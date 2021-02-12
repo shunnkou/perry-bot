@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 chatterbot-corpus = {git = "https://github.com/gunthercox/chatterbot-corpus.git"}
 chatterbot = "*"
+pyqt5 = "*"
 
 [dev-packages]
 pytest = "*"
