@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """The setup script."""
 
 from setuptools import setup, find_packages
@@ -29,11 +28,17 @@ with open('README.md') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click', ]
+requirements = [
+    'Click',
+]
 
-setup_requirements = ['pytest-runner', ]
+setup_requirements = [
+    'pytest-runner',
+]
 
-test_requirements = ['pytest', ]
+test_requirements = [
+    'pytest',
+]
 
 setup(
     author="Jace Huang",
@@ -43,8 +48,7 @@ setup(
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 3',
+        'Natural Language :: English', 'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9'
@@ -63,10 +67,7 @@ setup(
     name='perry_bot',
     packages=find_packages(include=['perry_bot', 'perry_bot.*']),
     package_data={
-        module.__name__: walker(
-            os.path.dirname(module.__file__),
-            'files'
-        ),
+        module.__name__: walker(os.path.dirname(module.__file__), 'files'),
     },
     setup_requires=setup_requirements,
     test_suite='tests',
