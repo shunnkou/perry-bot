@@ -3,6 +3,8 @@
 """The setup script."""
 
 from setuptools import setup, find_packages
+import perry_bot as module
+import os
 
 
 def walker(base, *paths):
