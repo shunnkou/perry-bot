@@ -1,6 +1,22 @@
 version = 1
 
-test_patterns = ["te"]
+test_patterns = ["tests/**"]
+
+exclude_patterns = [
+    ".github/**",
+    "docs/**",
+    ".editorconfig",
+    ".gitignore",
+    "*.rst",
+    "LICENSE",
+    "Makefile",
+    "*.in",
+    "Pipfile",
+    "Pipfile.lock",
+    "*.txt",
+    "*.cfg",
+    "*.ini"
+]
 
 [[analyzers]]
 name = "python"
@@ -8,3 +24,15 @@ enabled = true
 
   [analyzers.meta]
   runtime_version = "3.x.x"
+
+[[transformers]]
+name = "yapf"
+enabled = true
+
+[[analyzers]]
+name = "secrets"
+enabled = true
+
+[[analyzers]]
+name = "test-coverage"
+enabled = true
