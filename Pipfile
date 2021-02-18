@@ -4,12 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-chatterbot-corpus = {git = "https://github.com/gunthercox/chatterbot-corpus.git"}
-chatterbot = "*"
-pyqt5 = "*"
 
 [dev-packages]
+bump2version = "*"
+watchdog = "*"
+flake8 = "*"
+tox = "*"
+click = "*"
 pytest = "*"
+pytest-runner = "*"
+pytest-cov = "*"
+Sphinx = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"

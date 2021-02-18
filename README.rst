@@ -79,13 +79,3 @@ Once you have a copy of the source, you can install it with:
 
 .. _Github repo: https://github.com/shunnkou/perry-bot
 .. _tarball: https://github.com/shunnkou/perry-bot/tarball/master
-
-
-=======
-Credits
-=======
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
