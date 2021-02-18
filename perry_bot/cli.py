@@ -39,8 +39,14 @@ def log_water(cups):
 
 
 @click.command(name='habit')
-@click.option('-v', '--view', help='View existing habit and its status. Use `all` to view all habits.', is_flag=True)
-@click.option('-c/-ic', '--complete/--incomplete', help='Mark habit as complete or incomplete.')
+@click.option(
+    '-v',
+    '--view',
+    help='View existing habit and its status. Use `all` to view all habits.',
+    is_flag=True)
+@click.option('-c/-ic',
+              '--complete/--incomplete',
+              help='Mark habit as complete or incomplete.')
 @click.option('-a', '--add', help='Add a habit.')
 @click.option('-d', '--delete', help='Delete a habit.')
 @click.argument('habit')
@@ -56,9 +62,18 @@ def log_habit(view, complete, add, delete, habit):
 
 @click.command(name='viz')
 @click.option('-o', '--on', type=dt.date, help='Show entries on this date.')
-@click.option('-t', '--to', type=dt.date, help='Show entries before, or on, this date.')
-@click.option('-m', '--month', type=dt.date, help='Show entries on this month of any year.')
-@click.option('-y', '--year', type=dt.date, help='Show entries of a specific year.')
+@click.option('-t',
+              '--to',
+              type=dt.date,
+              help='Show entries before, or on, this date.')
+@click.option('-m',
+              '--month',
+              type=dt.date,
+              help='Show entries on this month of any year.')
+@click.option('-y',
+              '--year',
+              type=dt.date,
+              help='Show entries of a specific year.')
 @click.option('-h', '--habit', help='Show entries of a specific habit.')
 @click.argument('type')
 def dataviz(from_, to, on, month, year, type_):
