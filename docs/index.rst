@@ -1,6 +1,9 @@
 Welcome to Perry Bot's documentation!
 ======================================
 
+.. attention::
+    This is the documentation for the ``develop`` branch.
+
 .. include:: readme.rst
 
 =========
