@@ -1,5 +1,4 @@
 """Console script for perry_bot."""
-import sys
 import click
 import datetime as dt
 # skipcq
@@ -45,7 +44,7 @@ def log_water(cups):
 @click.option('-d', '--delete', help='Delete a habit.')
 @click.argument('habit')
 def log_habit(view, complete, add, delete, habit):
-    """Log habit as complete/incomplete."""
+    """Log and manage habits."""
     click.echo(f"Habit = {habit}")
     click.echo(f"Complete = {complete}")
     click.echo(f"View = {view}")
@@ -65,7 +64,7 @@ def dataviz(from_, to, on, month, year, type_):
     """
     Visualize your water or habit records.
 
-    If no date is provided, the last 7 days will be shown.
+    If no date or date range is provided, the last 7 days will be shown.
 
     [TYPE] = `water` or `habit`
     """
