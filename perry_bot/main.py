@@ -2,7 +2,6 @@ import chatterbot
 from chatterbot import ChatBot, comparisons, response_selection
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
-
 bot = ChatBot(
     'Bot Boy',
     storage_adapter='chatterbot.storage.SQLStorageAdapter',
@@ -16,16 +15,14 @@ bot = ChatBot(
             "import_path": "chatterbot.logic.BestMatch",
             "default_response": 'I am sorry, but I do not understand.',
             'maximum_similarity_threshold': 0.90
-
         }
         # {
         #     "import_path": "chatterbot.logic.TimeLogicAdapter"
         # }
     ],
-    statement_comparison_function= chatterbot.comparisons.levenshtein_distance,
-    response_selection_method = chatterbot.response_selection.get_first_response,
-    read_only=True
-)
+    statement_comparison_function=chatterbot.comparisons.levenshtein_distance,
+    response_selection_method=chatterbot.response_selection.get_first_response,
+    read_only=True)
 
 # trainer = ChatterBotCorpusTrainer(bot)
 #
@@ -54,5 +51,5 @@ while True:
     try:
         bot_input = bot.get_response(input())
         print(bot_input)
-    except(KeyboardInterrupt, EOFError, SystemExit):
+    except (KeyboardInterrupt, EOFError, SystemExit):
         break

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """Tests for `perry_bot` package."""
 
 import pytest
