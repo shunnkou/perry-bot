@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 import perry_bot
+import recommonmark
 from recommonmark.transform import AutoStructify
 
 # -- General configuration ---------------------------------------------
