@@ -5,7 +5,6 @@ sphinx:
 
 formats:
     - pdf
-    - md
 
 python:
   version: 3.7
