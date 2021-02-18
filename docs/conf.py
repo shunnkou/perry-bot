@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.abspath('..'))
 import perry_bot
 import recommonmark
 from recommonmark.transform import AutoStructify
+from dotenv import load_dotenv
 
 # -- General configuration ---------------------------------------------
 
@@ -86,6 +87,11 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 html_theme = 'sphinx_book_theme'
+
+load_dotenv(os.path.join('.env'))
+htmlthemepath = os.getenv('SITE_PACKAGES')
+
+html_theme_path = htmlthemepath
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.  For a list of options available for each theme, see the
