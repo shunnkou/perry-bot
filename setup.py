@@ -56,7 +56,7 @@ setup(
     description="A self care bot.",
     entry_points={
         'console_scripts': [
-            'perry_bot=perry_bot.cli:main',
+            'perry-bot=perry_bot.cli:main',
         ],
     },
     install_requires=requirements,

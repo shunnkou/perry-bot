@@ -6,6 +6,12 @@
 
 A self-care bot.
 
+
+```{note} **Notice**
+This is the documentation for the **develop** branch.
+```
+
+
 * Free software: BSD license
 * Documentation: https://perry-bot.readthedocs.io.
 
