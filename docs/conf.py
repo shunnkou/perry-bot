@@ -20,12 +20,13 @@
 import os
 import sys
 
+import sphinx_book_theme
+
 sys.path.insert(0, os.path.abspath('..'))
 
 import perry_bot
 import recommonmark
 from recommonmark.transform import AutoStructify
-from dotenv import load_dotenv
 
 # -- General configuration ---------------------------------------------
 
@@ -44,7 +45,15 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = ['.rst', '.md']
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
+
+# Source parser markdown support
+source_parsers = {
+   '.md': 'recommonmark.parser.CommonMarkParser',
+}
 
 # The master toctree document.
 master_doc = 'index'
@@ -88,10 +97,7 @@ todo_include_todos = False
 #
 html_theme = 'sphinx_book_theme'
 
-load_dotenv(os.path.join('.env'))
-htmlthemepath = os.getenv('SITE_PACKAGES')
-
-html_theme_path = htmlthemepath
+html_theme_path = (sphinx_book_theme.get_html_theme_path()).split(" ")
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.  For a list of options available for each theme, see the
@@ -102,7 +108,7 @@ html_theme_path = htmlthemepath
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # -- Options for HTMLHelp output ---------------------------------------
 
@@ -162,12 +168,12 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-github_doc_root = 'https://github.com/shunnkou/perry-bot/tree/main/docs'
+# github_doc_root = 'https://github.com/shunnkou/perry-bot/tree/main/docs'
 
 
 def setup(app):
     app.add_config_value('recommonmark_config', {
-        'url_resolver': lambda url: github_doc_root + url,
+        # 'url_resolver': lambda url: github_doc_root + url,
         'auto_toc_tree_section': 'Contents',
         'enable_eval_rst': True,
     }, True)
