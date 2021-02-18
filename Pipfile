@@ -15,8 +15,8 @@ pytest = "*"
 pytest-runner = "*"
 pytest-cov = "*"
 Sphinx = ">=1.4"
-recommonmark = "*"
 sphinx-book-theme = "*"
+m2r2 = "*"
 
 [requires]
 python_version = "3.9"

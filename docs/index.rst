@@ -9,6 +9,7 @@ Welcome to Perry Bot's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   readme.rst
    installation
    usage
    contributing

@@ -25,8 +25,7 @@ import sphinx_book_theme
 sys.path.insert(0, os.path.abspath('..'))
 
 import perry_bot
-import recommonmark
-from recommonmark.transform import AutoStructify
+
 
 # -- General configuration ---------------------------------------------
 
@@ -36,7 +35,7 @@ from recommonmark.transform import AutoStructify
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'recommonmark']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'm2r2']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -45,10 +44,7 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = {
-    '.rst': 'restructuredtext',
-    '.md': 'markdown',
-}
+source_suffix = ['.rst', '.md']
 
 # Source parser markdown support
 source_parsers = {
@@ -103,12 +99,24 @@ html_theme_path = (sphinx_book_theme.get_html_theme_path()).split(" ")
 # theme further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    "repository_url": "https://github.com/shunnkou/perry-bot",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "use_download_button": True,
+}
+
+# Title and favicon
+# html_logo = ''
+# html_favicon = ''
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 # html_static_path = ['_static']
+
+# html base url for metadata open graph tags
+html_baseurl = 'https://perry-bot.readthedocs.io/en/latest/'
 
 # -- Options for HTMLHelp output ---------------------------------------
 
@@ -167,14 +175,3 @@ texinfo_documents = [
      'One line description of project.',
      'Miscellaneous'),
 ]
-
-# github_doc_root = 'https://github.com/shunnkou/perry-bot/tree/main/docs'
-
-
-def setup(app):
-    app.add_config_value('recommonmark_config', {
-        # 'url_resolver': lambda url: github_doc_root + url,
-        'auto_toc_tree_section': 'Contents',
-        'enable_eval_rst': True,
-    }, True)
-    app.add_transform(AutoStructify)
