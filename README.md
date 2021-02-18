@@ -13,5 +13,7 @@ A self-care bot.
 Features
 --------
 
-* TODO
-
+* Habit tracker
+* Water tracker and (optional) reminders
+* [You feel like sh*t's](https://youfeellikeshit.com/) interactive self-care
+* Visualize your tracked data
