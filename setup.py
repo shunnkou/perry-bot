@@ -7,7 +7,7 @@ import os
 
 
 def walker(base, *paths):
-    file_list = set([])
+    file_list = set()
     cur_dir = os.path.abspath(os.curdir)
 
     os.chdir(base)
