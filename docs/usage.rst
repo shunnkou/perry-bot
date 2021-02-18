@@ -2,6 +2,13 @@
 Usage
 =====
 
-To use Perry Bot in a project::
+GUI Usage
+---------
 
-    import perry_bot
+* TODO
+
+
+CLI Usage
+---------
+
+* TODO

@@ -14,7 +14,7 @@ To install Perry Bot, download the ``.tar.gz`` of the `latest release`_ and run 
 
     # Navigate to the directory containing perry_bot
 
-    $ pipx install ./perry_bot
+    $ pipx install ./perry_bot-v0.1.0
 
 
 Start Perry Bot with:

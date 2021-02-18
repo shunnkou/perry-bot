@@ -1,22 +1,20 @@
 ---
-name: Feature Request
-about: Suggest a new idea for the project.
-title: ''
-labels: enhancement, new feature
-assignees: shunnkou
+name: Feature request
+about: Suggest a new feature
+title: 'Feature Request Summary'
+labels: 'enhancement'
+assignees: 'shunnkou'
+
 ---
 
-## Summary
+**Is your feature request related to a problem? Please describe.**
 
-Brief explanation of the feature.
-If the proposal requires a new package, list the packages.
+<!-- A clear and concise description of what the problem is. Ex. I'm always frustrated when ... -->
 
+**Describe the solution you would like**
 
-### Basic example
+<!-- A clear and concise description of what you want to happen. -->
 
-If the proposal involves a new or changed API, include a basic code example. Omit this section if it's not applicable.
+**Additional context**
 
-
-### Motivation
-
-Why are we doing this? What use cases does it support? What is the expected outcome?
+<!-- Add any other context or screenshots about the feature request here. -->
