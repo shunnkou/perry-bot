@@ -5,6 +5,4 @@ tox
 Sphinx
 Click
 pytest
-recommonmark
-pytest-runner
 pytest-cov

@@ -33,14 +33,6 @@ requirements = [
     'Click',
 ]
 
-setup_requirements = [
-    'pytest-runner',
-]
-
-test_requirements = [
-    'pytest',
-]
-
 setup(
     author="Jace Huang",
     author_email='jacehuang8@protonmail.ch',
@@ -70,9 +62,7 @@ setup(
     package_data={
         module.__name__: walker(os.path.dirname(module.__file__), 'files'),
     },
-    setup_requires=setup_requirements,
     test_suite='tests',
-    tests_require=test_requirements,
     url='https://github.com/shunnkou/perry_bot',
     version='v0.1.0',
     zip_safe=False,
