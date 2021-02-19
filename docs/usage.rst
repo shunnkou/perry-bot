@@ -199,7 +199,7 @@ To see a full list of commands, type ``perry-bot --help``
 
       Perry Bot.
 
-      Use `perry-bot [command] --help` to view options for the command.
+      Use `perry-bot COMMAND --help` to view options for the command.
 
       See documentation at
       https://perry-bot.readthedocs.io/en/latest/usage.html#cli-usage for
