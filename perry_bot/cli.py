@@ -64,11 +64,12 @@ def log_water(cups, delete):
                   ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
                   case_sensitive=False),
               default='Daily')
-@click.option('-sd',
-              '--start-date',
-              help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
-              type=click.DateTime(formats=['%Y-%m-%d']),
-              )
+@click.option(
+    '-sd',
+    '--start-date',
+    help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
+    type=click.DateTime(formats=['%Y-%m-%d']),
+)
 @click.argument('habit')
 def log_habit(view, complete, add, delete, habit, start_date):
     """
