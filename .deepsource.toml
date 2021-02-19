@@ -5,6 +5,7 @@ test_patterns = ["tests/**"]
 exclude_patterns = [
     ".github/**",
     "docs/**",
+    "gui/**",
     ".editorconfig",
     ".gitignore",
     "*.rst",
