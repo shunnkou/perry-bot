@@ -7,6 +7,7 @@ import os
 
 
 def walker(base, *paths):
+    """Finds package data.."""
     file_list = set()
     cur_dir = os.path.abspath(os.curdir)
 
@@ -46,7 +47,7 @@ setup(
     python_requires='>=3.7',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
+        'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English', 'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
