@@ -10,11 +10,18 @@ A self-care bot.
 * Documentation: https://perry-bot.readthedocs.io.
 
 
-Features
---------
-
+## Features
+* CLI and GUI
 * Habit tracker
     * Daily, weekly, bi-weekly, monthly, and yearly habits
-* Water tracker and (optional) reminders
+* Water tracker
 * [You feel like sh*t's](https://youfeellikeshit.com/) interactive self-care
 * Visualize your tracked data
+
+
+___
+
+# Credits
+This package was created based on a modified
+[audreyr/cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)
+project template using [Cookiecutter](https://github.com/cookiecutter/cookiecutter).
