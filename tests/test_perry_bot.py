@@ -4,8 +4,8 @@
 import pytest
 
 from click.testing import CliRunner
-
-from perry_bot import perry_bot
+# skipcq
+from perry_bot import main
 from perry_bot import cli
 
 
