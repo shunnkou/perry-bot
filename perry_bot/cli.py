@@ -41,13 +41,34 @@ def log_water(cups, delete):
 
 
 @click.command(name='habit')
-@click.option('-v', '--view', help='View existing habit and its status.', is_flag=True)
-@click.option('-c/-ic', '--complete/--incomplete', help='Mark habit as complete or incomplete.')
+@click.option('-v',
+              '--view',
+              help='View existing habit and its status.',
+              is_flag=True)
+@click.option('-c/-ic',
+              '--complete/--incomplete',
+              help='Mark habit as complete or incomplete.')
 @click.option('-a', '--add', help='Add a habit.', is_flag=True)
 @click.option('-d', '--delete', help='Delete a habit.', is_flag=True)
-@click.option('-e', '--edit', help='Edit a habit', is_flag=True, type=click.Choice(['Name', 'Frequency', 'Start date'], case_sensitive=False))
-@click.option('-f', '--frequency', help='Frequency of the habit.', type=click.Choice(['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'], case_sensitive=False), default='Daily')
-@click.option('-sd', '--start-date', help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.', type=click.DateTime(formats=['%Y-%m-%d']),)
+@click.option('-e',
+              '--edit',
+              help='Edit a habit',
+              is_flag=True,
+              type=click.Choice(['Name', 'Frequency', 'Start date'],
+                                case_sensitive=False))
+@click.option('-f',
+              '--frequency',
+              help='Frequency of the habit.',
+              type=click.Choice(
+                  ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
+                  case_sensitive=False),
+              default='Daily')
+@click.option(
+    '-sd',
+    '--start-date',
+    help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
+    type=click.DateTime(formats=['%Y-%m-%d']),
+)
 @click.argument('habit')
 def log_habit(view, complete, add, delete, habit, start_date):
     """
@@ -66,11 +87,27 @@ def log_habit(view, complete, add, delete, habit, start_date):
 
 
 @click.command(name='viz')
-@click.option('-o', '--on', type=click.DateTime(formats=['%Y-%m-%d']), help='Show entries on this date.')
-@click.option('-f', '--from', 'from_', type=click.DateTime(formats=['%Y-%m-%d']), help='Show entries after, or on, this date')
-@click.option('-t', '--to', type=click.DateTime(formats=['%Y-%m-%d']), help='Show entries before, or on, this date.')
-@click.option('-m', '--month', type=click.DateTime(formats=['%m', '%b', '%B']), help='Show entries on this month of any year.')
-@click.option('-y', '--year', type=click.DateTime(formats=['%Y', '%y']), help='Show entries of a specific year.')
+@click.option('-o',
+              '--on',
+              type=click.DateTime(formats=['%Y-%m-%d']),
+              help='Show entries on this date.')
+@click.option('-f',
+              '--from',
+              'from_',
+              type=click.DateTime(formats=['%Y-%m-%d']),
+              help='Show entries after, or on, this date')
+@click.option('-t',
+              '--to',
+              type=click.DateTime(formats=['%Y-%m-%d']),
+              help='Show entries before, or on, this date.')
+@click.option('-m',
+              '--month',
+              type=click.DateTime(formats=['%m', '%b', '%B']),
+              help='Show entries on this month of any year.')
+@click.option('-y',
+              '--year',
+              type=click.DateTime(formats=['%Y', '%y']),
+              help='Show entries of a specific year.')
 @click.option('-h', '--habit', help='Show entries of a specific habit.')
 @click.argument('log_type')
 def dataviz(from_, to, on, month, year, log_type, habit):
