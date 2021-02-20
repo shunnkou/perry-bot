@@ -11,3 +11,12 @@ Contributors
 ------------
 
 None yet. Why not be the first?
+
+_____
+
+
+This package was created based on a modified
+`audreyr/cookiecutter-pypackage`_ project template using `Cookiecutter`_
+
+.. _Cookiecutter: https://github.com/cookiecutter/cookiecutter
+.. _audreyr/cookiecutter-pypackage: https://github.com/audreyfeldroy/cookiecutter-pypackage)
