@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 pendulum = "*"
+peewee = "*"
 
 [dev-packages]
 bump2version = "*"
@@ -18,6 +19,7 @@ pytest-cov = "*"
 Sphinx = ">=1.4"
 sphinx-book-theme = "*"
 m2r2 = "*"
+twine = "*"
 
 [requires]
 python_version = "3.9"
