@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pendulum = "*"
 peewee = "*"
+rich = "*"
 
 [dev-packages]
 bump2version = "*"
