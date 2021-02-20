@@ -20,6 +20,77 @@ Start Perry Bot's GUI with:
 CLI Usage
 ---------
 
+Track your water intake
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the ``water`` command where ``CUPS`` is the number of cups you want to log:
+
+.. code-block::
+
+    $ perry-bot water [OPTIONS] [CUPS]
+
+
+Log a cup of water
+""""""""""""""""""
+
+| To log cups of water drank, use the ``water`` command.
+| For example, to log 1 cup of water:
+
+
+.. code-block::
+
+    $ perry-bot water 1
+
+
+Delete a cup
+""""""""""""
+
+| If you made a mistake and want to remove a log, use ``-d`` or ``--delete``.
+| For example, to delete 1 cup of water:
+
+.. code-block::
+
+    $ perry-bot water --delete 1
+
+
+View your cups drank
+""""""""""""""""""""
+
+To view the number of cups you've drank, use ``-v`` or ``--view``:
+
+.. code-block::
+
+    $ perry-bot water --view
+
+
+Track your mood
+^^^^^^^^^^^^^^^
+
+Use the ``mood`` command:
+
+.. code-block::
+
+    $ perry-bot mood [OPTIONS] [RATING]
+
+
+Rate your mood on a scale from 1 - 10:
+
+.. code-block::
+
+    $ perry-bot mood 6
+
+
+Add a comment
+"""""""""""""
+
+To add a comment/explanation for your mood, use ``--c`` or ``--comment``:
+
+.. code-block::
+
+    $ perry-bot -c "Failed an exam today..." 3
+
+
+
 Track and manage habits
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -94,48 +165,6 @@ To change the start date of a habit:
 
     $ perry-bot habit -e "start date" -sd 2021-02-14
 
-
-Track your water intake
-^^^^^^^^^^^^^^^^^^^^^^^
-
-Use the ``water`` command where ``CUPS`` is the number of cups you want to log:
-
-.. code-block::
-
-    $ perry-bot water [OPTIONS] [CUPS]
-
-
-Log a cup of water
-""""""""""""""""""
-
-| To log cups of water drank, use the ``water`` command.
-| For example, to log 1 cup of water:
-
-
-.. code-block::
-
-    $ perry-bot water 1
-
-
-Delete a cup
-""""""""""""
-
-| If you made a mistake and want to remove a log, use ``-d`` or ``--delete``.
-| For example, to delete 1 cup of water:
-
-.. code-block::
-
-    $ perry-bot water --delete 1
-
-
-View your cups drank
-""""""""""""""""""""
-
-To view the number of cups you've drank, use ``-v`` or ``--view``
-
-.. code-block::
-
-    $ perry-bot water --view
 
 
 Visualize your data
