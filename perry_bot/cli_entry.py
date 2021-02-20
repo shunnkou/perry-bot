@@ -4,9 +4,8 @@ import click
 from perry_bot import main as pb
 
 
-# skipcq: FLK-D301
 @click.group()
-def main():
+def main():  # skipcq: FLK-D301, FLK-D400
     """
     \b
     Perry Bot.
@@ -27,18 +26,45 @@ def start_gui():
 
 
 @click.command(name='water')
-@click.option('-d', '--delete', help='Delete # cup(s) of water.', is_flag=True)
+@click.option('-d', '--delete', help='Delete NUM cup(s) of water.', is_flag=True)
 @click.option('-v', '--view', help='View cups of water drank.', is_flag=True)
 @click.argument('cups', type=int)
-def log_water(cups, delete):
+def log_water(cups, delete):    # skipcq: FLK-D301, FLK-D400
     """
     Log cups of water drank.
 
     [CUPS] = Integer
+
+    \f
+
+    :param cups:
+    :param delete:
+    :return:
     """
     click.echo(f"Delete = {delete}")
     click.echo(f"Number of cups to log: {cups}")
     return 0
+
+
+@click.command(name='mood')
+@click.option('-c', '--comment', help='Add a comment.')
+@click.argument('rating', type=click.IntRange(1, 10))
+def log_mood(datetime, rating, comment):    # skipcq: FLK-D301, FLK-D400
+    """
+    Rate your mood.
+
+    [RATING] = Integer from 1 - 10
+
+    \f
+
+    :param datetime:
+    :param rating:
+    :param comment:
+    :return:
+    """
+    click.echo(f"Datetime = {datetime}")
+    click.echo(f"Ratings = {rating}")
+    click.echo(f"Comment = {comment}")
 
 
 @click.command(name='habit')
@@ -71,13 +97,23 @@ def log_water(cups, delete):
     type=click.DateTime(formats=['%Y-%m-%d']),
 )
 @click.argument('habit')
-def log_habit(view, complete, add, delete, habit, start_date):
+def log_habit(view, complete, add, delete, habit, start_date):  # skipcq: FLK-D301, FLK-D400
     """
-    Log and manage habits.
+        Log and manage habits.
 
     Default frequency is set to daily.
 
     [HABIT] = Name of habit. Use `all` for all habits.
+
+    \f
+
+    :param view:
+    :param complete:
+    :param add:
+    :param delete:
+    :param habit:
+    :param start_date:
+    :return:
     """
     click.echo(f"Habit = {habit}")
     click.echo(f"Complete = {complete}")
@@ -101,6 +137,7 @@ def log_habit(view, complete, add, delete, habit, start_date):
               '--to',
               type=click.DateTime(formats=['%Y-%m-%d']),
               help='Show entries before, or on, this date.')
+# TODO: Month and year flags for comparison
 @click.option('-m',
               '--month',
               type=click.DateTime(formats=['%m', '%b', '%B']),
@@ -111,14 +148,25 @@ def log_habit(view, complete, add, delete, habit, start_date):
               help='Show entries of a specific year.')
 @click.option('-h', '--habit', help='Show entries of a specific habit.')
 @click.argument('log_type')
-def dataviz(from_, to, on, month, year, log_type, habit):
+def dataviz(from_, to, on, month, year, log_type, habit):   # skipcq: FLK-D301, FLK-D400
     """
-    Visualize your water or habit records.
+        Visualize your water or habit records.
 
     If no date or date range is provided, the last 7 days will be shown.
     See documentation for date formatting.
 
-    [LOG_TYPE] = `water` or `habit`
+    [LOG_TYPE] = `water` or `mood` or `habit`
+
+    \f
+
+    :param from_:
+    :param to:
+    :param on:
+    :param month:
+    :param year:
+    :param log_type:
+    :param habit:
+    :return:
     """
     click.echo(f'From = {from_}')
     click.echo(f'To = {to}')
@@ -134,5 +182,6 @@ def dataviz(from_, to, on, month, year, log_type, habit):
 
 main.add_command(start_gui)
 main.add_command(log_water)
+main.add_command(log_mood)
 main.add_command(log_habit)
 main.add_command(dataviz)
