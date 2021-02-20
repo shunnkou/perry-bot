@@ -1,5 +1,7 @@
 """Console script for perry_bot."""
 import click
+from click.exceptions import UsageError
+import pendulum
 # skipcq
 from perry_bot import main as pb
 
@@ -29,7 +31,7 @@ def start_gui():
 @click.option('-d', '--delete', help='Delete NUM cup(s) of water.', is_flag=True)
 @click.option('-v', '--view', help='View cups of water drank.', is_flag=True)
 @click.argument('cups', type=int)
-def log_water(cups, delete):    # skipcq: FLK-D301, FLK-D400
+def log_water(cups, delete):  # skipcq: FLK-D301, FLK-D400
     """
     Log cups of water drank.
 
@@ -47,24 +49,31 @@ def log_water(cups, delete):    # skipcq: FLK-D301, FLK-D400
 
 
 @click.command(name='mood')
+@click.option('-v', '--view', help="View today's mood.", is_flag=True)
 @click.option('-c', '--comment', help='Add a comment.')
-@click.argument('rating', type=click.IntRange(1, 10))
-def log_mood(datetime, rating, comment):    # skipcq: FLK-D301, FLK-D400
+@click.argument('rating')
+def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
     """
     Rate your mood.
 
-    [RATING] = Integer from 1 - 10
+    [RATING] = Integer from 1 - 10. Use `all` to view today's mood.
 
     \f
 
-    :param datetime:
     :param rating:
     :param comment:
+    :param view:
     :return:
     """
+    # TODO: Implement a check to make sure user has entered the correct number
+    datetime = pendulum.now()
     click.echo(f"Datetime = {datetime}")
-    click.echo(f"Ratings = {rating}")
+    click.echo(f"Rating = {rating}")
     click.echo(f"Comment = {comment}")
+    if view and rating.isdigit():
+        raise UsageError("The --view flag and a rating cannot be used together.")
+    if view and rating.lower() == 'all':
+        click.echo("Return today's mood.")
 
 
 @click.command(name='habit')
@@ -90,16 +99,15 @@ def log_mood(datetime, rating, comment):    # skipcq: FLK-D301, FLK-D400
                   ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
                   case_sensitive=False),
               default='Daily')
-@click.option(
-    '-sd',
-    '--start-date',
-    help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
-    type=click.DateTime(formats=['%Y-%m-%d']),
-)
+@click.option('-sd',
+              '--start-date',
+              help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
+              type=click.DateTime(formats=['%Y-%m-%d'])
+              )
 @click.argument('habit')
-def log_habit(view, complete, add, delete, habit, start_date):  # skipcq: FLK-D301, FLK-D400
+def log_habit(view, complete, add, delete, habit, start_date, edit, frequency):  # skipcq: FLK-D301, FLK-D400
     """
-        Log and manage habits.
+    Log and manage habits.
 
     Default frequency is set to daily.
 
@@ -107,6 +115,8 @@ def log_habit(view, complete, add, delete, habit, start_date):  # skipcq: FLK-D3
 
     \f
 
+    :param frequency:
+    :param edit:
     :param view:
     :param complete:
     :param add:
@@ -120,6 +130,8 @@ def log_habit(view, complete, add, delete, habit, start_date):  # skipcq: FLK-D3
     click.echo(f"View = {view}")
     click.echo(f"Add = {add}")
     click.echo(f"Delete = {delete}")
+    if add and delete:
+        raise UsageError('The --add and --delete flags cannot be used together.')
     return 0
 
 
@@ -148,9 +160,9 @@ def log_habit(view, complete, add, delete, habit, start_date):  # skipcq: FLK-D3
               help='Show entries of a specific year.')
 @click.option('-h', '--habit', help='Show entries of a specific habit.')
 @click.argument('log_type')
-def dataviz(from_, to, on, month, year, log_type, habit):   # skipcq: FLK-D301, FLK-D400
+def dataviz(from_, to, on, month, year, log_type, habit):  # skipcq: FLK-D301, FLK-D400
     """
-        Visualize your water or habit records.
+    Visualize your water or habit records.
 
     If no date or date range is provided, the last 7 days will be shown.
     See documentation for date formatting.
@@ -174,9 +186,11 @@ def dataviz(from_, to, on, month, year, log_type, habit):   # skipcq: FLK-D301, 
     click.echo(f'Type = {log_type}')
     click.echo(f'Month = {month}')
     click.echo(f'Year = {year}')
+    if habit and log_type != 'habit':
+        raise UsageError('The --habit option requires LOG_TYPE to be habit.')
 
     if log_type == 'water' and habit is True:
-        click.echo("The --habit option cannot be used with `water`")
+        raise UsageError("The --habit option cannot be used with `water`")
     return 0
 
 
@@ -185,3 +199,7 @@ main.add_command(log_water)
 main.add_command(log_mood)
 main.add_command(log_habit)
 main.add_command(dataviz)
+
+
+if __name__ == '__main__':
+    main()
