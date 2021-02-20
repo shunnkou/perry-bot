@@ -31,6 +31,9 @@ with open('HISTORY.rst') as history_file:
 
 requirements = [
     'Click',
+    'pendulum',
+    'peewee',
+    'rich'
 ]
 
 setup(
