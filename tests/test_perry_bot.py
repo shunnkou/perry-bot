@@ -6,7 +6,7 @@ import pytest
 from click.testing import CliRunner
 # skipcq
 from perry_bot import main
-from perry_bot import cli
+from perry_bot import cli_entry
 
 
 @pytest.fixture
@@ -28,9 +28,9 @@ def test_content(response):
 def test_command_line_interface():
     """Test the CLI."""
     runner = CliRunner()
-    result = runner.invoke(cli.main)
+    result = runner.invoke(cli_entry.main)
     assert result.exit_code == 0
     assert 'perry_bot.cli.main' in result.output
-    help_result = runner.invoke(cli.main, ['--help'])
+    help_result = runner.invoke(cli_entry.main, ['--help'])
     assert help_result.exit_code == 0
     assert '--help  Show this message and exit.' in help_result.output
