@@ -6,7 +6,7 @@
 
 A self-care bot.
 
-* Free software: BSD license
+* Free software: GPL-3.0 license
 * Documentation: https://perry-bot.readthedocs.io.
 
 
