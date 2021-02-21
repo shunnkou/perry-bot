@@ -28,38 +28,49 @@ def start_gui():
 
 
 @click.command(name='water')
-@click.option('-d',
-              '--delete',
-              help='Delete NUM cup(s) of water.',
-              is_flag=True)
-@click.option('-v', '--view', help='View cups of water drank.', is_flag=True)
-@click.argument('cups', type=int)
-def log_water(cups, delete):  # skipcq: FLK-D301, FLK-D400
+@click.option('-d', '--delete', help='Delete NUM cup(s) of water.', is_flag=True)
+@click.option('-v', '--view', help='View cups of water drank. Use with `today` argument.', is_flag=True)
+@click.option('--start', help='Start water reminder. Use with `reminder` argument.', is_flag=True)
+@click.option('--stop', help='Stop water reminder. Use with `reminder` argument.', is_flag=True)
+@click.option('-e', '--edit', help='Edit water reminder schedule. use with `reminder` argument.', is_flag=True)
+@click.argument('arg')
+def log_water(cups, delete, view, start, stop):  # skipcq: FLK-D301, FLK-D400
     """
+    \b
     Log cups of water drank.
+    Get reminders to drink water.
+    See the documentation for more information on scheduling reminders.
 
-    [CUPS] = Integer
+    [ARG] = Integer or `reminder` or `today`
 
     \f
 
+    :param stop:
+    :param start:
+    :param view:
     :param cups:
     :param delete:
     :return:
     """
     click.echo(f"Delete = {delete}")
     click.echo(f"Number of cups to log: {cups}")
+
+    if cups.lower() not in ('reminder' or 'today') and cups.lower is not int:
+        raise UsageError('The [CUPS] argument must be `reminder` or `today` or a number.')
+
+    # Ask what reminder user wants to stop
     return 0
 
 
 @click.command(name='mood')
 @click.option('-v', '--view', help="View today's mood.", is_flag=True)
 @click.option('-c', '--comment', help='Add a comment.')
-@click.argument('rating')
+@click.argument('arg')
 def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
     """
     Rate your mood.
 
-    [RATING] = Integer from 1 - 10. Use `all` to view today's mood.
+    [ARG] = Integer from 1 - 10 or `today` to view today's mood.
 
     \f
 
@@ -74,9 +85,8 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
     click.echo(f"Rating = {rating}")
     click.echo(f"Comment = {comment}")
     if view and rating.isdigit():
-        raise UsageError(
-            "The --view flag and a rating cannot be used together.")
-    if view and rating.lower() == 'all':
+        raise UsageError("The --view option and a rating cannot be used together.")
+    if view and rating.lower() == 'today':
         click.echo("Return today's mood.")
 
 
@@ -90,12 +100,6 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
               help='Mark habit as complete or incomplete.')
 @click.option('-a', '--add', help='Add a habit.', is_flag=True)
 @click.option('-d', '--delete', help='Delete a habit.', is_flag=True)
-@click.option('-e',
-              '--edit',
-              help='Edit a habit',
-              is_flag=True,
-              type=click.Choice(['Name', 'Frequency', 'Start date'],
-                                case_sensitive=False))
 @click.option('-f',
               '--frequency',
               help='Frequency of the habit.',
@@ -103,11 +107,17 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
                   ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
                   case_sensitive=False),
               default='Daily')
-@click.option(
-    '-sd',
-    '--start-date',
-    help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
-    type=click.DateTime(formats=['%Y-%m-%d']))
+@click.option('-sd',
+              '--start-date',
+              help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
+              type=click.DateTime(formats=['%Y-%m-%d'])
+              )
+@click.option('-e',
+              '--edit',
+              help='Edit a habit',
+              type=click.Choice(['Name', 'Frequency', 'Start date'],
+                                case_sensitive=False))
+@click.option('-o', '--original', help='The name of the habit you want to edit. Use when editing the name of a habit')
 @click.argument('habit')
 def log_habit(view, complete, add, delete, habit, start_date, edit,
               frequency):  # skipcq: FLK-D301, FLK-D400
@@ -116,7 +126,7 @@ def log_habit(view, complete, add, delete, habit, start_date, edit,
 
     Default frequency is set to daily.
 
-    [HABIT] = Name of habit. Use `all` for all habits.
+    [HABIT] = Name of habit or `all` for all habits.
 
     \f
 
@@ -136,8 +146,9 @@ def log_habit(view, complete, add, delete, habit, start_date, edit,
     click.echo(f"Add = {add}")
     click.echo(f"Delete = {delete}")
     if add and delete:
-        raise UsageError(
-            'The --add and --delete flags cannot be used together.')
+        raise UsageError('The --add and --delete option cannot be used together.')
+    if habit.lower() != 'all' and view:
+        raise UsageError('Use the `all` argument with the --view option')
     return 0
 
 
@@ -145,25 +156,19 @@ def log_habit(view, complete, add, delete, habit, start_date, edit,
 @click.option('-o',
               '--on',
               type=click.DateTime(formats=['%Y-%m-%d']),
-              help='Show entries on this date.')
+              help='Show records on this date.')
 @click.option('-f',
               '--from',
               'from_',
               type=click.DateTime(formats=['%Y-%m-%d']),
-              help='Show entries after, or on, this date')
+              help='Show records after, or on, this date')
 @click.option('-t',
               '--to',
               type=click.DateTime(formats=['%Y-%m-%d']),
-              help='Show entries before, or on, this date.')
-# TODO: Month and year flags for comparison
-@click.option('-m',
-              '--month',
-              type=click.DateTime(formats=['%m', '%b', '%B']),
-              help='Show entries on this month of any year.')
-@click.option('-y',
-              '--year',
-              type=click.DateTime(formats=['%Y', '%y']),
-              help='Show entries of a specific year.')
+              help='Show records before, or on, this date.')
+@click.option('-c',
+              '--compare',
+              help='Compare records. Separate values with a comma.')
 @click.option('-h', '--habit', help='Show entries of a specific habit.')
 @click.argument('log_type')
 def dataviz(from_, to, on, month, year, log_type,
@@ -201,11 +206,28 @@ def dataviz(from_, to, on, month, year, log_type,
     return 0
 
 
+@click.command(name='yfls')
+@click.option('-st', '--start', help='Start the interactive self-care.', is_flag=True)
+@click.option('--save', help='Save your progress', is_flag=True)
+@click.option('-l', '--load', help='Load your progress from an existing save.', is_flag=True)
+def you_feel_like_sht(start, save, load):
+    """
+    You feel like shit.
+    Interactive self-care.
+
+    \f
+
+    :param start:
+    :param save:
+    :param load:
+    :return:
+    """
+    pass
+
+
 main.add_command(start_gui)
 main.add_command(log_water)
 main.add_command(log_mood)
 main.add_command(log_habit)
 main.add_command(dataviz)
-
-if __name__ == '__main__':
-    main()
+main.add_command(you_feel_like_sht)

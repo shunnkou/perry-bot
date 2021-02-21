@@ -22,8 +22,9 @@ A self-care bot.
     * Daily, weekly, bi-weekly, monthly, and yearly habits
 * Water reminders
 * Visualize your tracked data
-* [You feel like sh*t's](https://youfeellikeshit.com/) interactive self-care
 * Local data storage with a SQLite database
+* [You feel like sh*t's](https://youfeellikeshit.com/) interactive self-care
+  * Save and load your progress
 
 
 ## Installation
@@ -77,3 +78,5 @@ perry-bot yfls [OPTIONS]
 This package was created based on a modified
 [audreyr/cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)
 project template using [Cookiecutter](https://github.com/cookiecutter/cookiecutter).
+
+The interactive self-care guide is from https://youfeellikeshit.com/.

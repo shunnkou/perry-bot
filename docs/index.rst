@@ -6,16 +6,15 @@ Perry Bot
 
 .. include:: readme.rst
 
-=========
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   :hidden:
 
    readme
    installation
    usage
-   cheatsheet
    contributing
    authors
    history

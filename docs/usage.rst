@@ -176,6 +176,13 @@ Schedule a habit
 If no frequency is specified, the default is daily.
 
 
+.. margin::
+
+    .. attention::
+
+        Editing the name of a habit requires an ``--original`` option
+
+
 Edit a habit
 """"""""""""
 
@@ -212,8 +219,69 @@ Use the ``viz`` command where ``LOG_TYPE`` is either ``habit`` or ``water``
 
     $ perry-bot viz [OPTIONS] [LOG_TYPE]
 
-If no date range is provided, the last 7 days will be shown.
+| If no date range is provided, the last 7 days will be shown.
+| For example, to see data for the last 7 days:
 
+.. code-block::
+
+    $ perry-bot viz water
+    $ perry-bot viz habit
+    $ perry-bot viz mood
+
+
+To see data on a specific day:
+
+.. code-block::
+
+    $ perry-bot viz --on 2021-02-03 water
+
+
+To see data in a specific date range:
+
+.. code-block::
+
+    $ perry-bot viz --from 2021-01-02 --to 2021-02-02 mood
+
+
+Compare data from two dates
+"""""""""""""""""""""""""""
+
+To compare days:
+
+.. code-block::
+
+    $ perry-bot viz --compare "2021-02-02,2021-02-05" habit
+
+
+To compare months:
+
+.. code-block::
+
+    $ perry-bot viz --compare "2021-01,2021-02" water
+
+
+To compare years:
+
+.. code-block::
+
+    $ perry-bot viz --compare "2020-2021" mood
+
+
+
+You feel like shit: An interactive self-care guide
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the ``yfls`` command:
+
+.. code-block::
+
+    $ perry-bot yfls [OPTIONS]
+
+.. margin::
+
+    .. note::
+
+        Basically, everything is in the format of "Year-Month-Date"
 
 
 Date Formats
@@ -224,7 +292,7 @@ Date Formats
 
     * - Command
       - Option
-      - Accepted Format(s)
+      - Accepted Format
       - Example
     * - ``habit``
       - ``-sd``, ``--start-date``
@@ -243,13 +311,17 @@ Date Formats
       - %Y-%m-%d
       - 2021-12-11
     * - ``viz``
-      - ``-m``, ``--month``
-      - %m, %b, %B
-      - 12, Dec, December
-    * - ``viz``
-      - ``-y``, ``--year``
-      - %Y, %y
-      - 2021, 21
+      - ``-c``, ``--compare``
+      - "%Y-%m-%d,%Y-%m-%d",
+
+        "%Y-%m,%Y-%m",
+
+        "%Y,%Y"
+      - "2021-02-04,2021-02,05",
+
+        "2021-02,2021-01",
+
+        "2021,2020"
 
 
 
@@ -263,12 +335,11 @@ To see a full list of commands, type ``perry-bot --help``
     Usage: perry-bot [OPTIONS] COMMAND [ARGS]...
 
       Perry Bot.
-
       Use `perry-bot COMMAND --help` to view options for the command.
 
       See documentation at
-      https://perry-bot.readthedocs.io/en/latest/usage.html#cli-usage for
-      further help.
+      https://perry-bot.readthedocs.io/en/latest/usage.html#cli-usage
+      for further help.
 
     Options:
       --help  Show this message and exit.
@@ -276,8 +347,10 @@ To see a full list of commands, type ``perry-bot --help``
     Commands:
       gui    Start GUI.
       habit  Log and manage habits.
-      log    Log cups of water drank.
+      mood   Rate your mood.
       viz    Visualize your water or habit records.
+      water  Log cups of water drank.
+      yfls   You feel like shit.
 
 
 Habit options
@@ -289,7 +362,9 @@ Habit options
 
       Log and manage habits.
 
-      [HABIT] = Name of habit. Use `all` for all habits.
+      Default frequency is set to daily.
+
+      [HABIT] = Name of habit or `all` for all habits.
 
     Options:
       -v, --view                      View existing habit and its status.
@@ -300,37 +375,41 @@ Habit options
       -a, --add                       Add a habit.
       -d, --delete                    Delete a habit.
 
-      -e, --edit [Name|Frequency|Start date]
-                                      Edit a habit.
-
       -f, --frequency [Daily|Bi-Weekly|Weekly|Monthly|Yearly]
                                       Frequency of the habit.
 
       -sd, --start-date [%Y-%m-%d]    Set the state date for weekly, bi-weekly,
                                       monthly, or yearly habits.
 
+      -e, --edit [Name|Frequency|Start date]
+                                      Edit a habit
+
+      -o, --original TEXT             The name of the habit you want to edit. Use
+                                      when editing the name of a habit
+
       --help                          Show this message and exit.
 
 
-Water options
-"""""""""""""
+Mood options
+""""""""""""
 
 .. code-block::
 
-    Usage: perry-bot log [OPTIONS] CUPS
+    Usage: perry-bot mood [OPTIONS] ARG
 
-      Log cups of water drank.
+      Rate your mood.
 
-      [CUPS] = Integer
+      [ARG] = Integer from 1 - 10 or `today` to view today's mood.
 
     Options:
-      -d, --delete  Delete # cup(s) of water.
-      -v, --view    View cups of water drank.
-      --help        Show this message and exit.
+      -v, --view          View today's mood.
+      -c, --comment TEXT  Add a comment.
+      --help              Show this message and exit.
+
 
 
 Data visualization options
-"""""""""""""""""""""""""""
+""""""""""""""""""""""""""
 
 .. code-block::
 
@@ -341,13 +420,51 @@ Data visualization options
       If no date or date range is provided, the last 7 days will be shown. See
       documentation for date formatting.
 
-      [LOG_TYPE] = `water` or `habit`
+      [LOG_TYPE] = `water` or `mood` or `habit`
 
     Options:
-      -o, --on [%Y-%m-%d]     Show entries on this date.
-      -f, --from [%Y-%m-%d]   Show entries after, or on, this date
-      -t, --to [%Y-%m-%d]     Show entries before, or on, this date.
-      -m, --month [%m|%b|%B]  Show entries on this month of any year.
-      -y, --year [%Y|%y]      Show entries of a specific year.
-      -h, --habit TEXT        Show entries of a specific habit.
-      --help                  Show this message and exit.
+      -o, --on [%Y-%m-%d]    Show records on this date.
+      -f, --from [%Y-%m-%d]  Show records after, or on, this date
+      -t, --to [%Y-%m-%d]    Show records before, or on, this date.
+      -c, --compare TEXT     Compare records. Separate values with a comma.
+      -h, --habit TEXT       Show entries of a specific habit.
+      --help                 Show this message and exit.
+
+
+
+Water options
+"""""""""""""
+
+.. code-block::
+
+    Usage: perry-bot water [OPTIONS] ARG
+
+      Log cups of water drank.
+      Get reminders to drink water.
+      See the documentation for more information on scheduling reminders.
+
+      [ARG] = Integer or `reminder` or `today`
+
+    Options:
+      -d, --delete  Delete NUM cup(s) of water.
+      -v, --view    View cups of water drank. Use with `today` argument.
+      --start       Start water reminder. Use with `reminder` argument.
+      --stop        Stop water reminder. Use with `reminder` argument.
+      -e, --edit    Edit water reminder schedule. use with `reminder` argument.
+      --help        Show this message and exit.
+
+
+You feel like shit options
+""""""""""""""""""""""""""
+
+.. code-block::
+
+    Usage: perry-bot yfls [OPTIONS]
+
+      You feel like shit. Interactive self-care.
+
+    Options:
+      -st, --start     Start the interactive self-care.
+      --save           Save your progress
+      -l, --load       Load your progress from an existing save.
+      --help           Show this message and exit.

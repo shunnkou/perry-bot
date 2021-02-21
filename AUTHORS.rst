@@ -12,11 +12,16 @@ Contributors
 
 None yet. Why not be the first?
 
+Misc
 _____
 
 
 This package was created based on a modified
 `audreyr/cookiecutter-pypackage`_ project template using `Cookiecutter`_
 
+The interactive self-care guide is from https://youfeellikeshit.com/.
+
+
 .. _Cookiecutter: https://github.com/cookiecutter/cookiecutter
 .. _audreyr/cookiecutter-pypackage: https://github.com/audreyfeldroy/cookiecutter-pypackage)
+
