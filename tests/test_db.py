@@ -10,7 +10,6 @@ test_db = SqliteDatabase(':memory:')
 
 class BaseTestCase(unittest.TestCase):
     """Base class for testing DB."""
-
     def setUp(self):
         """Set up database."""
         test_db.bind(MODELS, bind_refs=False, bind_backrefs=False)
@@ -27,7 +26,8 @@ class BaseTestCase(unittest.TestCase):
     def test_create_water_log(self):
         import datetime
         Water.get_or_create(cups_drank=3, datestamp='2021-02-20')
-        query = [(water.cups_drank, water.datestamp) for water in Water.select()]
+        query = [(water.cups_drank, water.datestamp)
+                 for water in Water.select()]
 
         assert 3 in query[0]
         assert datetime.date(2021, 2, 20) in query[0]
