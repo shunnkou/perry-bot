@@ -15,5 +15,3 @@ def test_command_line_interface():
     help_result = runner.invoke(cli_entry.main, ['--help'])
     assert help_result.exit_code == 0
     assert '--help' in help_result.output
-
-

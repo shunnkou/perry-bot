@@ -28,7 +28,10 @@ def start_gui():
 
 
 @click.command(name='water')
-@click.option('-d', '--delete', help='Delete NUM cup(s) of water.', is_flag=True)
+@click.option('-d',
+              '--delete',
+              help='Delete NUM cup(s) of water.',
+              is_flag=True)
 @click.option('-v', '--view', help='View cups of water drank.', is_flag=True)
 @click.argument('cups', type=int)
 def log_water(cups, delete):  # skipcq: FLK-D301, FLK-D400
@@ -71,7 +74,8 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
     click.echo(f"Rating = {rating}")
     click.echo(f"Comment = {comment}")
     if view and rating.isdigit():
-        raise UsageError("The --view flag and a rating cannot be used together.")
+        raise UsageError(
+            "The --view flag and a rating cannot be used together.")
     if view and rating.lower() == 'all':
         click.echo("Return today's mood.")
 
@@ -99,13 +103,14 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
                   ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
                   case_sensitive=False),
               default='Daily')
-@click.option('-sd',
-              '--start-date',
-              help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
-              type=click.DateTime(formats=['%Y-%m-%d'])
-              )
+@click.option(
+    '-sd',
+    '--start-date',
+    help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
+    type=click.DateTime(formats=['%Y-%m-%d']))
 @click.argument('habit')
-def log_habit(view, complete, add, delete, habit, start_date, edit, frequency):  # skipcq: FLK-D301, FLK-D400
+def log_habit(view, complete, add, delete, habit, start_date, edit,
+              frequency):  # skipcq: FLK-D301, FLK-D400
     """
     Log and manage habits.
 
@@ -131,7 +136,8 @@ def log_habit(view, complete, add, delete, habit, start_date, edit, frequency): 
     click.echo(f"Add = {add}")
     click.echo(f"Delete = {delete}")
     if add and delete:
-        raise UsageError('The --add and --delete flags cannot be used together.')
+        raise UsageError(
+            'The --add and --delete flags cannot be used together.')
     return 0
 
 
@@ -160,7 +166,8 @@ def log_habit(view, complete, add, delete, habit, start_date, edit, frequency): 
               help='Show entries of a specific year.')
 @click.option('-h', '--habit', help='Show entries of a specific habit.')
 @click.argument('log_type')
-def dataviz(from_, to, on, month, year, log_type, habit):  # skipcq: FLK-D301, FLK-D400
+def dataviz(from_, to, on, month, year, log_type,
+            habit):  # skipcq: FLK-D301, FLK-D400
     """
     Visualize your water or habit records.
 
@@ -199,7 +206,6 @@ main.add_command(log_water)
 main.add_command(log_mood)
 main.add_command(log_habit)
 main.add_command(dataviz)
-
 
 if __name__ == '__main__':
     main()

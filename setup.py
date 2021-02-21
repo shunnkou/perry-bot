@@ -29,12 +29,7 @@ with open('README.md') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    'Click',
-    'pendulum',
-    'peewee',
-    'rich'
-]
+requirements = ['Click', 'pendulum', 'peewee', 'rich']
 
 setup(
     author="Jace Huang",

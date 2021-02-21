@@ -2,17 +2,19 @@ import os
 from pathlib import Path
 from peewee import BooleanField, DateField, DateTimeField, IntegerField, Model, SqliteDatabase, TextField
 
-db_path = os.path.join(Path(__file__).parent.parent, 'tests', 'test_perry-bot.sqlite')
+db_path = os.path.join(
+    Path(__file__).parent.parent, 'tests', 'test_perry-bot.sqlite')
 
-db = SqliteDatabase(db_path, pragmas={
-    'journal_mode': 'wal',
-    'cache_size': -1 * 64000,
-    'ignore_check_constraints': 0,
-    'synchronous': 0
-})
-
+db = SqliteDatabase(db_path,
+                    pragmas={
+                        'journal_mode': 'wal',
+                        'cache_size': -1 * 64000,
+                        'ignore_check_constraints': 0,
+                        'synchronous': 0
+                    })
 
 # <!-------- Models --------!>
+
 
 class BaseModel(Model):
     class Meta:
