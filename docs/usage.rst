@@ -12,6 +12,8 @@ Start Perry Bot's GUI with:
     $ perry-bot gui
 
 
+Water Reminders
+^^^^^^^^^^^^^^^
 
 * TODO
 
@@ -20,8 +22,8 @@ Start Perry Bot's GUI with:
 CLI Usage
 ---------
 
-Track your water intake
-^^^^^^^^^^^^^^^^^^^^^^^
+Track your water intake and manage water reminders
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use the ``water`` command where ``CUPS`` is the number of cups you want to log:
 
@@ -60,7 +62,28 @@ To view the number of cups you've drank, use ``-v`` or ``--view``:
 
 .. code-block::
 
-    $ perry-bot water --view
+    $ perry-bot water --view today
+
+
+.. margin::
+
+    .. note::
+
+        ``reminder`` and ``today`` are the only strings that are accepted in this command.
+        Any other string will raise a ``UsageError``
+
+
+Add a reminder
+""""""""""""""
+
+To start a reminder, use the ``-s`` or ``--start`` option with the ``reminder`` argument:
+
+.. code-block::
+
+    $ perry-bot water -s reminder
+
+
+
 
 
 Track your mood
@@ -103,10 +126,17 @@ Use the ``habit`` command:
 If the habit is more than one word, enclose it in quotes.
 
 
+.. margin::
+
+    .. note::
+
+        Habit names must be unique. Creation will fail if the name isn't unique.
+
+
 Add a habit
 """""""""""
 
-| To add a habit, use the ``-a`` or ``--add`` command.
+| To add a habit, use the ``-a`` or ``--add`` option.
 | For example, to add a habit called "Water plants":
 
 .. code-block::
@@ -114,10 +144,16 @@ Add a habit
     $ perry-bot habit -a "Water plants"
 
 
+View habits
+"""""""""""
+
+| To view your habits, use the ``-v`` or ``--view`` option along with the ``all`` argument.
+
+
 Delete a habit
 """"""""""""""
 
-| To delete a habit, use the ``-d`` or ``--delete`` command.
+| To delete a habit, use the ``-d`` or ``--delete`` option.
 | For example, to delete a habit called "Water plants":
 
 .. code-block::
@@ -129,7 +165,7 @@ Delete a habit
 Schedule a habit
 """"""""""""""""
 
-| If you want to repeat a habit on a specific day, use the ``-sd``, or ``--start-date`` command.
+| If you want to repeat a habit on a specific day, use the ``-sd``, or ``--start-date`` option.
 | For example, to schedule "Water plants" to repeat bi-weekly:
 
 .. code-block:: shell
@@ -144,12 +180,12 @@ Edit a habit
 """"""""""""
 
 | If you've made a mistake while creating a habit or just want to edit a habit, use the ``-e`` or ``--edit`` option
-  along with the target to edit - ``Name``, ``Frequency``, or ``"Start date"``
-| For example, to change the name of a habit:
+  along with the target to edit - ``Name``, ``Frequency``, or ``"Start date"`` and the name or index of the original habit.
+| To change the name of a habit, remember to add the name or index of the original habit:
 
 .. code-block::
 
-    $ perry-bot habit -e name "Water plants!!!"
+    $ perry-bot habit -e name --original "Water plants" "Water plants!!!"
 
 
 To change the frequency of a habit to weekly:
@@ -163,7 +199,7 @@ To change the start date of a habit:
 
 .. code-block::
 
-    $ perry-bot habit -e "start date" -sd 2021-02-14
+    $ perry-bot habit -e "start date" -sd 2021-02-14 "Water plants!!!"
 
 
 

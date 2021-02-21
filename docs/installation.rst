@@ -8,7 +8,7 @@ Installation
 Stable release
 --------------
 
-To install Perry Bot, use pipx by running this command in your terminal:
+Install Perry Bot, with `pipx`_:
 
 .. code-block:: shell
 
@@ -29,7 +29,8 @@ Use the ``--help`` flag to see all commands:
     $ perry-bot --help
 
 
-This is the preferred method to install Perry Bot, as it will automatically create a virtual environment for Perry Bot and add the binary to your PATH.
+This is the preferred method to install Perry Bot, as it will
+automatically create a virtual environment for Perry Bot and add the binary to your PATH.
 
 If you don't have `pipx`_ installed, see pipx's `installation guide`_
 

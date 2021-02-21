@@ -1,5 +1,5 @@
-Welcome to Perry Bot's documentation!
-======================================
+Perry Bot
+=========
 
 .. attention::
     This is the documentation for the ``develop`` branch.
@@ -15,6 +15,7 @@ Welcome to Perry Bot's documentation!
    readme
    installation
    usage
+   cheatsheet
    contributing
    authors
    history
