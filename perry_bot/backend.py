@@ -12,7 +12,6 @@ db = SqliteDatabase(db_path,
                         'synchronous': 0
                     })
 
-
 # <!-------- Models --------!>
 
 
