@@ -153,3 +153,9 @@ pip-selfcheck.json
 
 # Project config
 .idea/
+/features/._sync_f66e5e6ec65c.db
+/features/._sync_f66e5e6ec65c.db-shm
+/features/._sync_f66e5e6ec65c.db-wal
+/tests/yaml_formats.yml
+/perry_bot/files/perry-bot.sqlite
+/gui/
