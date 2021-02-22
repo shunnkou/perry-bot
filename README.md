@@ -5,7 +5,7 @@
 [![DeepSource](https://deepsource.io/gh/shunnkou/perry-bot.svg/?label=active+issues)](https://deepsource.io/gh/shunnkou/perry-bot/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/shunnkou/perry-bot.svg/?label=resolved+issues)](https://deepsource.io/gh/shunnkou/perry-bot/?ref=repository-badge)
 
-A self-care bot.
+A commandline self-care bot.
 
 * Free software: GPL-3.0 license
 * Documentation: https://perry-bot.readthedocs.io.
@@ -14,7 +14,7 @@ A self-care bot.
 
 
 ## Features
-* Command line dashboard
+* Commandline dashboard
 * Trackers
   * Water tracker
   * Mood tracker
@@ -38,8 +38,8 @@ pipx install perry-bot
 * See options and help for a specific command
   * `perry-bot [COMMAND] --help`
 
-### CLI Commands
-See more commands and information in the [docs](https://perry-bot.readthedocs.io/en/latest/usage.html#cli-usage).
+### Commands
+See more commands and information in the [docs](https://perry-bot.readthedocs.io/en/latest/usage.html).
 
 #### Water
 ```

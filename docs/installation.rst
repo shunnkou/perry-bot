@@ -15,7 +15,7 @@ Install Perry Bot, with `pipx`_:
     $ pipx install perry-bot
 
 
-Start Perry Bot with:
+Perry Bot's command is:
 
 .. code-block:: shell
 

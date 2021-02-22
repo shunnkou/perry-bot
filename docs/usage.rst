@@ -2,28 +2,8 @@
 Usage
 =====
 
-GUI Usage
----------
-
-Start Perry Bot's GUI with:
-
-.. code-block:: shell
-
-    $ perry-bot gui
-
-
-Water Reminders
-^^^^^^^^^^^^^^^
-
-* TODO
-
-
-
-CLI Usage
----------
-
-Track your water intake and manage water reminders
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Track and manage water
+======================
 
 Use the ``water`` command where ``CUPS`` is the number of cups you want to log:
 
@@ -33,7 +13,7 @@ Use the ``water`` command where ``CUPS`` is the number of cups you want to log:
 
 
 Log a cup of water
-""""""""""""""""""
+^^^^^^^^^^^^^^^^^^
 
 | To log cups of water drank, use the ``water`` command.
 | For example, to log 1 cup of water:
@@ -45,7 +25,7 @@ Log a cup of water
 
 
 Delete a cup
-""""""""""""
+^^^^^^^^^^^^
 
 | If you made a mistake and want to remove a log, use ``-d`` or ``--delete``.
 | For example, to delete 1 cup of water:
@@ -56,7 +36,7 @@ Delete a cup
 
 
 View your cups drank
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^
 
 To view the number of cups you've drank, use ``-v`` or ``--view``:
 
@@ -70,11 +50,11 @@ To view the number of cups you've drank, use ``-v`` or ``--view``:
     .. note::
 
         ``reminder`` and ``today`` are the only strings that are accepted in this command.
-        Any other string will raise a ``UsageError``
+        Any other string will raise a ``UsageError``.
 
 
 Add a reminder
-""""""""""""""
+^^^^^^^^^^^^^^
 
 To start a reminder, use the ``-s`` or ``--start`` option with the ``reminder`` argument:
 
@@ -86,8 +66,8 @@ To start a reminder, use the ``-s`` or ``--start`` option with the ``reminder`` 
 
 
 
-Track your mood
-^^^^^^^^^^^^^^^
+Track mood
+==========
 
 Use the ``mood`` command:
 
@@ -104,7 +84,7 @@ Rate your mood on a scale from 1 - 10:
 
 
 Add a comment
-"""""""""""""
+^^^^^^^^^^^^^
 
 To add a comment/explanation for your mood, use ``--c`` or ``--comment``:
 
@@ -115,7 +95,7 @@ To add a comment/explanation for your mood, use ``--c`` or ``--comment``:
 
 
 Track and manage habits
-^^^^^^^^^^^^^^^^^^^^^^^
+=======================
 
 Use the ``habit`` command:
 
@@ -134,7 +114,7 @@ If the habit is more than one word, enclose it in quotes.
 
 
 Add a habit
-"""""""""""
+^^^^^^^^^^^
 
 | To add a habit, use the ``-a`` or ``--add`` option.
 | For example, to add a habit called "Water plants":
@@ -145,13 +125,22 @@ Add a habit
 
 
 View habits
-"""""""""""
+^^^^^^^^^^^
 
-| To view your habits, use the ``-v`` or ``--view`` option along with the ``all`` argument.
+| To view your habits, use the ``-v`` or ``--view`` option along with the ``all`` argument:
+
+.. code-block::
+
+    $ perry-bot habit -v all
+
+
+.. attention::
+
+    ``--view`` used with any other string will raise a ``UsageError``.
 
 
 Delete a habit
-""""""""""""""
+^^^^^^^^^^^^^^
 
 | To delete a habit, use the ``-d`` or ``--delete`` option.
 | For example, to delete a habit called "Water plants":
@@ -163,7 +152,7 @@ Delete a habit
 
 
 Schedule a habit
-""""""""""""""""
+^^^^^^^^^^^^^^^^
 
 | If you want to repeat a habit on a specific day, use the ``-sd``, or ``--start-date`` option.
 | For example, to schedule "Water plants" to repeat bi-weekly:
@@ -176,15 +165,9 @@ Schedule a habit
 If no frequency is specified, the default is daily.
 
 
-.. margin::
-
-    .. attention::
-
-        Editing the name of a habit requires an ``--original`` option
-
 
 Edit a habit
-""""""""""""
+^^^^^^^^^^^^
 
 | If you've made a mistake while creating a habit or just want to edit a habit, use the ``-e`` or ``--edit`` option
   along with the target to edit - ``Name``, ``Frequency``, or ``"Start date"`` and the name or index of the original habit.
@@ -193,6 +176,11 @@ Edit a habit
 .. code-block::
 
     $ perry-bot habit -e name --original "Water plants" "Water plants!!!"
+
+
+.. attention::
+
+    Editing the name of a habit requires an ``--original`` option.
 
 
 To change the frequency of a habit to weekly:
@@ -211,9 +199,9 @@ To change the start date of a habit:
 
 
 Visualize your data
-^^^^^^^^^^^^^^^^^^^
+===================
 
-Use the ``viz`` command where ``LOG_TYPE`` is either ``habit`` or ``water``
+Use the ``viz`` command where ``LOG_TYPE`` is either ``habit`` or ``water``:
 
 .. code-block::
 
@@ -236,6 +224,11 @@ To see data on a specific day:
     $ perry-bot viz --on 2021-02-03 water
 
 
+.. attention::
+
+    When visualizing ``habit``, the date must be a year (``2021``) or a month (``2021-02``), not a day.
+
+
 To see data in a specific date range:
 
 .. code-block::
@@ -244,27 +237,29 @@ To see data in a specific date range:
 
 
 Compare data from two dates
-"""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the ``--compare`` option and separate your dates with a comma.
 
 To compare days:
 
 .. code-block::
 
-    $ perry-bot viz --compare "2021-02-02,2021-02-05" habit
+    $ perry-bot viz --compare "2021-02-02,2021-02-05" water
 
 
 To compare months:
 
 .. code-block::
 
-    $ perry-bot viz --compare "2021-01,2021-02" water
+    $ perry-bot viz --compare "2021-01,2021-02" habit
 
 
 To compare years:
 
 .. code-block::
 
-    $ perry-bot viz --compare "2020-2021" mood
+    $ perry-bot viz --compare "2020,2021" mood
 
 
 .. margin::
@@ -316,7 +311,7 @@ Date Formats
 
 
 Full list of commands and options
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+=================================
 
 To see a full list of commands, type ``perry-bot --help``
 
@@ -344,7 +339,7 @@ To see a full list of commands, type ``perry-bot --help``
 
 
 Habit options
-"""""""""""""
+^^^^^^^^^^^^^
 
 .. code-block::
 
@@ -381,7 +376,7 @@ Habit options
 
 
 Mood options
-""""""""""""
+^^^^^^^^^^^^
 
 .. code-block::
 
@@ -399,7 +394,7 @@ Mood options
 
 
 Data visualization options
-""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block::
 
@@ -423,7 +418,7 @@ Data visualization options
 
 
 Water options
-"""""""""""""
+^^^^^^^^^^^^^
 
 .. code-block::
 

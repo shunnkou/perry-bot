@@ -17,7 +17,7 @@ _____
 
 
 This package was created based on a modified
-`audreyr/cookiecutter-pypackage`_ project template using `Cookiecutter`_
+`audreyr/cookiecutter-pypackage`_ project template using `Cookiecutter`_.
 
 
 .. _Cookiecutter: https://github.com/cookiecutter/cookiecutter

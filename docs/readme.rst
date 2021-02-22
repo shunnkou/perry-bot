@@ -14,7 +14,7 @@
     :target: https://deepsource.io/gh/shunnkou/perry-bot/?ref=repository-badge
     :alt: Deepsource resolved issues
 
-A self-care bot.
+A commandline self-care bot.
 
 * Free software: BSD license
 * Documentation: https://perry-bot.readthedocs.io.
@@ -23,7 +23,7 @@ A self-care bot.
 Features
 ^^^^^^^^
 
-* Command line dashboard
+* Commandline dashboard
 * Trackers
 
   * Water tracker
@@ -34,3 +34,11 @@ Features
 * Water reminders
 * Visualize your tracked data with matplotlib graphs
 * Local data storage with a SQLite database
+
+
+Credits
+^^^^^^^
+
+* See `credits`_.
+
+.. _credits: https://perry-bot.readthedocs.io/en/latest/authors.html#misc
