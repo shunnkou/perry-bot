@@ -23,8 +23,7 @@ A self-care bot.
 Features
 ^^^^^^^^
 
-* CLI and GUI
-
+* Command line dashboard
 * Trackers
 
   * Water tracker
@@ -32,7 +31,6 @@ Features
   * Habit tracker
 
     * Daily, weekly, bi-weekly, monthly, and yearly habits
-
-* Water reminder
-* Visualize your tracked data
+* Water reminders
+* Visualize your tracked data with matplotlib graphs
 * Local data storage with a SQLite database
