@@ -9,7 +9,6 @@ MODELS = [WaterDB, MoodDB, HabitDB]
 # skipqc
 class BaseTestCase(unittest.TestCase):
     """Base class for testing DB."""
-
     def setUp(self):
         """Set up database."""
         super(BaseTestCase, self).setUp()
@@ -22,6 +21,7 @@ class BaseTestCase(unittest.TestCase):
         """Cleanup database."""
         self.conn.drop_tables(MODELS)
         self.conn.close()
+
 
 #
 #     # <!-------- Water Table --------!>

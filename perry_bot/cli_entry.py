@@ -22,11 +22,25 @@ def main():
 
 
 @click.command(name='water')
-@click.option('-d', '--delete', help='Delete NUM cup(s) of water.', is_flag=True)
-@click.option('-v', '--view', help='View cups of water drank. Use with `today` argument.', is_flag=True)
-@click.option('--start', help='Start water reminder. Use with `reminder` argument.', is_flag=True)
-@click.option('--stop', help='Stop water reminder. Use with `reminder` argument.', is_flag=True)
-@click.option('-e', '--edit', help='Edit water reminder schedule. use with `reminder` argument.', is_flag=True)
+@click.option('-d',
+              '--delete',
+              help='Delete NUM cup(s) of water.',
+              is_flag=True)
+@click.option('-v',
+              '--view',
+              help='View cups of water drank. Use with `today` argument.',
+              is_flag=True)
+@click.option('--start',
+              help='Start water reminder. Use with `reminder` argument.',
+              is_flag=True)
+@click.option('--stop',
+              help='Stop water reminder. Use with `reminder` argument.',
+              is_flag=True)
+@click.option(
+    '-e',
+    '--edit',
+    help='Edit water reminder schedule. use with `reminder` argument.',
+    is_flag=True)
 @click.argument('arg')
 def log_water(arg, delete, view, start, stop):  # skipcq: FLK-D301, FLK-D400
     """
@@ -50,7 +64,8 @@ def log_water(arg, delete, view, start, stop):  # skipcq: FLK-D301, FLK-D400
     click.echo(f"Number of cups to log: {arg}")
 
     if arg.lower() not in ('reminder' or 'today') and arg.lower is not int:
-        raise UsageError('The [CUPS] argument must be `reminder` or `today` or a number.')
+        raise UsageError(
+            'The [CUPS] argument must be `reminder` or `today` or a number.')
 
     # Ask what reminder user wants to stop
     return 0
@@ -79,7 +94,8 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
     click.echo(f"Rating = {rating}")
     click.echo(f"Comment = {comment}")
     if view and rating.isdigit():
-        raise UsageError("The --view option and a rating cannot be used together.")
+        raise UsageError(
+            "The --view option and a rating cannot be used together.")
     if view and rating.lower() == 'today':
         click.echo("Return today's mood.")
 
@@ -101,17 +117,22 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
                   ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
                   case_sensitive=False),
               default='Daily')
-@click.option('-sd',
-              '--start-date',
-              help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
-              type=click.DateTime(formats=['%Y-%m-%d'])
-              )
+@click.option(
+    '-sd',
+    '--start-date',
+    help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
+    type=click.DateTime(formats=['%Y-%m-%d']))
 @click.option('-e',
               '--edit',
               help='Edit a habit',
               type=click.Choice(['Name', 'Frequency', 'Start date'],
                                 case_sensitive=False))
-@click.option('-o', '--original', help='The name of the habit you want to edit. Use when editing the name of a habit')
+@click.option(
+    '-o',
+    '--original',
+    help=
+    'The name of the habit you want to edit. Use when editing the name of a habit'
+)
 @click.argument('habit')
 def log_habit(view, complete, add, delete, habit, start_date, edit,
               frequency):  # skipcq: FLK-D301, FLK-D400
@@ -140,7 +161,8 @@ def log_habit(view, complete, add, delete, habit, start_date, edit,
     click.echo(f"Add = {add}")
     click.echo(f"Delete = {delete}")
     if add and delete:
-        raise UsageError('The --add and --delete option cannot be used together.')
+        raise UsageError(
+            'The --add and --delete option cannot be used together.')
     if habit.lower() != 'all' and view:
         raise UsageError('Use the `all` argument with the --view option')
     return 0
@@ -198,6 +220,7 @@ def dataviz(from_, to, on, month, year, log_type,
     if log_type == 'water' and habit is True:
         raise UsageError("The --habit option cannot be used with `water`")
     return 0
+
 
 main.add_command(log_water)
 main.add_command(log_mood)

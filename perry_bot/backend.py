@@ -19,13 +19,11 @@ db = SqliteDatabase(db_path,
                         'synchronous': 0
                     })
 
-
 # <!-------- Models --------!>
 
 
 class BaseModelDB(Model):
     """Database model."""
-
     class Meta:
         database = db
         legacy_table_names = False
@@ -64,6 +62,7 @@ class HabitDB(BaseModelDB):
 
 # <!-------- Dataclasses --------!>
 
+
 @attr.s(kw_only=True)
 class Water:
     """Water dataclass."""
@@ -100,6 +99,7 @@ class Habit:
 
 # <!-------- Methods -------->
 
+
 def get_or_create(model, **kwargs):
     """Check if today exists. If yes, get it. Else, create new day."""
     if model.lower() == 'water':
@@ -111,4 +111,3 @@ def get_or_create(model, **kwargs):
     elif model.lower() == 'habit':
         habit, created = HabitDB.get_or_create(**kwargs)
         return habit
-
