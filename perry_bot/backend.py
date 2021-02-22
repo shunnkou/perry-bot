@@ -27,6 +27,7 @@ class BaseModelDB(Model):
     """Database model."""
 
     class Meta:
+        """Set database and use legacy table names."""
         database = db
         legacy_table_names = False
 
@@ -37,6 +38,7 @@ class WaterDB(BaseModelDB):
     date_stamp = TextField(column_name='date_stamp')
 
     class Meta:
+        """Name the table 'water'."""
         table_name = 'water'
 
 
@@ -47,6 +49,7 @@ class MoodDB(BaseModelDB):
     comment = TextField(column_name='comment', null=True)
 
     class Meta:
+        """Name the table 'mood'."""
         table_name = 'mood'
 
 
@@ -59,6 +62,7 @@ class HabitDB(BaseModelDB):
     frequency = TextField(column_name='frequency')
 
     class Meta:
+        """Name the table 'habit'."""
         table_name = 'habit'
 
 
@@ -100,15 +104,16 @@ class Habit:
 
 # <!-------- Methods -------->
 
-def get_or_create(model, **kwargs):
+def _get_or_create(model, **kwargs):
     """Check if today exists. If yes, get it. Else, create new day."""
     if model.lower() == 'water':
-        water, created = WaterDB.get_or_create(**kwargs)
+        water, _unused_created = WaterDB.get_or_create(**kwargs)
         return water
-    elif model.lower() == 'mood':
-        mood, created = MoodDB.get_or_create(**kwargs)
+    if model.lower() == 'mood':
+        mood, _unused_created = MoodDB.get_or_create(**kwargs)
         return mood
-    elif model.lower() == 'habit':
-        habit, created = HabitDB.get_or_create(**kwargs)
+    if model.lower() == 'habit':
+        habit, _unused_created = HabitDB.get_or_create(**kwargs)
         return habit
+    raise Exception("The model must be `water`, `mood`, or `habit`.")
 

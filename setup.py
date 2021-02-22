@@ -14,7 +14,7 @@ def walker(base, *paths):
     os.chdir(base)
     try:
         for path in paths:
-            for dname, dirs, files in os.walk(path):
+            for dname, _unused_dirs, files in os.walk(path):
                 for f in files:
                     file_list.add(os.path.join(dname, f))
     finally:
