@@ -7,6 +7,7 @@ name = "pypi"
 pendulum = "*"
 peewee = "*"
 rich = "*"
+attrs = "*"
 
 [dev-packages]
 bump2version = "*"
@@ -21,6 +22,7 @@ Sphinx = ">=1.4"
 sphinx-book-theme = "*"
 m2r2 = "*"
 twine = "*"
+behave = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
