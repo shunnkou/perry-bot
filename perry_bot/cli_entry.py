@@ -7,7 +7,9 @@ from perry_bot import main as pb
 
 
 @click.group()
+# skipcq: FLK-D301, FLK-D400
 def main():  # skipcq: FLK-D301, FLK-D400
+    # skipcq: FLK-D301, FLK-D400
     """
     \b
     Perry Bot.
@@ -21,10 +23,10 @@ def main():  # skipcq: FLK-D301, FLK-D400
     return 0
 
 
-@click.command(name='gui')
-def start_gui():
-    """Start GUI."""
-    click.echo("Start GUI")
+# @click.command(name='gui')
+# def start_gui():
+#     """Start GUI."""
+#     click.echo("Start GUI")
 
 
 @click.command(name='water')
@@ -206,28 +208,8 @@ def dataviz(from_, to, on, month, year, log_type,
     return 0
 
 
-@click.command(name='yfls')
-@click.option('-st', '--start', help='Start the interactive self-care.', is_flag=True)
-@click.option('--save', help='Save your progress', is_flag=True)
-@click.option('-l', '--load', help='Load your progress from an existing save.', is_flag=True)
-def you_feel_like_sht(start, save, load):
-    """
-    You feel like shit.
-    Interactive self-care.
-
-    \f
-
-    :param start:
-    :param save:
-    :param load:
-    :return:
-    """
-    pass
-
-
-main.add_command(start_gui)
+# main.add_command(start_gui)
 main.add_command(log_water)
 main.add_command(log_mood)
 main.add_command(log_habit)
 main.add_command(dataviz)
-main.add_command(you_feel_like_sht)
