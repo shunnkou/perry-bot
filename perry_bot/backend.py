@@ -1,6 +1,13 @@
 import os
 from pathlib import Path
-from playhouse.sqlite_ext import BooleanField, DateField, IntegerField, Model, SqliteDatabase, TextField, JSONField
+
+import attr
+from peewee import BooleanField, IntegerField, Model, SqliteDatabase, TextField
+from rich.table import Table
+
+from perry_bot.console import console
+
+console = console()
 
 db_path = os.path.join(Path(__file__).parent, 'files', 'perry-bot.sqlite')
 
@@ -16,27 +23,34 @@ db = SqliteDatabase(db_path,
 # <!-------- Models --------!>
 
 
-class BaseModel(Model):
+class BaseModelDB(Model):
     """Database model."""
+
     class Meta:
         database = db
         legacy_table_names = False
 
 
-class Water(BaseModel):
+class WaterDB(BaseModelDB):
     """Water table."""
     cups_drank = IntegerField(column_name='cups_drank')
-    datestamp = DateField(column_name='datestamp')
+    date_stamp = TextField(column_name='date_stamp')
+
+    class Meta:
+        table_name = 'water'
 
 
-class Mood(BaseModel):
+class MoodDB(BaseModelDB):
     """Mood table."""
     rating = IntegerField(column_name='rating')
     datetime_stamp = TextField(column_name='datetime_stamp')
     comment = TextField(column_name='comment', null=True)
 
+    class Meta:
+        table_name = 'mood'
 
-class Habit(BaseModel):
+
+class HabitDB(BaseModelDB):
     """Habit table."""
     habit_name = TextField(column_name='habit_name', unique=True)
     completion = BooleanField(column_name='completion')
@@ -44,9 +58,57 @@ class Habit(BaseModel):
     completed_on = TextField(column_name='completed_on')
     frequency = TextField(column_name='frequency')
 
+    class Meta:
+        table_name = 'habit'
 
-def create_tables():
-    """Create tables."""
-    with db:
-        db.create_tables([Water, Mood, Habit])
-    print("Tables created.")
+
+# <!-------- Dataclasses --------!>
+
+@attr.s(kw_only=True)
+class Water:
+    """Water dataclass."""
+    cups_drank = attr.ib()
+    date_stamp = attr.ib()
+
+
+@attr.s()
+class Mood:
+    """Mood dataclass."""
+    rating = attr.ib(kw_only=True)
+    datetime_stamp = attr.ib(kw_only=True)
+    comment = attr.ib()
+
+
+@attr.s(kw_only=True)
+class Habit:
+    """Habit dataclass."""
+    habit_name = attr.ib()
+    completion = attr.ib()
+    start_date = attr.ib()
+    completed_on = attr.ib()
+    frequency = attr.ib()
+
+    @classmethod
+    def make_table(cls, **kwargs):
+        """Create a table to view habits."""
+        table = Table(title="My Habits")
+        table.add_column("Habit")
+        table.add_column("Complete?")
+        table.add_column("Start Date")
+        table.add_column("Frequency")
+
+
+# <!-------- Methods -------->
+
+def get_or_create(model, **kwargs):
+    """Check if today exists. If yes, get it. Else, create new day."""
+    if model.lower() == 'water':
+        water, created = WaterDB.get_or_create(**kwargs)
+        return water
+    elif model.lower() == 'mood':
+        mood, created = MoodDB.get_or_create(**kwargs)
+        return mood
+    elif model.lower() == 'habit':
+        habit, created = HabitDB.get_or_create(**kwargs)
+        return habit
+

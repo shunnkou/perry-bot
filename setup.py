@@ -14,7 +14,7 @@ def walker(base, *paths):
     os.chdir(base)
     try:
         for path in paths:
-            for dname, _unused_dirs, files in os.walk(path):
+            for dname, dirs, files in os.walk(path):
                 for f in files:
                     file_list.add(os.path.join(dname, f))
     finally:
@@ -38,13 +38,12 @@ setup(
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: End Users/Desktop',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English', 'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9'
+        'Programming Language :: Python :: 3.8'
     ],
-    description="A self care bot.",
+    description="A commandline self care bot.",
     entry_points={
         'console_scripts': [
             'perry-bot=perry_bot.cli_entry:main',
@@ -54,7 +53,6 @@ setup(
     license="BSD license",
     long_description=readme,
     long_description_content_type='text/markdown',
-    include_package_data=True,
     keywords='perry_bot',
     name='perry_bot',
     packages=find_packages(include=['perry_bot', 'perry_bot.*']),

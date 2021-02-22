@@ -7,9 +7,7 @@ from perry_bot import main as pb
 
 
 @click.group()
-# skipcq: FLK-D301, FLK-D400
-def main():  # skipcq: FLK-D301, FLK-D400
-    # skipcq: FLK-D301, FLK-D400
+def main():
     """
     \b
     Perry Bot.
@@ -23,12 +21,6 @@ def main():  # skipcq: FLK-D301, FLK-D400
     return 0
 
 
-# @click.command(name='gui')
-# def start_gui():
-#     """Start GUI."""
-#     click.echo("Start GUI")
-
-
 @click.command(name='water')
 @click.option('-d', '--delete', help='Delete NUM cup(s) of water.', is_flag=True)
 @click.option('-v', '--view', help='View cups of water drank. Use with `today` argument.', is_flag=True)
@@ -36,7 +28,7 @@ def main():  # skipcq: FLK-D301, FLK-D400
 @click.option('--stop', help='Stop water reminder. Use with `reminder` argument.', is_flag=True)
 @click.option('-e', '--edit', help='Edit water reminder schedule. use with `reminder` argument.', is_flag=True)
 @click.argument('arg')
-def log_water(cups, delete, view, start, stop):  # skipcq: FLK-D301, FLK-D400
+def log_water(arg, delete, view, start, stop):  # skipcq: FLK-D301, FLK-D400
     """
     \b
     Log cups of water drank.
@@ -50,14 +42,14 @@ def log_water(cups, delete, view, start, stop):  # skipcq: FLK-D301, FLK-D400
     :param stop:
     :param start:
     :param view:
-    :param cups:
+    :param arg:
     :param delete:
     :return:
     """
     click.echo(f"Delete = {delete}")
-    click.echo(f"Number of cups to log: {cups}")
+    click.echo(f"Number of cups to log: {arg}")
 
-    if cups.lower() not in ('reminder' or 'today') and cups.lower is not int:
+    if arg.lower() not in ('reminder' or 'today') and arg.lower is not int:
         raise UsageError('The [CUPS] argument must be `reminder` or `today` or a number.')
 
     # Ask what reminder user wants to stop
@@ -207,8 +199,6 @@ def dataviz(from_, to, on, month, year, log_type,
         raise UsageError("The --habit option cannot be used with `water`")
     return 0
 
-
-# main.add_command(start_gui)
 main.add_command(log_water)
 main.add_command(log_mood)
 main.add_command(log_habit)
