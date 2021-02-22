@@ -267,16 +267,6 @@ To compare years:
     $ perry-bot viz --compare "2020-2021" mood
 
 
-
-You feel like shit: An interactive self-care guide
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use the ``yfls`` command:
-
-.. code-block::
-
-    $ perry-bot yfls [OPTIONS]
-
 .. margin::
 
     .. note::
@@ -452,19 +442,3 @@ Water options
       --stop        Stop water reminder. Use with `reminder` argument.
       -e, --edit    Edit water reminder schedule. use with `reminder` argument.
       --help        Show this message and exit.
-
-
-You feel like shit options
-""""""""""""""""""""""""""
-
-.. code-block::
-
-    Usage: perry-bot yfls [OPTIONS]
-
-      You feel like shit. Interactive self-care.
-
-    Options:
-      -st, --start     Start the interactive self-care.
-      --save           Save your progress
-      -l, --load       Load your progress from an existing save.
-      --help           Show this message and exit.

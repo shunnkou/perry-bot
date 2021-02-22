@@ -14,17 +14,15 @@ A self-care bot.
 
 
 ## Features
-* CLI and GUI
+* Command line dashboard
 * Trackers
   * Water tracker
   * Mood tracker
   * Habit tracker
     * Daily, weekly, bi-weekly, monthly, and yearly habits
 * Water reminders
-* Visualize your tracked data
+* Visualize your tracked data with matplotlib graphs
 * Local data storage with a SQLite database
-* [You feel like sh*t's](https://youfeellikeshit.com/) interactive self-care
-  * Save and load your progress
 
 
 ## Installation
@@ -39,11 +37,6 @@ pipx install perry-bot
   * `perry-bot --help`
 * See options and help for a specific command
   * `perry-bot [COMMAND] --help`
-### GUI
-Start the GUI with:
-```
-perry-bot gui
-```
 
 ### CLI Commands
 See more commands and information in the [docs](https://perry-bot.readthedocs.io/en/latest/usage.html#cli-usage).
@@ -68,15 +61,8 @@ perry-bot habit [OPTIONS] HABIT
 perry-bot viz [OPTIONS] LOG_TYPE
 ```
 
-#### You feel like sh*t
-```
-perry-bot yfls [OPTIONS]
-```
-
 
 ## Credits
 This package was created based on a modified
 [audreyr/cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)
 project template using [Cookiecutter](https://github.com/cookiecutter/cookiecutter).
-
-The interactive self-care guide is from https://youfeellikeshit.com/.

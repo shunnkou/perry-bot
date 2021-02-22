@@ -35,9 +35,4 @@ Features
 
 * Water reminder
 * Visualize your tracked data
-* `You feel like sh*t's`_ interactive self-care
-
-  * Save and load your progress
 * Local data storage with a SQLite database
-
-.. _You feel like sh*t's: https://youfeellikeshit.com/
