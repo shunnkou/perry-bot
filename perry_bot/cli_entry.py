@@ -15,6 +15,7 @@ from perry_bot import main as pb
 
 
 @click.group()
+@click.version_option(version='v0.1.0', prog_name='perry-bot')
 def main():
     """
     \b
