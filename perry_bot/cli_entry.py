@@ -5,7 +5,6 @@ import pendulum
 # skipcq
 from perry_bot import main as pb
 
-
 # def validate_date():
 #     pass
 #
@@ -30,13 +29,24 @@ def main():
 
 
 @click.command(name='water')
-@click.option('-a', '--add', help='Add NUM cup(s) of water', type=click.IntRange(1, None))
-@click.option('-d', '--delete', help='Delete NUM cup(s) of water.', type=click.IntRange(1, None))
-@click.option('-v', '--view', help='View cups of water drank.',
+@click.option('-a',
+              '--add',
+              help='Add NUM cup(s) of water',
+              type=click.IntRange(1, None))
+@click.option('-d',
+              '--delete',
+              help='Delete NUM cup(s) of water.',
+              type=click.IntRange(1, None))
+@click.option('-v',
+              '--view',
+              help='View cups of water drank.',
               type=click.DateTime(['%Y-%m-%d', '%Y-%m, %Y']))
 @click.option('--start', help='Start water reminder.', is_flag=True)
 @click.option('--stop', help='Stop water reminder.', is_flag=True)
-@click.option('-e', '--edit', help='Edit water reminder schedule.', is_flag=True)
+@click.option('-e',
+              '--edit',
+              help='Edit water reminder schedule.',
+              is_flag=True)
 def log_water(add, delete, view, start, stop, edit):
     """
     \b
@@ -61,9 +71,15 @@ def log_water(add, delete, view, start, stop, edit):
 
 
 @click.command(name='mood')
-@click.option('-r', '--rating', help="Your mood's rating. A number from 1-10", type=click.IntRange(1, 10))
+@click.option('-r',
+              '--rating',
+              help="Your mood's rating. A number from 1-10",
+              type=click.IntRange(1, 10))
 @click.option('-c', '--comment', help='Add a comment.', type=str)
-@click.option('-v', '--view', help="View average mood.", type=click.DateTime(['%Y-%m-%d', '%Y-%m', '%Y']))
+@click.option('-v',
+              '--view',
+              help="View average mood.",
+              type=click.DateTime(['%Y-%m-%d', '%Y-%m', '%Y']))
 def log_mood(rating, comment, view):
     """
     Rate your mood.
@@ -81,7 +97,9 @@ def log_mood(rating, comment, view):
     click.echo(f"Rating = {rating}")
     click.echo(f"Comment = {comment}")
     if view and rating.isdigit():
-        raise BadOptionUsage(message="The --view option and a rating cannot be used together.", option_name='--view')
+        raise BadOptionUsage(
+            message="The --view option and a rating cannot be used together.",
+            option_name='--view')
     if view and rating.lower() == 'today':
         click.echo("Return today's mood.")
 
@@ -91,12 +109,8 @@ def log_mood(rating, comment, view):
               '--view',
               help='View existing habit(s) and its status.',
               is_flag=True)
-@click.option('-c',
-              '--complete',
-              help='Mark habit as complete.')
-@click.option('-ic',
-              '--incomplete',
-              help='Mark habit as incomplete')
+@click.option('-c', '--complete', help='Mark habit as complete.')
+@click.option('-ic', '--incomplete', help='Mark habit as incomplete')
 @click.option('-a', '--add', help='Add a habit.')
 @click.option('-d', '--delete', help='Delete a habit.')
 @click.option('-f',
@@ -106,17 +120,18 @@ def log_mood(rating, comment, view):
                   ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
                   case_sensitive=False),
               default='Daily')
-@click.option('-sd',
-              '--start-date',
-              help='Set the start date for weekly, bi-weekly, monthly, or yearly habits.',
-              type=click.DateTime(formats=['%Y-%m-%d'])
-              )
-@click.option('-e',
-              '--edit',
-              help='Edit a habit. Choice = Name, Frequency, "Start date".'
-                   ' Use the original name or number of the habit you want to edit.',
-              type=(click.Choice(['Name', 'Frequency', 'Start date'],
-                                 case_sensitive=False), str))
+@click.option(
+    '-sd',
+    '--start-date',
+    help='Set the start date for weekly, bi-weekly, monthly, or yearly habits.',
+    type=click.DateTime(formats=['%Y-%m-%d']))
+@click.option(
+    '-e',
+    '--edit',
+    help='Edit a habit. Choice = Name, Frequency, "Start date".'
+    ' Use the original name or number of the habit you want to edit.',
+    type=(click.Choice(['Name', 'Frequency', 'Start date'],
+                       case_sensitive=False), str))
 def log_habit(view, complete, incomplete, add, delete, start_date, edit,
               frequency):
     """
@@ -144,7 +159,9 @@ def log_habit(view, complete, incomplete, add, delete, start_date, edit,
     click.echo(f"Delete = {delete}")
     click.echo(f"Edit = {edit[0]}, {edit[1]}")
     if add and delete:
-        raise BadOptionUsage(message='The --add and --delete option cannot be used together.', option_name='--add, --delete')
+        raise BadOptionUsage(
+            message='The --add and --delete option cannot be used together.',
+            option_name='--add, --delete')
     return 0
 
 
@@ -169,8 +186,7 @@ def log_habit(view, complete, incomplete, add, delete, start_date, edit,
                     click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y'])))
 @click.option('-h', '--habit', help='Show records of a specific habit.')
 @click.argument('log_type')
-def dataviz(from_, to, on, month, year, log_type,
-            habit):
+def dataviz(from_, to, on, month, year, log_type, habit):
     """
     Visualize your records.
 
@@ -197,7 +213,8 @@ def dataviz(from_, to, on, month, year, log_type,
     click.echo(f'Month = {month}')
     click.echo(f'Year = {year}')
     if habit and log_type != 'habit':
-        raise BadOptionUsage(message='LOG_TYPE must be habit.', option_name='--habit')
+        raise BadOptionUsage(message='LOG_TYPE must be habit.',
+                             option_name='--habit')
     return 0
 
 
