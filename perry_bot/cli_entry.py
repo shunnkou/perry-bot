@@ -5,7 +5,6 @@ import pendulum
 # skipcq
 from perry_bot import main as pb
 
-
 # def validate_date(ctx, param, value):
 #     pass
 #
@@ -24,9 +23,17 @@ def validate_edit_habit(ctx, param, value):
         option, habit_name = value.split(',')
         assert option in option_list
     except AssertionError:
-        raise click.BadParameter(message="Value to change needs to be 'name', 'frequency', or 'start date'.", param=param, ctx=ctx)
+        raise click.BadParameter(
+            message=
+            "Value to change needs to be 'name', 'frequency', or 'start date'.",
+            param=param,
+            ctx=ctx)
     except ValueError:
-        raise click.BadParameter(message="Separate your option and your new habit name with a comma.", param=param, ctx=ctx)
+        raise click.BadParameter(
+            message=
+            "Separate your option and your new habit name with a comma.",
+            param=param,
+            ctx=ctx)
 
 
 @click.group()
@@ -140,7 +147,7 @@ def log_mood(rating, comment, view):
     '-e',
     '--edit',
     help="Edit a habit's name, frequency, start date. "
-         "Separate your choice and the name (or number) of the habit with a comma.",
+    "Separate your choice and the name (or number) of the habit with a comma.",
     nargs=2,
     callback=validate_edit_habit)
 def log_habit(view, complete, incomplete, add, delete, start_date, edit,
