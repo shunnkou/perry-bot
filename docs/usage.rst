@@ -5,23 +5,23 @@ Usage
 Track and manage water
 ======================
 
-Use the ``water`` command where ``CUPS`` is the number of cups you want to log:
+Use the ``water`` command:
 
 .. code-block::
 
-    $ perry-bot water [OPTIONS] [CUPS]
+    $ perry-bot water [OPTIONS]
 
 
 Log a cup of water
 ^^^^^^^^^^^^^^^^^^
 
-| To log cups of water drank, use the ``water`` command.
+| To log cups of water drank, use the ``-a`` or ``--add`` option.
 | For example, to log 1 cup of water:
 
 
 .. code-block::
 
-    $ perry-bot water 1
+    $ perry-bot water -a 1
 
 
 Delete a cup
@@ -38,30 +38,41 @@ Delete a cup
 View your cups drank
 ^^^^^^^^^^^^^^^^^^^^
 
-To view the number of cups you've drank, use ``-v`` or ``--view``:
+To view the number of cups you've drank, use ``-v`` or ``--view`` and a date, month, or year:
 
 .. code-block::
 
-    $ perry-bot water --view today
+    $ perry-bot water --view 2021-02-05
 
 
-.. margin::
-
-    .. note::
-
-        ``reminder`` and ``today`` are the only strings that are accepted in this command.
-        Any other string will raise a ``UsageError``.
-
-
-Add a reminder
+Start reminder
 ^^^^^^^^^^^^^^
 
-To start a reminder, use the ``-s`` or ``--start`` option with the ``reminder`` argument:
+To start a reminder, use the ``--start`` option:
 
 .. code-block::
 
-    $ perry-bot water -s reminder
+    $ perry-bot water --start
 
+
+Stop reminder
+^^^^^^^^^^^^^
+
+To stop a reminder, use the ``--stop`` option:
+
+.. code-block::
+
+    $ perry-bot water --stop
+
+
+Edit schedule
+^^^^^^^^^^^^^
+
+TO edit the reminder's schedule, use the ``-e`` or ``--edit`` option:
+
+.. code-block::
+
+    $ perry-bot water --edit
 
 
 
@@ -73,24 +84,24 @@ Use the ``mood`` command:
 
 .. code-block::
 
-    $ perry-bot mood [OPTIONS] [RATING]
+    $ perry-bot mood [OPTIONS]
 
 
-Rate your mood on a scale from 1 - 10:
+To rate your mood on a scale from 1 - 10, use the ``-r`` or ``--rating`` option:
 
 .. code-block::
 
-    $ perry-bot mood 6
+    $ perry-bot mood -r 6
 
 
 Add a comment
 ^^^^^^^^^^^^^
 
-To add a comment/explanation for your mood, use ``--c`` or ``--comment``:
+To add a comment/explanation for your mood, use the ``-c`` or ``--comment`` option:
 
 .. code-block::
 
-    $ perry-bot -c "Failed an exam today..." 3
+    $ perry-bot -c "Failed an exam today..." -r 3
 
 
 
@@ -101,7 +112,7 @@ Use the ``habit`` command:
 
 .. code-block:: shell
 
-    $ perry-bot habit [OPTIONS] [HABIT]
+    $ perry-bot habit [OPTIONS]
 
 If the habit is more than one word, enclose it in quotes.
 
@@ -127,16 +138,18 @@ Add a habit
 View habits
 ^^^^^^^^^^^
 
-| To view your habits, use the ``-v`` or ``--view`` option along with the ``all`` argument:
+| To view your habits, use the ``-v`` or ``--view`` option along with a date:
 
 .. code-block::
 
-    $ perry-bot habit -v all
+    $ perry-bot habit -v 2021-02-01
 
 
-.. attention::
+.. note::
 
-    ``--view`` used with any other string will raise a ``UsageError``.
+    See `date formats`_ for more information.
+
+.. _date formats: https://perry-bot.readthedocs.io/en/develop/usage.html#date-formats
 
 
 Delete a habit
@@ -159,7 +172,7 @@ Schedule a habit
 
 .. code-block:: shell
 
-    $ perry-bot -a -f bi-weekly -sd 2021-02-18 "Water plants"
+    $ perry-bot -f bi-weekly -sd 2021-02-18 -a "Water plants"
 
 
 If no frequency is specified, the default is daily.
@@ -170,17 +183,13 @@ Edit a habit
 ^^^^^^^^^^^^
 
 | If you've made a mistake while creating a habit or just want to edit a habit, use the ``-e`` or ``--edit`` option
-  along with the target to edit - ``Name``, ``Frequency``, or ``"Start date"`` and the name or index of the original habit.
+  as the target to edit - ``Name``, ``Frequency``, or ``"Start date"``, the name or index of the original habit, along
+  with the ``-a`` or ``--add`` option to specify the new name.
 | To change the name of a habit, remember to add the name or index of the original habit:
 
 .. code-block::
 
-    $ perry-bot habit -e name --original "Water plants" "Water plants!!!"
-
-
-.. attention::
-
-    Editing the name of a habit requires an ``--original`` option.
+    $ perry-bot habit -e name "Water plants" -a "Water plants!!!"
 
 
 To change the frequency of a habit to weekly:
@@ -270,7 +279,7 @@ To compare years:
 
 
 Date Formats
-^^^^^^^^^^^^
+============
 
 .. list-table::
     :header-rows: 1
@@ -283,6 +292,19 @@ Date Formats
       - ``-sd``, ``--start-date``
       - %Y-%m-%d
       - 2021-03-01
+    * - ``water``
+      - ``-v``, ``--view``
+      - x%Y-%m-%d,
+
+        %Y-%m,
+
+        %Y
+      - 2021-02-04,
+
+        2021-02,
+
+        2021
+
     * - ``viz``
       - ``-o``, ``--on``
       - %Y-%m-%d
@@ -330,12 +352,10 @@ To see a full list of commands, type ``perry-bot --help``
       --help  Show this message and exit.
 
     Commands:
-      gui    Start GUI.
       habit  Log and manage habits.
       mood   Rate your mood.
-      viz    Visualize your water or habit records.
+      viz    Visualize your records.
       water  Log cups of water drank.
-      yfls   You feel like shit.
 
 
 Habit options
@@ -343,34 +363,29 @@ Habit options
 
 .. code-block::
 
-    Usage: perry-bot habit [OPTIONS] HABIT
+    Usage: perry-bot habit [OPTIONS]
 
       Log and manage habits.
-
       Default frequency is set to daily.
 
-      [HABIT] = Name of habit or `all` for all habits.
+      Tip: The number of the habit can be used instead of its name.
 
     Options:
-      -v, --view                      View existing habit and its status.
-
-      -c, --complete / -ic, --incomplete
-                                      Mark habit as complete or incomplete.
-
-      -a, --add                       Add a habit.
-      -d, --delete                    Delete a habit.
+      -v, --view                      View existing habit(s) and its status.
+      -c, --complete TEXT             Mark habit as complete.
+      -ic, --incomplete TEXT          Mark habit as incomplete
+      -a, --add TEXT                  Add a habit.
+      -d, --delete TEXT               Delete a habit.
 
       -f, --frequency [Daily|Bi-Weekly|Weekly|Monthly|Yearly]
                                       Frequency of the habit.
 
-      -sd, --start-date [%Y-%m-%d]    Set the state date for weekly, bi-weekly,
+      -sd, --start-date [%Y-%m-%d]    Set the start date for weekly, bi-weekly,
                                       monthly, or yearly habits.
 
-      -e, --edit [Name|Frequency|Start date]
-                                      Edit a habit
-
-      -o, --original TEXT             The name of the habit you want to edit. Use
-                                      when editing the name of a habit
+      -e, --edit <CHOICE TEXT>...     Edit a habit. Choice = Name, Frequency,
+                                      "Start date". Use the original name or
+                                      number of the habit you want to edit.
 
       --help                          Show this message and exit.
 
@@ -380,17 +395,15 @@ Mood options
 
 .. code-block::
 
-    Usage: perry-bot mood [OPTIONS] ARG
+    Usage: perry-bot mood [OPTIONS]
 
       Rate your mood.
 
-      [ARG] = Integer from 1 - 10 or `today` to view today's mood.
-
     Options:
-      -v, --view          View today's mood.
-      -c, --comment TEXT  Add a comment.
-      --help              Show this message and exit.
-
+      -r, --rating INTEGER RANGE      Your mood's rating. A number from 1-10
+      -c, --comment TEXT              Add a comment.
+      -v, --view [%Y-%m-%d|%Y-%m|%Y]  View average mood.
+      --help                          Show this message and exit.
 
 
 Data visualization options
@@ -400,7 +413,7 @@ Data visualization options
 
     Usage: perry-bot viz [OPTIONS] LOG_TYPE
 
-      Visualize your water or habit records.
+      Visualize your records.
 
       If no date or date range is provided, the last 7 days will be shown. See
       documentation for date formatting.
@@ -408,12 +421,18 @@ Data visualization options
       [LOG_TYPE] = `water` or `mood` or `habit`
 
     Options:
-      -o, --on [%Y-%m-%d]    Show records on this date.
-      -f, --from [%Y-%m-%d]  Show records after, or on, this date
-      -t, --to [%Y-%m-%d]    Show records before, or on, this date.
-      -c, --compare TEXT     Compare records. Separate values with a comma.
-      -h, --habit TEXT       Show entries of a specific habit.
-      --help                 Show this message and exit.
+      -o, --on [%Y-%m-%d]             Show records on this date.
+      -f, --from [%Y-%m-%d]           Show records after, or on, this date
+      -t, --to [%Y-%m-%d]             Show records before, or on, this date.
+
+      -c, --compare <DATETIME DATETIME>...
+                                      Compare records. Separate values with a
+                                      comma.
+
+      -h, --habit TEXT                Show records of a specific habit.
+      --help                          Show this message and exit.
+
+
 
 
 
@@ -422,18 +441,18 @@ Water options
 
 .. code-block::
 
-    Usage: perry-bot water [OPTIONS] ARG
+    Usage: perry-bot water [OPTIONS]
 
       Log cups of water drank.
       Get reminders to drink water.
       See the documentation for more information on scheduling reminders.
 
-      [ARG] = Integer or `reminder` or `today`
-
     Options:
-      -d, --delete  Delete NUM cup(s) of water.
-      -v, --view    View cups of water drank. Use with `today` argument.
-      --start       Start water reminder. Use with `reminder` argument.
-      --stop        Stop water reminder. Use with `reminder` argument.
-      -e, --edit    Edit water reminder schedule. use with `reminder` argument.
-      --help        Show this message and exit.
+      -a, --add INTEGER RANGE         Add NUM cup(s) of water
+      -d, --delete INTEGER RANGE      Delete NUM cup(s) of water.
+      -v, --view [%Y-%m-%d|%Y-%m, %Y]
+                                      View cups of water drank.
+      --start                         Start water reminder.
+      --stop                          Stop water reminder.
+      -e, --edit                      Edit water reminder schedule.
+      --help                          Show this message and exit.

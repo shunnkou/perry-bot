@@ -1,9 +1,17 @@
 """Console script for perry_bot."""
 import click
-from click.exceptions import UsageError
+from click.exceptions import BadOptionUsage
 import pendulum
 # skipcq
 from perry_bot import main as pb
+
+
+# def validate_date():
+#     pass
+#
+#
+# def validate_delete():
+#     pass
 
 
 @click.group()
@@ -22,49 +30,43 @@ def main():
 
 
 @click.command(name='water')
-@click.option('-d', '--delete', help='Delete NUM cup(s) of water.', is_flag=True)
-@click.option('-v', '--view', help='View cups of water drank. Use with `today` argument.', is_flag=True)
-@click.option('--start', help='Start water reminder. Use with `reminder` argument.', is_flag=True)
-@click.option('--stop', help='Stop water reminder. Use with `reminder` argument.', is_flag=True)
-@click.option('-e', '--edit', help='Edit water reminder schedule. use with `reminder` argument.', is_flag=True)
-@click.argument('arg')
-def log_water(arg, delete, view, start, stop):  # skipcq: FLK-D301, FLK-D400
+@click.option('-a', '--add', help='Add NUM cup(s) of water', type=click.IntRange(1, None))
+@click.option('-d', '--delete', help='Delete NUM cup(s) of water.', type=click.IntRange(1, None))
+@click.option('-v', '--view', help='View cups of water drank.',
+              type=click.DateTime(['%Y-%m-%d', '%Y-%m, %Y']))
+@click.option('--start', help='Start water reminder.', is_flag=True)
+@click.option('--stop', help='Stop water reminder.', is_flag=True)
+@click.option('-e', '--edit', help='Edit water reminder schedule.', is_flag=True)
+def log_water(add, delete, view, start, stop, edit):
     """
     \b
     Log cups of water drank.
     Get reminders to drink water.
     See the documentation for more information on scheduling reminders.
 
-    [ARG] = Integer or `reminder` or `today`
-
     \f
 
+    :param edit:
     :param stop:
     :param start:
     :param view:
-    :param arg:
+    :param add:
     :param delete:
     :return:
     """
     click.echo(f"Delete = {delete}")
-    click.echo(f"Number of cups to log: {arg}")
+    click.echo(f"Number of cups to log: {add}")
 
-    if arg.lower() not in ('reminder' or 'today') and arg.lower is not int:
-        raise UsageError('The [CUPS] argument must be `reminder` or `today` or a number.')
-
-    # Ask what reminder user wants to stop
     return 0
 
 
 @click.command(name='mood')
-@click.option('-v', '--view', help="View today's mood.", is_flag=True)
-@click.option('-c', '--comment', help='Add a comment.')
-@click.argument('arg')
-def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
+@click.option('-r', '--rating', help="Your mood's rating. A number from 1-10", type=click.IntRange(1, 10))
+@click.option('-c', '--comment', help='Add a comment.', type=str)
+@click.option('-v', '--view', help="View average mood.", type=click.DateTime(['%Y-%m-%d', '%Y-%m', '%Y']))
+def log_mood(rating, comment, view):
     """
     Rate your mood.
-
-    [ARG] = Integer from 1 - 10 or `today` to view today's mood.
 
     \f
 
@@ -79,7 +81,7 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
     click.echo(f"Rating = {rating}")
     click.echo(f"Comment = {comment}")
     if view and rating.isdigit():
-        raise UsageError("The --view option and a rating cannot be used together.")
+        raise BadOptionUsage(message="The --view option and a rating cannot be used together.", option_name='--view')
     if view and rating.lower() == 'today':
         click.echo("Return today's mood.")
 
@@ -87,13 +89,16 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
 @click.command(name='habit')
 @click.option('-v',
               '--view',
-              help='View existing habit and its status.',
+              help='View existing habit(s) and its status.',
               is_flag=True)
-@click.option('-c/-ic',
-              '--complete/--incomplete',
-              help='Mark habit as complete or incomplete.')
-@click.option('-a', '--add', help='Add a habit.', is_flag=True)
-@click.option('-d', '--delete', help='Delete a habit.', is_flag=True)
+@click.option('-c',
+              '--complete',
+              help='Mark habit as complete.')
+@click.option('-ic',
+              '--incomplete',
+              help='Mark habit as incomplete')
+@click.option('-a', '--add', help='Add a habit.')
+@click.option('-d', '--delete', help='Delete a habit.')
 @click.option('-f',
               '--frequency',
               help='Frequency of the habit.',
@@ -103,46 +108,43 @@ def log_mood(rating, comment, view):  # skipcq: FLK-D301, FLK-D400
               default='Daily')
 @click.option('-sd',
               '--start-date',
-              help='Set the state date for weekly, bi-weekly, monthly, or yearly habits.',
+              help='Set the start date for weekly, bi-weekly, monthly, or yearly habits.',
               type=click.DateTime(formats=['%Y-%m-%d'])
               )
 @click.option('-e',
               '--edit',
-              help='Edit a habit',
-              type=click.Choice(['Name', 'Frequency', 'Start date'],
-                                case_sensitive=False))
-@click.option('-o', '--original', help='The name of the habit you want to edit. Use when editing the name of a habit')
-@click.argument('habit')
-def log_habit(view, complete, add, delete, habit, start_date, edit,
-              frequency):  # skipcq: FLK-D301, FLK-D400
+              help='Edit a habit. Choice = Name, Frequency, "Start date".'
+                   ' Use the original name or number of the habit you want to edit.',
+              type=(click.Choice(['Name', 'Frequency', 'Start date'],
+                                 case_sensitive=False), str))
+def log_habit(view, complete, incomplete, add, delete, start_date, edit,
+              frequency):
     """
+    \b
     Log and manage habits.
-
     Default frequency is set to daily.
 
-    [HABIT] = Name of habit or `all` for all habits.
+    Tip: The number of the habit can be used instead of its name.
 
     \f
 
+    :param incomplete:
     :param frequency:
     :param edit:
     :param view:
     :param complete:
     :param add:
     :param delete:
-    :param habit:
     :param start_date:
     :return:
     """
-    click.echo(f"Habit = {habit}")
     click.echo(f"Complete = {complete}")
     click.echo(f"View = {view}")
     click.echo(f"Add = {add}")
     click.echo(f"Delete = {delete}")
+    click.echo(f"Edit = {edit[0]}, {edit[1]}")
     if add and delete:
-        raise UsageError('The --add and --delete option cannot be used together.')
-    if habit.lower() != 'all' and view:
-        raise UsageError('Use the `all` argument with the --view option')
+        raise BadOptionUsage(message='The --add and --delete option cannot be used together.', option_name='--add, --delete')
     return 0
 
 
@@ -162,13 +164,15 @@ def log_habit(view, complete, add, delete, habit, start_date, edit,
               help='Show records before, or on, this date.')
 @click.option('-c',
               '--compare',
-              help='Compare records. Separate values with a comma.')
-@click.option('-h', '--habit', help='Show entries of a specific habit.')
+              help='Compare records. Separate values with a comma.',
+              type=(click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
+                    click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y'])))
+@click.option('-h', '--habit', help='Show records of a specific habit.')
 @click.argument('log_type')
 def dataviz(from_, to, on, month, year, log_type,
-            habit):  # skipcq: FLK-D301, FLK-D400
+            habit):
     """
-    Visualize your water or habit records.
+    Visualize your records.
 
     If no date or date range is provided, the last 7 days will be shown.
     See documentation for date formatting.
@@ -193,11 +197,9 @@ def dataviz(from_, to, on, month, year, log_type,
     click.echo(f'Month = {month}')
     click.echo(f'Year = {year}')
     if habit and log_type != 'habit':
-        raise UsageError('The --habit option requires LOG_TYPE to be habit.')
-
-    if log_type == 'water' and habit is True:
-        raise UsageError("The --habit option cannot be used with `water`")
+        raise BadOptionUsage(message='LOG_TYPE must be habit.', option_name='--habit')
     return 0
+
 
 main.add_command(log_water)
 main.add_command(log_mood)
