@@ -10,7 +10,7 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* `Niveusater`_
 
 Misc
 _____
@@ -22,4 +22,5 @@ This package was created based on a modified
 
 .. _Cookiecutter: https://github.com/cookiecutter/cookiecutter
 .. _audreyr/cookiecutter-pypackage: https://github.com/audreyfeldroy/cookiecutter-pypackage)
+.. _Niveusater: https://github.com/Niveusater
 
