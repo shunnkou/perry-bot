@@ -17,7 +17,7 @@
 A commandline self-care bot.
 
 * Free software: BSD license
-* Documentation: https://perry-bot.readthedocs.io.
+* Documentation: https://perry-bot.readthedocs.io/en/develop/.
 
 
 Features

@@ -8,7 +8,7 @@
 A commandline self-care bot.
 
 * Free software: GPL-3.0 license
-* Documentation: https://perry-bot.readthedocs.io.
+* Documentation: https://perry-bot.readthedocs.io/en/develop/.
 
 # Under active development, not functional yet
 
@@ -39,21 +39,21 @@ pipx install perry-bot
   * `perry-bot [COMMAND] --help`
 
 ### Commands
-See more commands and information in the [docs](https://perry-bot.readthedocs.io/en/latest/usage.html).
+See more commands and information in the [docs](https://perry-bot.readthedocs.io/en/develop/usage.html).
 
 #### Water
 ```
-perry-bot water [OPTIONS] ARG
+perry-bot water [OPTIONS]
 ```
 
 #### Mood
 ```
-perry-bot mood [OPTIONS] ARG
+perry-bot mood [OPTIONS]
 ```
 
 #### Habit
 ```
-perry-bot habit [OPTIONS] HABIT
+perry-bot habit [OPTIONS]
 ```
 
 #### Data visualization

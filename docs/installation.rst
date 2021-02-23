@@ -8,7 +8,7 @@ Installation
 Stable release
 --------------
 
-Install Perry Bot, with `pipx`_:
+Install `Perry Bot`_, with `pipx`_:
 
 .. code-block:: shell
 
@@ -64,3 +64,4 @@ Once you have a copy of the source, you can install it with:
 
 .. _Github repo: https://github.com/shunnkou/perry-bot
 .. _tarball: https://github.com/shunnkou/perry-bot/tarball/master
+.. _Perry Bot: https://pypi.org/project/perry-bot/
