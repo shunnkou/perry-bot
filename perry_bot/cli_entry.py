@@ -121,18 +121,8 @@ def log_mood(rating, comment, view):
                   ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
                   case_sensitive=False),
               default='Daily')
-@click.option(
-    '-sd',
-    '--start-date',
-    help='Set the start date for weekly, bi-weekly, monthly, or yearly habits.',
-    type=click.DateTime(formats=['%Y-%m-%d']))
-@click.option(
-    '-e',
-    '--edit',
-    help='Edit a habit. Choice = Name, Frequency, "Start date".'
-    ' Use the original name or number of the habit you want to edit.',
-    type=(click.Choice(['Name', 'Frequency', 'Start date'],
-                       case_sensitive=False), str))
+@click.option('-sd', '--start-date', help='Set the start date for weekly, bi-weekly, monthly, or yearly habits.', type=click.DateTime(formats=['%Y-%m-%d']))
+@click.option('-e', '--edit', help='Edit a habit. Choice = Name, Frequency, "Start date". Use the original name or number of the habit you want to edit.', type=(click.Choice(['Name', 'Frequency', 'Start date'], case_sensitive=False), str))
 def log_habit(view, complete, incomplete, add, delete, start_date, edit,
               frequency):
     """
