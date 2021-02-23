@@ -116,6 +116,8 @@ Use the ``habit`` command:
 
 If the habit is more than one word, enclose it in quotes.
 
+Once your habit has been created, you can refer to it with its number for quicker inputs.
+
 
 .. margin::
 
@@ -135,21 +137,22 @@ Add a habit
     $ perry-bot habit -a "Water plants"
 
 
+.. note::
+
+    The ``--add`` option is also used to specify the name (or index) of a habit when you want to `edit`_ it.
+
+
 View habits
 ^^^^^^^^^^^
 
-| To view your habits, use the ``-v`` or ``--view`` option along with a date:
+| To view your habits existing habits, use the ``-v`` or ``--view`` option:
 
 .. code-block::
 
-    $ perry-bot habit -v 2021-02-01
+    $ perry-bot habit -v
 
 
-.. note::
-
-    See `date formats`_ for more information.
-
-.. _date formats: https://perry-bot.readthedocs.io/en/develop/usage.html#date-formats
+.. _edit: https://perry-bot.readthedocs.io/en/develop/usage.html#edit-a-habit
 
 
 Delete a habit
@@ -182,28 +185,29 @@ If no frequency is specified, the default is daily.
 Edit a habit
 ^^^^^^^^^^^^
 
-| If you've made a mistake while creating a habit or just want to edit a habit, use the ``-e`` or ``--edit`` option
-  as the target to edit - ``Name``, ``Frequency``, or ``"Start date"``, the name or index of the original habit, along
-  with the ``-a`` or ``--add`` option to specify the new name.
-| To change the name of a habit, remember to add the name or index of the original habit:
+| To edit a habit, use the ``-e`` or ``--edit`` option with the target to edit
+  - ``name``, ``frequency``, or ``start date``, and the name or index of the original habit,
+  separated by a comma.
+
+To change the name of a habit, remember to add the name or number of the original habit with ``-a``:
 
 .. code-block::
 
-    $ perry-bot habit -e name "Water plants" -a "Water plants!!!"
+    $ perry-bot habit -e "name,Water plants!!!" -a "Water plants"
 
 
 To change the frequency of a habit to weekly:
 
 .. code-block::
 
-    $ perry-bot habit -e frequency -f weekly "Water plants!!!"
+    $ perry-bot habit -e "frequency,Water plants!!!" -f weekly
 
 
 To change the start date of a habit:
 
 .. code-block::
 
-    $ perry-bot habit -e "start date" -sd 2021-02-14 "Water plants!!!"
+    $ perry-bot habit -e "start date,Water plants!!!" -sd 2021-02-14
 
 
 
@@ -383,11 +387,12 @@ Habit options
       -sd, --start-date [%Y-%m-%d]    Set the start date for weekly, bi-weekly,
                                       monthly, or yearly habits.
 
-      -e, --edit <CHOICE TEXT>...     Edit a habit. Choice = Name, Frequency,
-                                      "Start date". Use the original name or
-                                      number of the habit you want to edit.
+      -e, --edit TEXT...              Edit a habit's name, frequency, start date.
+                                      Separate your choice and the name (or number)
+                                      of the habit with a comma.
 
       --help                          Show this message and exit.
+
 
 
 Mood options
@@ -421,18 +426,15 @@ Data visualization options
       [LOG_TYPE] = `water` or `mood` or `habit`
 
     Options:
-      -o, --on [%Y-%m-%d]             Show records on this date.
-      -f, --from [%Y-%m-%d]           Show records after, or on, this date
-      -t, --to [%Y-%m-%d]             Show records before, or on, this date.
-
+      -o, --on [%Y-%m-%d|%Y-%m|%Y]    Show records on this date.
+      -f, --from [%Y-%m-%d|%Y-%m|%Y]  Show records after, or on, this date
+      -t, --to [%Y-%m-%d|%Y-%m|%Y]    Show records before, or on, this date.
       -c, --compare <DATETIME DATETIME>...
                                       Compare records. Separate values with a
                                       comma.
 
       -h, --habit TEXT                Show records of a specific habit.
       --help                          Show this message and exit.
-
-
 
 
 

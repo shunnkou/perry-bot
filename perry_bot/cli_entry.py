@@ -5,12 +5,28 @@ import pendulum
 # skipcq
 from perry_bot import main as pb
 
-# def validate_date():
+
+# def validate_date(ctx, param, value):
 #     pass
 #
 #
-# def validate_delete():
+# def validate_delete(ctx, param, value):
 #     pass
+
+
+def validate_edit_habit(ctx, param, value):
+    """
+    Check that input is in the format of 'option, str' and that
+    the option chosen is valid.
+    """
+    option_list = ['name', 'frequency', 'start date']
+    try:
+        option, habit_name = value.split(',')
+        assert option in option_list
+    except AssertionError:
+        raise click.BadParameter(message="Value to change needs to be 'name', 'frequency', or 'start date'.", param=param, ctx=ctx)
+    except ValueError:
+        raise click.BadParameter(message="Separate your option and your new habit name with a comma.", param=param, ctx=ctx)
 
 
 @click.group()
@@ -97,12 +113,6 @@ def log_mood(rating, comment, view):
     click.echo(f"Datetime = {datetime}")
     click.echo(f"Rating = {rating}")
     click.echo(f"Comment = {comment}")
-    if view and rating.isdigit():
-        raise BadOptionUsage(
-            message="The --view option and a rating cannot be used together.",
-            option_name='--view')
-    if view and rating.lower() == 'today':
-        click.echo("Return today's mood.")
 
 
 @click.command(name='habit')
@@ -129,10 +139,10 @@ def log_mood(rating, comment, view):
 @click.option(
     '-e',
     '--edit',
-    help=
-    'Edit a habit. Choice = Name, Frequency, "Start date". Use the original name or number of the habit you want to edit.',
-    type=(click.Choice(['Name', 'Frequency', 'Start date'],
-                       case_sensitive=False), str))
+    help="Edit a habit's name, frequency, start date. "
+         "Separate your choice and the name (or number) of the habit with a comma.",
+    nargs=2,
+    callback=validate_edit_habit)
 def log_habit(view, complete, incomplete, add, delete, start_date, edit,
               frequency):
     """
@@ -159,26 +169,22 @@ def log_habit(view, complete, incomplete, add, delete, start_date, edit,
     click.echo(f"Add = {add}")
     click.echo(f"Delete = {delete}")
     click.echo(f"Edit = {edit[0]}, {edit[1]}")
-    if add and delete:
-        raise BadOptionUsage(
-            message='The --add and --delete option cannot be used together.',
-            option_name='--add, --delete')
     return 0
 
 
 @click.command(name='viz')
 @click.option('-o',
               '--on',
-              type=click.DateTime(formats=['%Y-%m-%d']),
+              type=click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
               help='Show records on this date.')
 @click.option('-f',
               '--from',
               'from_',
-              type=click.DateTime(formats=['%Y-%m-%d']),
+              type=click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
               help='Show records after, or on, this date')
 @click.option('-t',
               '--to',
-              type=click.DateTime(formats=['%Y-%m-%d']),
+              type=click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
               help='Show records before, or on, this date.')
 @click.option('-c',
               '--compare',
