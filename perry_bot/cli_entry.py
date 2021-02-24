@@ -24,14 +24,14 @@ def validate_edit_habit(ctx, param, value):
         assert option in option_list
     except AssertionError:
         raise click.BadParameter(
-            message=
-            "Value to change needs to be 'name', 'frequency', or 'start date'.",
+            message="Value to change needs to be "
+            "'name', 'frequency', or 'start date'.",
             param=param,
             ctx=ctx)
     except ValueError:
         raise click.BadParameter(
-            message=
-            "Separate your option and your new habit name with a comma.",
+            message="Separate your option and your "
+            "new habit name with a comma.",
             param=param,
             ctx=ctx)
 
