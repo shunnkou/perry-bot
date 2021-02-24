@@ -8,7 +8,7 @@ Installation
 Stable release
 --------------
 
-Install `Perry Bot`_, with `pipx`_:
+Install the latest release of `Perry Bot`_ with `pipx`_:
 
 .. code-block:: shell
 
@@ -32,7 +32,7 @@ Use the ``--help`` flag to see all commands:
 This is the preferred method to install Perry Bot, as it will
 automatically create a virtual environment for Perry Bot and add the binary to your PATH.
 
-If you don't have `pipx`_ installed, see pipx's `installation guide`_
+If you don't have `pipx`_ installed, see pipx's `installation guide`_.
 
 .. _pipx: https://pipxproject.github.io/pipx/
 .. _installation guide: https://pipxproject.github.io/pipx/installation/

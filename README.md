@@ -39,7 +39,8 @@ pipx install perry-bot
   * `perry-bot [COMMAND] --help`
 
 ### Commands
-See more commands and information in the [docs](https://perry-bot.readthedocs.io/en/develop/usage.html).
+See more information about each command's options in the
+[docs](https://perry-bot.readthedocs.io/en/develop/usage.html).
 
 #### Water
 ```

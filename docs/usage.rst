@@ -38,7 +38,7 @@ Delete a cup
 View your cups drank
 ^^^^^^^^^^^^^^^^^^^^
 
-To view the number of cups you've drank, use ``-v`` or ``--view`` and a date, month, or year:
+To view the number of cups you've drank, use ``-v`` or ``--view`` and a date:
 
 .. code-block::
 
@@ -68,13 +68,11 @@ To stop a reminder, use the ``--stop`` option:
 Edit schedule
 ^^^^^^^^^^^^^
 
-TO edit the reminder's schedule, use the ``-e`` or ``--edit`` option:
+To edit the reminder's schedule, use the ``-e`` or ``--edit`` option:
 
 .. code-block::
 
     $ perry-bot water --edit
-
-
 
 
 Track mood
@@ -87,7 +85,7 @@ Use the ``mood`` command:
     $ perry-bot mood [OPTIONS]
 
 
-To rate your mood on a scale from 1 - 10, use the ``-r`` or ``--rating`` option:
+Use the ``-r`` or ``--rating`` option and rate your mood on a scale from 1 - 10:
 
 .. code-block::
 
@@ -119,13 +117,6 @@ If the habit is more than one word, enclose it in quotes.
 Once your habit has been created, you can refer to it with its number for quicker inputs.
 
 
-.. margin::
-
-    .. note::
-
-        Habit names must be unique. Creation will fail if the name isn't unique.
-
-
 Add a habit
 ^^^^^^^^^^^
 
@@ -136,10 +127,11 @@ Add a habit
 
     $ perry-bot habit -a "Water plants"
 
+Habit names must be **unique**. Creation will fail if the name isn't unique.
 
 .. note::
 
-    The ``--add`` option is also used to specify the name (or index) of a habit when you want to `edit`_ it.
+    The ``--add`` option is also used to specify the name (or number) of a habit when you want to `edit`_ it.
 
 
 View habits
@@ -185,8 +177,8 @@ If no frequency is specified, the default is daily.
 Edit a habit
 ^^^^^^^^^^^^
 
-| To edit a habit, use the ``-e`` or ``--edit`` option with the target to edit
-  - ``name``, ``frequency``, or ``start date``, and the name or index of the original habit,
+| To edit a habit, use the ``-e`` or ``--edit`` option with the target to edit,
+  ``name``, ``frequency``, or ``start date``, and the name or number of the original habit,
   separated by a comma.
 
 To change the name of a habit, remember to add the name or number of the original habit with ``-a``:
@@ -298,14 +290,14 @@ Date Formats
       - 2021-03-01
     * - ``water``
       - ``-v``, ``--view``
-      - x%Y-%m-%d,
+      - x%Y-%m-%d
 
-        %Y-%m,
+        %Y-%m
 
-        %Y
-      - 2021-02-04,
+        %
+      - 2021-02-04
 
-        2021-02,
+        2021-02
 
         2021
 
@@ -323,14 +315,14 @@ Date Formats
       - 2021-12-11
     * - ``viz``
       - ``-c``, ``--compare``
-      - "%Y-%m-%d,%Y-%m-%d",
+      - "%Y-%m-%d,%Y-%m-%d"
 
-        "%Y-%m,%Y-%m",
+        "%Y-%m,%Y-%m"
 
         "%Y,%Y"
-      - "2021-02-04,2021-02,05",
+      - "2021-02-04,2021-02,05"
 
-        "2021-02,2021-01",
+        "2021-02,2021-01"
 
         "2021,2020"
 

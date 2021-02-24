@@ -39,7 +39,7 @@ def validate_edit_habit(ctx, param, value):
 def main():
     """
     \b
-    Perry Bot.
+    Perry Bot - a commandline self-care bot.
     Use `perry-bot COMMAND --help` to view options for the command.
 
     \b
