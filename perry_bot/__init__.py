@@ -3,3 +3,4 @@
 __author__ = """Jace Huang"""
 __email__ = 'jacehuang8@protonmail.ch'
 __version__ = 'v0.1.0'
+__release__ = 'v0.1.0 alpha'

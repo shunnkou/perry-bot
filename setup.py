@@ -7,7 +7,7 @@ import os
 
 
 def walker(base, *paths):
-    """Finds package data.."""
+    """Find package data.."""
     file_list = set()
     cur_dir = os.path.abspath(os.curdir)
 
@@ -26,7 +26,7 @@ def walker(base, *paths):
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
+with open('HISTORY.md') as history_file:
     history = history_file.read()
 
 requirements = ['Click', 'pendulum', 'peewee', 'rich', 'attrs']

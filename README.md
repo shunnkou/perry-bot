@@ -4,6 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/shunnkou/perry-bot/badge)](https://www.codefactor.io/repository/github/shunnkou/perry-bot)
 [![DeepSource](https://deepsource.io/gh/shunnkou/perry-bot.svg/?label=active+issues)](https://deepsource.io/gh/shunnkou/perry-bot/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/shunnkou/perry-bot.svg/?label=resolved+issues)](https://deepsource.io/gh/shunnkou/perry-bot/?ref=repository-badge)
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 
 A commandline self-care bot.
 
@@ -18,9 +19,7 @@ A commandline self-care bot.
 * Trackers
   * Water tracker
   * Mood tracker
-  * Habit tracker
-    * Daily, weekly, bi-weekly, monthly, and yearly habits
-* Water reminders
+  * Habit tracker that allows you to schedule habits as daily, weekly, bi-weekly, monthly, or yearly habits
 * Visualize your tracked data with matplotlib graphs
 * Local data storage with a SQLite database
 
@@ -29,10 +28,10 @@ A commandline self-care bot.
 Install using pipx:
 
 ```shell
-pipx install perry-bot
+$ pipx install perry-bot
 ```
 
-## Usage
+## Quickstart
 * See a list of commands
   * `perry-bot --help`
 * See options and help for a specific command
@@ -40,7 +39,8 @@ pipx install perry-bot
 
 ### Commands
 See more information about each command's options in the
-[docs](https://perry-bot.readthedocs.io/en/develop/usage.html).
+[usage](docs/usage.md#Usage) section
+of the docs.
 
 #### Water
 ```
@@ -64,6 +64,4 @@ perry-bot viz [OPTIONS] LOG_TYPE
 
 
 ## Credits
-This package was created based on a modified
-[audreyr/cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)
-project template using [Cookiecutter](https://github.com/cookiecutter/cookiecutter).
+See [credits](AUTHORS.md#credits).

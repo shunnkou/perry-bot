@@ -8,6 +8,7 @@ pendulum = "*"
 peewee = "*"
 rich = "*"
 attrs = "*"
+linkify-it-py = "*"
 
 [dev-packages]
 bump2version = "*"
@@ -22,6 +23,7 @@ Sphinx = ">=1.4"
 sphinx-book-theme = "*"
 twine = "*"
 pre-commit = "*"
+myst-parser = "*"
 
 [requires]
 python_version = "3.8"
