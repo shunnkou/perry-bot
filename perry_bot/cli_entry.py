@@ -40,6 +40,7 @@ def validate_date(value: str):
     :param value:
     :return:
     """
+    valid_strings = ["today"]
     view_year = re.match(r"\d{4}", value)
     view_month = re.match(r"\d{4}-\d{2}", value)
     view_day = re.match(r"\d{4}-\d{2}-\d{2}", value)
@@ -50,10 +51,12 @@ def validate_date(value: str):
         return value
     elif view_day:
         return value
+    elif value.lower() == valid_strings[0]:
+        return arrow.now('local').format('YYYY-MM-DD')
     else:
         raise click.BadParameter(
             message="Date is incorrectly formatted. "
-            "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY.")
+            "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY, today.")
 
 
 @click.group()
@@ -75,17 +78,19 @@ def main():
 @click.command(name='water')
 @click.option('-a',
               '--add',
-              help='Add NUM cup(s) of water',
+              help="Add NUM cup(s) of water to today's log",
               type=click.IntRange(1, None))
 @click.option('-d',
               '--delete',
-              help='Delete NUM cup(s) of water.',
+              help="Delete NUM cup(s) of water from today's log.",
               type=click.IntRange(1, None))
 @click.option('-v',
               '--view',
-              help='View cups of water drank.',
-              type=click.DateTime(['%Y-%m-%d', '%Y-%m, %Y']))
-def log_water(add, delete, view):
+              help="View cups of water drank on the given date.")
+@click.option('-e',
+              '--edit',
+              help='Edit cups of water drank on the given date.')
+def log_water(add, delete, view, edit):
     """
     \b
     Log cups of water drank.
@@ -94,15 +99,28 @@ def log_water(add, delete, view):
 
     \f
 
+    :param edit:
     :param view:
     :param add:
     :param delete:
     :return:
     """
-    click.echo(f"Delete = {delete}")
-    click.echo(f"Number of cups to log: {add}")
+    dt = arrow.now('local').format('YYYY-MM-DD')
 
-    return 0
+    if add:
+        new_record = be.Water(id=[], cups_drank=[], date_stamp=[])
+        be.Water.get_or_create_cups(new_record, date=dt, cups=add)
+    if delete:
+        delete_cups = be.Water(id=[], cups_drank=[], date_stamp=[])
+        be.Water.delete_cups(delete_cups, date=dt, cups=delete)
+    if view:
+        date = validate_date(view)
+        view_date = be.Water(id=[], cups_drank=[], date_stamp=[])
+        be.Water.view_total(view_date, date=date)
+    if edit:
+        edit_date = validate_date(edit)
+        edit_model = be.Water(id=[], cups_drank=[], date_stamp=[])
+        be.Water.edit_cups(edit_model, edit_date=edit_date)
 
 
 @click.command(name='mood')
@@ -111,14 +129,16 @@ def log_water(add, delete, view):
               help="Your mood's rating. A number from 1-10",
               type=click.IntRange(1, 10))
 @click.option('-c', '--comment', help='Add a comment.', type=str)
-@click.option('-va',
-              '--view-average',
+@click.option('-a',
+              '--average',
               help="View your average mood on a given date.")
 @click.option('-vt',
               '--view-table',
               help='View a table of your mood and comments on a given date.')
-@click.option('-e', '--edit', help='Edit a specific mood rating on a date.')
-def log_mood(rating, comment, view_average, edit, view_table):
+@click.option('-e',
+              '--edit',
+              help='Edit a mood rating or comment on a given date.')
+def log_mood(rating, comment, average, edit, view_table):
     """
     Rate your mood.
 
@@ -128,19 +148,18 @@ def log_mood(rating, comment, view_average, edit, view_table):
     :param edit:
     :param rating:
     :param comment:
-    :param view_average:
+    :param average:
     :return:
     """
-    datetime = arrow.now('local')
+    datetime = arrow.now('local').format('YYYY-MM-DD HH-mm-ss')
     if rating:
-        new_entry = be.Mood(
-            id=[],
-            rating=rating,
-            comment=comment,
-            datetime_stamp=datetime.format('YYYY-MM-DD HH-mm-ss'))
+        new_entry = be.Mood(id=[],
+                            rating=rating,
+                            comment=comment,
+                            datetime_stamp=datetime)
         be.Mood.new_entry(new_entry)
-    if view_average:
-        view_option = validate_date(value=view_average)
+    if average:
+        view_option = validate_date(value=average)
         mood = be.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
         be.Mood.view_average_mood(mood, view_date=view_option)
     if view_table:
