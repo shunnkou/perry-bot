@@ -26,11 +26,10 @@ def validate_edit_habit(ctx, param, value):
             return option, habit_name
         raise click.BadParameter(message="The value to change needs to be "
                                  "'name', 'frequency', or 'start date'.")
-    else:
-        raise click.BadParameter(message="Separate your option and your "
-                                 "new habit name with a comma.",
-                                 param=param,
-                                 ctx=ctx)
+    raise click.BadParameter(message="Separate your option and your "
+                             "new habit name with a comma.",
+                             param=param,
+                             ctx=ctx)
 
 
 def validate_date(value: str):
