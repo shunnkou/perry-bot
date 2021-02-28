@@ -24,9 +24,8 @@ def validate_edit_habit(ctx, param, value):
         check_option = re.search('name|frequency|start date', value)
         if check_option:
             return option, habit_name
-        else:
-            raise click.BadParameter(message="The value to change needs to be "
-                                     "'name', 'frequency', or 'start date'.")
+        raise click.BadParameter(message="The value to change needs to be "
+                                 "'name', 'frequency', or 'start date'.")
     else:
         raise click.BadParameter(message="Separate your option and your "
                                  "new habit name with a comma.",
@@ -47,16 +46,15 @@ def validate_date(value: str):
 
     if view_year:
         return value
-    elif view_month:
+    if view_month:
         return value
-    elif view_day:
+    if view_day:
         return value
-    elif value.lower() == valid_strings[0]:
+    if value.lower() == valid_strings[0]:
         return arrow.now('local').format('YYYY-MM-DD')
-    else:
-        raise click.BadParameter(
-            message="Date is incorrectly formatted. "
-            "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY, today.")
+    raise click.BadParameter(
+        message="Date is incorrectly formatted. "
+        "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY, today.")
 
 
 @click.group()
