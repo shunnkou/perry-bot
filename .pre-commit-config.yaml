@@ -11,10 +11,12 @@ repos:
       rev: 5.1.1
       hooks:
           - id: pydocstyle
-    - repo: https://github.com/markdownlint/markdownlint
-      rev: v0.11.0
+    - repo: https://github.com/executablebooks/mdformat
+      rev: 0.5.7
       hooks:
-          - id: markdownlint
+          - id: mdformat
+            additional_dependencies:
+                - mdformat-tables
     - repo: https://github.com/pre-commit/pygrep-hooks
       rev: v1.8.0
       hooks:
