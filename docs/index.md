@@ -8,8 +8,6 @@ This is the documentation for the `develop` branch.
 ```{toctree}
 ---
 maxdepth: 2
-caption: Contents
-hidden:
 ---
 
 installation.md

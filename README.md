@@ -6,7 +6,7 @@
 [![DeepSource](https://deepsource.io/gh/shunnkou/perry-bot.svg/?label=resolved+issues)](https://deepsource.io/gh/shunnkou/perry-bot/?ref=repository-badge)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 
-A commandline tracker program.
+A commandline self-care tracker program.
 
 - Free software: GPL-3.0 license
 - Documentation: https://perry-bot.readthedocs.io/en/develop/.
@@ -15,20 +15,13 @@ A commandline tracker program.
 
 ## Features
 
-Commandline dashboard
-~ Upcoming habits
-~ Streaks
+- **Commandline dashboard** to see upcoming habits and streaks.
 
-Trackers
-~ Water tracker.
-~ Mood tracker.
-~ Habit tracker.
+- **Trackers**. Water, mood, and habit trackers are all supported.
 
-Visualize your tracked data
-~ With `matplotlib`.
+- **Visualize** your tracked data with `matplotlib`.
 
-Local data storage
-~ With a SQLite database.
+- **Local data storage** with a SQLite database.
 
 ## Installation
 
@@ -46,40 +39,17 @@ done!
 ## Quickstart
 
 See a list of commands
-~ `perry-bot --help`
+
+- `perry-bot --help`
 
 See options and help for a specific command
-~ `perry-bot [COMMAND] --help`
+
+- `perry-bot [COMMAND] --help`
 
 ### Commands
 
-See more information about each command's options in the
-[usage](docs/usage.md#Usage) section
+See the [usage](docs/usage.md#Usage) section
 of the docs.
-
-#### Water
-
-```
-perry-bot water [OPTIONS]
-```
-
-#### Mood
-
-```
-perry-bot mood [OPTIONS]
-```
-
-#### Habit
-
-```
-perry-bot habit [OPTIONS]
-```
-
-#### Data visualization
-
-```
-perry-bot viz [OPTIONS] LOG_TYPE
-```
 
 ## Credits
 
