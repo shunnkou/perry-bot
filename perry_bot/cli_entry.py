@@ -1,37 +1,59 @@
 """Console script for perry_bot."""
+
 import click
 from click.exceptions import BadOptionUsage
-import pendulum
-# skipcq
-from perry_bot import main as pb
-
-# def validate_date(ctx, param, value):
-#     pass
-#
-#
-# def validate_delete(ctx, param, value):
-#     pass
+import arrow
+import re
+from perry_bot import backend as be
 
 
 def validate_edit_habit(ctx, param, value):
     """
-    Check that input is in the format of 'option, str' and that
-    the option chosen is valid.
+    Check that input is in the format of 'option, str' and that the option chosen is valid.
+
+    :param ctx:
+    :param param:
+    :param value:
+    :return:
     """
-    option_list = ['name', 'frequency', 'start date']
-    try:
+    # TODO: Switch this to something like validate_date()
+    check_comma = re.search(',', value)
+    if check_comma:
         option, habit_name = value.split(',')
-        assert option in option_list
-    except AssertionError:
-        raise click.BadParameter(message="Value to change needs to be "
-                                 "'name', 'frequency', or 'start date'.",
-                                 param=param,
-                                 ctx=ctx)
-    except ValueError:
+        check_option = re.search('name|frequency|start date', value)
+        if check_option:
+            return option, habit_name
+        else:
+            raise click.BadParameter(message="The value to change needs to be "
+                                     "'name', 'frequency', or 'start date'.")
+    else:
         raise click.BadParameter(message="Separate your option and your "
                                  "new habit name with a comma.",
                                  param=param,
                                  ctx=ctx)
+
+
+def validate_date(value: str):
+    """
+    Check that date is in the correct format.
+
+    :param value:
+    :return:
+    """
+    view_year = re.match(r"\d{4}", value)
+    view_month = re.match(r"\d{4}-\d{2}", value)
+    view_day = re.match(r"\d{4}-\d{2}-\d{2}", value)
+
+    if view_year:
+        return value
+    elif view_month:
+        return value
+    elif view_day:
+        return value
+    else:
+        raise click.BadParameter(
+            message="Date is incorrectly formatted. "
+            "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY.")
 
 
 @click.group()
@@ -39,12 +61,12 @@ def validate_edit_habit(ctx, param, value):
 def main():
     """
     \b
-    Perry Bot - a commandline self-care bot.
+    Perry Bot - a commandline self-care tracker bot.
     Use `perry-bot COMMAND --help` to view options for the command.
 
     \b
     See documentation at
-    https://perry-bot.readthedocs.io/en/latest/usage.html#cli-usage
+    https://perry-bot.readthedocs.io/en/latest/usage.html
     for further help.
     """
     return 0
@@ -63,13 +85,7 @@ def main():
               '--view',
               help='View cups of water drank.',
               type=click.DateTime(['%Y-%m-%d', '%Y-%m, %Y']))
-@click.option('--start', help='Start water reminder.', is_flag=True)
-@click.option('--stop', help='Stop water reminder.', is_flag=True)
-@click.option('-e',
-              '--edit',
-              help='Edit water reminder schedule.',
-              is_flag=True)
-def log_water(add, delete, view, start, stop, edit):
+def log_water(add, delete, view):
     """
     \b
     Log cups of water drank.
@@ -78,9 +94,6 @@ def log_water(add, delete, view, start, stop, edit):
 
     \f
 
-    :param edit:
-    :param stop:
-    :param start:
     :param view:
     :param add:
     :param delete:
@@ -98,26 +111,46 @@ def log_water(add, delete, view, start, stop, edit):
               help="Your mood's rating. A number from 1-10",
               type=click.IntRange(1, 10))
 @click.option('-c', '--comment', help='Add a comment.', type=str)
-@click.option('-v',
-              '--view',
-              help="View average mood.",
-              type=click.DateTime(['%Y-%m-%d', '%Y-%m', '%Y']))
-def log_mood(rating, comment, view):
+@click.option('-va',
+              '--view-average',
+              help="View your average mood on a given date.")
+@click.option('-vt',
+              '--view-table',
+              help='View a table of your mood and comments on a given date.')
+@click.option('-e', '--edit', help='Edit a specific mood rating on a date.')
+def log_mood(rating, comment, view_average, edit, view_table):
     """
     Rate your mood.
 
     \f
 
+    :param view_table:
+    :param edit:
     :param rating:
     :param comment:
-    :param view:
+    :param view_average:
     :return:
     """
-    # TODO: Implement a check to make sure user has entered the correct number
-    datetime = pendulum.now()
-    click.echo(f"Datetime = {datetime}")
-    click.echo(f"Rating = {rating}")
-    click.echo(f"Comment = {comment}")
+    datetime = arrow.now('local')
+    if rating:
+        new_entry = be.Mood(
+            id=[],
+            rating=rating,
+            comment=comment,
+            datetime_stamp=datetime.format('YYYY-MM-DD HH-mm-ss'))
+        be.Mood.new_entry(new_entry)
+    if view_average:
+        view_option = validate_date(value=view_average)
+        mood = be.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
+        be.Mood.view_average_mood(mood, view_date=view_option)
+    if view_table:
+        date_option = validate_date(value=view_table)
+        table = be.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
+        be.Mood.view_mood_table(table, view_date=date_option)
+    if edit:
+        edit_date = validate_date(value=edit)
+        edit_mood = be.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
+        be.Mood.edit_mood(edit_mood, edit_date=edit_date)
 
 
 @click.command(name='habit')
@@ -169,6 +202,7 @@ def log_habit(view, complete, incomplete, add, delete, start_date, edit,
     :param start_date:
     :return:
     """
+    # If editing name, the `-a` option has to be supplied as well
     click.echo(f"Complete = {complete}")
     click.echo(f"View = {view}")
     click.echo(f"Add = {add}")
