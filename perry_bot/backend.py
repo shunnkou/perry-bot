@@ -29,7 +29,6 @@ from perry_bot.console import console
 
 # -----------------------
 
-pretty.install()
 console = console()
 
 # db_path = os.path.join(Path(__file__).parent, 'files', 'perry-bot.sqlite')
@@ -185,6 +184,9 @@ class Water:
                         f"[bold]{escape('[perry-bot]:')}[/bold] Cups drank today reset to 0.",
                         style='default')
                 elif c in ['n']:
+                    console.print(
+                        f"[bold]{escape('[perry-bot]:')}[/bold] Deleting cups cancelled.",
+                        style='default')
                     return
             else:
                 with db:
@@ -451,7 +453,7 @@ def edit_existing_entry(self, table, **kwargs):
         f"[bold]{escape('[perry-bot]:')}[/bold] Which category would "
         f"you like to edit?",
         style="default")
-    edit_target = Prompt.ask(choices=choices)
+    edit_target = Prompt.ask(choices=choices, default=choices[0])
     console.print(f"[bold]{escape('[perry-bot]:')}[/bold] Enter the new value",
                   style="default")
     edit_input = ''
@@ -468,7 +470,11 @@ def edit_existing_entry(self, table, **kwargs):
         style="default")
     check = Prompt.ask(choices=["y", "n"])
     while check.lower() in ['n']:
-        edit_target = Prompt.ask(choices=choices)
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] Which category would "
+            f"you like to edit?",
+            style="default")
+        edit_target = Prompt.ask(choices=choices, default=choices[0])
         console.print(
             f"[bold]{escape('[perry-bot]:')}[/bold] Enter the new value",
             style="default")

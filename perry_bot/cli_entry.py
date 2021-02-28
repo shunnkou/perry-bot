@@ -127,7 +127,7 @@ def log_water(add, delete, view, edit):
               help="Your mood's rating. A number from 1-10",
               type=click.IntRange(1, 10))
 @click.option('-c', '--comment', help='Add a comment.', type=str)
-@click.option('-a',
+@click.option('-av',
               '--average',
               help="View your average mood on a given date.")
 @click.option('-vt',
