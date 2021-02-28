@@ -4,18 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pendulum = "*"
 peewee = "*"
 rich = "*"
 attrs = "*"
-linkify-it-py = "*"
+click = "*"
+arrow = "*"
 
 [dev-packages]
 bump2version = "*"
 watchdog = "*"
-flake8 = "*"
 tox = "*"
-click = "*"
 pytest = "*"
 pytest-runner = "*"
 pytest-cov = "*"
@@ -24,6 +22,7 @@ sphinx-book-theme = "*"
 twine = "*"
 pre-commit = "*"
 myst-parser = "*"
+linkify-it-py = "*"
 
 [requires]
 python_version = "3.8"

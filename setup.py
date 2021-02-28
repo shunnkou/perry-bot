@@ -29,7 +29,7 @@ with open('README.md') as readme_file:
 with open('HISTORY.md') as history_file:
     history = history_file.read()
 
-requirements = ['Click', 'pendulum', 'peewee', 'rich', 'attrs']
+requirements = ['Click', 'arrow', 'peewee', 'rich', 'attrs']
 
 setup(
     author="Jace Huang",
@@ -43,7 +43,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8'
     ],
-    description="A commandline self care bot.",
+    description="A commandline tracker program.",
     entry_points={
         'console_scripts': [
             'perry-bot=perry_bot.cli_entry:main',
@@ -60,7 +60,10 @@ setup(
         module.__name__: walker(os.path.dirname(module.__file__), 'files'),
     },
     test_suite='tests',
-    url='https://github.com/shunnkou/perry_bot',
-    version='v0.1.0',
+    project_urls={
+        'Github': 'https://github.com/shunnkou/perry_bot',
+        'Documentation': 'https://perry-bot.readthedocs.io/en/latest/'
+    },
+    version='0.1.0',
     zip_safe=False,
 )
