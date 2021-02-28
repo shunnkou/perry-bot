@@ -8,8 +8,9 @@ from perry_bot import backend as be
 
 
 def validate_edit_habit(ctx, param, value):
-    """
-    Check that input is in the format of 'option, str' and that the option chosen is valid.
+    """Check input is in the correct format.
+
+     Format = 'option, str'
 
     :param ctx:
     :param param:
@@ -34,8 +35,7 @@ def validate_edit_habit(ctx, param, value):
 
 
 def validate_date(value: str):
-    """
-    Check that date is in the correct format.
+    """Check date is in the correct format.
 
     :param value:
     :return:

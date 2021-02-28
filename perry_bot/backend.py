@@ -119,8 +119,7 @@ class Water:
     cups_drank = attr.ib()
 
     def query(self, date: str):
-        """
-        Query database and append data to self.
+        """Query database and append data to self.
 
         :param date:
         :return:
@@ -133,8 +132,7 @@ class Water:
             self.date_stamp.append(record.date_stamp)
 
     def get_or_create_cups(self, date: str, cups: int):
-        """
-        Get existing record or create a new record of cups drank.
+        """Get existing record or create a new record of cups drank.
 
         :param date:
         :param cups:
@@ -164,8 +162,7 @@ class Water:
                 style='default')
 
     def delete_cups(self, date: str, cups: int):
-        """
-        Delete num of cups from today's record.
+        """Delete num of cups from today's record.
 
         :param date:
         :param cups:
@@ -204,8 +201,7 @@ class Water:
                 style="default")
 
     def view_total(self, date: str):
-        """
-        Return total cups in database.
+        """Return total cups in database.
 
         :param date:
         :return:
@@ -223,8 +219,7 @@ class Water:
                 style='default')
 
     def edit_cups(self, edit_date: str):
-        """
-        Edit number of cups drank in database.
+        """Edit number of cups drank in database.
 
         :param edit_date:
         :return:
@@ -273,8 +268,7 @@ class Mood:
     comment = attr.ib()
 
     def query(self, date: str):
-        """
-        Query database and append data to self.
+        """Query database and append data to self.
 
         :param date:
         :return:
@@ -288,8 +282,7 @@ class Mood:
                 self.comment.append(record.comment)
 
     def make_table(self, title: str):
-        """
-        Create 'Mood' table.
+        """Create 'Mood' table.
 
         :param title:
         :return:
@@ -307,8 +300,7 @@ class Mood:
         return table
 
     def new_entry(self):
-        """
-        Create a new entry in the database.
+        """Create a new entry in the database.
 
         :return:
         """
@@ -321,8 +313,7 @@ class Mood:
             style="default")
 
     def view_average_mood(self, view_date: str):
-        """
-        View average mood based on the given date.
+        """View average mood based on the given date.
 
         :param view_date:
         :return:
@@ -341,8 +332,7 @@ class Mood:
                 style="default")
 
     def view_mood_table(self, view_date: str):
-        """
-        Print a mood table given a date.
+        """Print a mood table given a date.
 
         :param view_date:
         :return:
@@ -369,8 +359,9 @@ class Mood:
                 style="default")
 
     def edit_mood(self, edit_date: str):
-        """
-        Edit a specific mood rating based on a date by inputting the number of the rating.
+        """Edit a specific mood rating.
+
+        Based on a date by inputting the number of the rating.
 
         :param edit_date:
         :return:
@@ -411,6 +402,13 @@ class Mood:
 
 
 def edit_existing_entry(self, table, **kwargs):
+    """Edit an existing entry.
+
+    :param self:
+    :param table:
+    :param kwargs:
+    :return:
+    """
     choices = kwargs['choices']
     if len(table.rows) >= 20:
         console.print(
