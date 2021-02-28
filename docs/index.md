@@ -1,5 +1,5 @@
-:::{attention}**Attention**
-This is the documentation for the ``develop`` branch.
+:::{attention}
+This is the documentation for the `develop` branch.
 :::
 
 ```{include} readme.md
@@ -7,7 +7,7 @@ This is the documentation for the ``develop`` branch.
 
 ```{toctree}
 ---
-maxdepth: 1
+maxdepth: 2
 caption: Contents
 hidden:
 ---
