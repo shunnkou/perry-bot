@@ -23,47 +23,48 @@ def walker(base, *paths):
     return list(file_list)
 
 
-with open('README.md') as readme_file:
+with open("README.md") as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.md') as history_file:
+with open("HISTORY.md") as history_file:
     history = history_file.read()
 
-requirements = ['Click', 'arrow', 'peewee', 'rich', 'attrs']
+requirements = ["Click", "arrow", "peewee", "rich", "attrs"]
 
 setup(
     author="Jace Huang",
-    author_email='jacehuang8@protonmail.ch',
-    python_requires='>=3.7',
+    author_email="jacehuang8@protonmail.ch",
+    python_requires=">=3.7",
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: End Users/Desktop',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-        'Natural Language :: English', 'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8'
+        "Development Status :: 2 - Pre-Alpha",
+        "Intended Audience :: End Users/Desktop",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     description="A commandline tracker program.",
     entry_points={
-        'console_scripts': [
-            'perry-bot=perry_bot.cli_entry:main',
+        "console_scripts": [
+            "perry-bot=perry_bot.cli_entry:main",
         ],
     },
     install_requires=requirements,
     license="BSD license",
     long_description=readme,
-    long_description_content_type='text/markdown',
-    keywords='perry_bot',
-    name='perry_bot',
-    packages=find_packages(include=['perry_bot', 'perry_bot.*']),
+    long_description_content_type="text/markdown",
+    keywords="perry_bot",
+    name="perry_bot",
+    packages=find_packages(include=["perry_bot", "perry_bot.*"]),
     package_data={
-        module.__name__: walker(os.path.dirname(module.__file__), 'files'),
+        module.__name__: walker(os.path.dirname(module.__file__), "files"),
     },
-    test_suite='tests',
+    test_suite="tests",
     project_urls={
-        'Github': 'https://github.com/shunnkou/perry_bot',
-        'Documentation': 'https://perry-bot.readthedocs.io/en/latest/'
+        "Github": "https://github.com/shunnkou/perry_bot",
+        "Documentation": "https://perry-bot.readthedocs.io/en/latest/",
     },
-    version='0.1.0',
+    version="0.1.0",
     zip_safe=False,
 )

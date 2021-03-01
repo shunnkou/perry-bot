@@ -18,18 +18,21 @@ def validate_edit_habit(ctx, param, value):
     :return:
     """
     # TODO: Switch this to something like validate_date()
-    check_comma = re.search(',', value)
+    check_comma = re.search(",", value)
     if check_comma:
-        option, habit_name = value.split(',')
-        check_option = re.search('name|frequency|start date', value)
+        option, habit_name = value.split(",")
+        check_option = re.search("name|frequency|start date", value)
         if check_option:
             return option, habit_name
-        raise click.BadParameter(message="The value to change needs to be "
-                                 "'name', 'frequency', or 'start date'.")
-    raise click.BadParameter(message="Separate your option and your "
-                             "new habit name with a comma.",
-                             param=param,
-                             ctx=ctx)
+        raise click.BadParameter(
+            message="The value to change needs to be "
+            "'name', 'frequency', or 'start date'."
+        )
+    raise click.BadParameter(
+        message="Separate your option and your " "new habit name with a comma.",
+        param=param,
+        ctx=ctx,
+    )
 
 
 def validate_date(value: str):
@@ -50,14 +53,15 @@ def validate_date(value: str):
     if view_day:
         return value
     if value.lower() == valid_strings[0]:
-        return arrow.now('local').format('YYYY-MM-DD')
+        return arrow.now("local").format("YYYY-MM-DD")
     raise click.BadParameter(
         message="Date is incorrectly formatted. "
-        "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY, today.")
+        "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY, today."
+    )
 
 
 @click.group()
-@click.version_option(version='v0.1.0', prog_name='perry-bot')
+@click.version_option(version="v0.1.0", prog_name="perry-bot")
 def main():
     """
     \b
@@ -72,21 +76,21 @@ def main():
     return 0
 
 
-@click.command(name='water')
-@click.option('-a',
-              '--add',
-              help="Add NUM cup(s) of water to today's log",
-              type=click.IntRange(1, None))
-@click.option('-d',
-              '--delete',
-              help="Delete NUM cup(s) of water from today's log.",
-              type=click.IntRange(1, None))
-@click.option('-v',
-              '--view',
-              help="View cups of water drank on the given date.")
-@click.option('-e',
-              '--edit',
-              help='Edit cups of water drank on the given date.')
+@click.command(name="water")
+@click.option(
+    "-a",
+    "--add",
+    help="Add NUM cup(s) of water to today's log",
+    type=click.IntRange(1, None),
+)
+@click.option(
+    "-d",
+    "--delete",
+    help="Delete NUM cup(s) of water from today's log.",
+    type=click.IntRange(1, None),
+)
+@click.option("-v", "--view", help="View cups of water drank on the given date.")
+@click.option("-e", "--edit", help="Edit cups of water drank on the given date.")
 def log_water(add, delete, view, edit):
     """
     \b
@@ -102,7 +106,7 @@ def log_water(add, delete, view, edit):
     :param delete:
     :return:
     """
-    dt = arrow.now('local').format('YYYY-MM-DD')
+    dt = arrow.now("local").format("YYYY-MM-DD")
 
     if add:
         new_record = be.Water(id=[], cups_drank=[], date_stamp=[])
@@ -120,21 +124,21 @@ def log_water(add, delete, view, edit):
         be.Water.edit_cups(edit_model, edit_date=edit_date)
 
 
-@click.command(name='mood')
-@click.option('-r',
-              '--rating',
-              help="Your mood's rating. A number from 1-10",
-              type=click.IntRange(1, 10))
-@click.option('-c', '--comment', help='Add a comment.', type=str)
-@click.option('-av',
-              '--average',
-              help="View your average mood on a given date.")
-@click.option('-vt',
-              '--view-table',
-              help='View a table of your mood and comments on a given date.')
-@click.option('-e',
-              '--edit',
-              help='Edit a mood rating or comment on a given date.')
+@click.command(name="mood")
+@click.option(
+    "-r",
+    "--rating",
+    help="Your mood's rating. A number from 1-10",
+    type=click.IntRange(1, 10),
+)
+@click.option("-c", "--comment", help="Add a comment.", type=str)
+@click.option("-av", "--average", help="View your average mood on a given date.")
+@click.option(
+    "-vt",
+    "--view-table",
+    help="View a table of your mood and comments on a given date.",
+)
+@click.option("-e", "--edit", help="Edit a mood rating or comment on a given date.")
 def log_mood(rating, comment, average, edit, view_table):
     """
     Rate your mood.
@@ -148,12 +152,11 @@ def log_mood(rating, comment, average, edit, view_table):
     :param average:
     :return:
     """
-    datetime = arrow.now('local').format('YYYY-MM-DD HH-mm-ss')
+    datetime = arrow.now("local").format("YYYY-MM-DD HH-mm-ss")
     if rating:
-        new_entry = be.Mood(id=[],
-                            rating=rating,
-                            comment=comment,
-                            datetime_stamp=datetime)
+        new_entry = be.Mood(
+            id=[], rating=rating, comment=comment, datetime_stamp=datetime
+        )
         be.Mood.new_entry(new_entry)
     if average:
         view_option = validate_date(value=average)
@@ -169,36 +172,38 @@ def log_mood(rating, comment, average, edit, view_table):
         be.Mood.edit_mood(edit_mood, edit_date=edit_date)
 
 
-@click.command(name='habit')
-@click.option('-v',
-              '--view',
-              help='View existing habit(s) and its status.',
-              is_flag=True)
-@click.option('-c', '--complete', help='Mark habit as complete.')
-@click.option('-ic', '--incomplete', help='Mark habit as incomplete')
-@click.option('-a', '--add', help='Add a habit.')
-@click.option('-d', '--delete', help='Delete a habit.')
-@click.option('-f',
-              '--frequency',
-              help='Frequency of the habit.',
-              type=click.Choice(
-                  ['Daily', 'Bi-Weekly', 'Weekly', 'Monthly', 'Yearly'],
-                  case_sensitive=False),
-              default='Daily')
+@click.command(name="habit")
 @click.option(
-    '-sd',
-    '--start-date',
-    help='Set the start date for weekly, bi-weekly, monthly, or yearly habits.',
-    type=click.DateTime(formats=['%Y-%m-%d']))
+    "-v", "--view", help="View existing habit(s) and its status.", is_flag=True
+)
+@click.option("-c", "--complete", help="Mark habit as complete.")
+@click.option("-ic", "--incomplete", help="Mark habit as incomplete")
+@click.option("-a", "--add", help="Add a habit.")
+@click.option("-d", "--delete", help="Delete a habit.")
 @click.option(
-    '-e',
-    '--edit',
+    "-f",
+    "--frequency",
+    help="Frequency of the habit.",
+    type=click.Choice(
+        ["Daily", "Bi-Weekly", "Weekly", "Monthly", "Yearly"], case_sensitive=False
+    ),
+    default="Daily",
+)
+@click.option(
+    "-sd",
+    "--start-date",
+    help="Set the start date for weekly, bi-weekly, monthly, or yearly habits.",
+    type=click.DateTime(formats=["%Y-%m-%d"]),
+)
+@click.option(
+    "-e",
+    "--edit",
     help="Edit a habit's name, frequency, start date. "
     "Separate your choice and the name (or number) of the habit with a comma.",
     nargs=2,
-    callback=validate_edit_habit)
-def log_habit(view, complete, incomplete, add, delete, start_date, edit,
-              frequency):
+    callback=validate_edit_habit,
+)
+def log_habit(view, complete, incomplete, add, delete, start_date, edit, frequency):
     """
     \b
     Log and manage habits.
@@ -227,27 +232,37 @@ def log_habit(view, complete, incomplete, add, delete, start_date, edit,
     return 0
 
 
-@click.command(name='viz')
-@click.option('-o',
-              '--on',
-              type=click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
-              help='Show records on this date.')
-@click.option('-f',
-              '--from',
-              'from_',
-              type=click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
-              help='Show records after, or on, this date')
-@click.option('-t',
-              '--to',
-              type=click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
-              help='Show records before, or on, this date.')
-@click.option('-c',
-              '--compare',
-              help='Compare records. Separate values with a comma.',
-              type=(click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y']),
-                    click.DateTime(formats=['%Y-%m-%d', '%Y-%m', '%Y'])))
-@click.option('-h', '--habit', help='Show records of a specific habit.')
-@click.argument('log_type')
+@click.command(name="viz")
+@click.option(
+    "-o",
+    "--on",
+    type=click.DateTime(formats=["%Y-%m-%d", "%Y-%m", "%Y"]),
+    help="Show records on this date.",
+)
+@click.option(
+    "-f",
+    "--from",
+    "from_",
+    type=click.DateTime(formats=["%Y-%m-%d", "%Y-%m", "%Y"]),
+    help="Show records after, or on, this date",
+)
+@click.option(
+    "-t",
+    "--to",
+    type=click.DateTime(formats=["%Y-%m-%d", "%Y-%m", "%Y"]),
+    help="Show records before, or on, this date.",
+)
+@click.option(
+    "-c",
+    "--compare",
+    help="Compare records. Separate values with a comma.",
+    type=(
+        click.DateTime(formats=["%Y-%m-%d", "%Y-%m", "%Y"]),
+        click.DateTime(formats=["%Y-%m-%d", "%Y-%m", "%Y"]),
+    ),
+)
+@click.option("-h", "--habit", help="Show records of a specific habit.")
+@click.argument("log_type")
 def dataviz(from_, to, on, month, year, log_type, habit):
     """
     Visualize your records.
@@ -268,15 +283,14 @@ def dataviz(from_, to, on, month, year, log_type, habit):
     :param habit:
     :return:
     """
-    click.echo(f'From = {from_}')
-    click.echo(f'To = {to}')
-    click.echo(f'On = {on}')
-    click.echo(f'Type = {log_type}')
-    click.echo(f'Month = {month}')
-    click.echo(f'Year = {year}')
-    if habit and log_type != 'habit':
-        raise BadOptionUsage(message='LOG_TYPE must be habit.',
-                             option_name='--habit')
+    click.echo(f"From = {from_}")
+    click.echo(f"To = {to}")
+    click.echo(f"On = {on}")
+    click.echo(f"Type = {log_type}")
+    click.echo(f"Month = {month}")
+    click.echo(f"Year = {year}")
+    if habit and log_type != "habit":
+        raise BadOptionUsage(message="LOG_TYPE must be habit.", option_name="--habit")
     return 0
 
 
