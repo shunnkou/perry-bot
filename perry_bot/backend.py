@@ -146,25 +146,18 @@ class Water:
                 WaterDB.update(cups_drank=WaterDB.cups_drank + cups).where(
                     WaterDB.date_stamp.contains(date)
                 ).execute()
-            self.query(date=date)
-            console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Water log added to database.\n"
-                f"[bold]{escape('[perry-bot]:')}[/bold] You've drunk "
-                f"{self.cups_drank[-1]} cups of water today, "
-                f"keep up the good work!",
-                style="default",
-            )
         else:
             with db:
                 WaterDB.insert(cups_drank=cups, date_stamp=date).execute()
-            self.query(date=date)
-            console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Water log added to database.\n"
-                f"[bold]{escape('[perry-bot]:')}[/bold] You've drunk "
-                f"{self.cups_drank[-1]} cups of water today, "
-                f"keep up the good work!",
-                style="default",
-            )
+
+        self.query(date=date)
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] Water log added to database.\n"
+            f"[bold]{escape('[perry-bot]:')}[/bold] You've drunk "
+            f"{self.cups_drank[-1]} cups of water today, "
+            f"keep up the good work!",
+            style="default",
+        )
 
     def delete_cups(self, date: str, cups: int):
         """Delete num of cups from today's record.
@@ -261,16 +254,15 @@ class Water:
             edit_target = edit_existing_entry(self, table, **targets)
             if edit_target is False:
                 return
-            else:
-                with db:
-                    WaterDB.update(cups_drank=edit_target[1]).where(
-                        WaterDB.id == edit_target[2]
-                    ).execute()
-                console.print(
-                    f"[bold]{escape('[perry-bot]:')}[/bold] Your number of cups "
-                    f"drank has been updated.",
-                    style="default",
-                )
+            with db:
+                WaterDB.update(cups_drank=edit_target[1]).where(
+                    WaterDB.id == edit_target[2]
+                ).execute()
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] Your number of cups "
+                f"drank has been updated.",
+                style="default",
+            )
         else:
             console.print(
                 f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no records "
@@ -500,12 +492,9 @@ def edit_existing_entry(self, table, **kwargs):
         f"[bold]{escape('[perry-bot]:')}[/bold] Enter the new value", style="default"
     )
     edit_input = ""
-    if len(choices) == 2:
-        if edit_target in choices[1]:
-            edit_input = Prompt.ask()
-        elif edit_target in choices[0]:
-            edit_input = IntPrompt.ask()
-    elif len(choices) == 1:
+    if len(choices) == 2 and edit_target in choices[1]:
+        edit_input = Prompt.ask()
+    elif len(choices) == 2 and edit_target in choices[0] or len(choices) == 1:
         edit_input = IntPrompt.ask()
     console.print(
         f"[bold]{escape('[perry-bot]:')}[/bold] You would like to "
@@ -525,12 +514,13 @@ def edit_existing_entry(self, table, **kwargs):
             style="default",
         )
         edit_input = ""
-        if len(choices) == 2:
-            if edit_target in choices[1]:
-                edit_input = Prompt.ask()
-            elif edit_target in choices[0]:
-                edit_input = IntPrompt.ask()
-        elif len(choices) == 1:
+        if len(choices) == 2 and edit_target in choices[1]:
+            edit_input = Prompt.ask()
+        elif (
+            len(choices) == 2
+            and edit_target in choices[0]
+            or len(choices) == 1
+        ):
             edit_input = IntPrompt.ask()
         console.print(
             f"[bold]{escape('[perry-bot]:')}[/bold] You would like to "
