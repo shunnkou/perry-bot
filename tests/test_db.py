@@ -13,7 +13,7 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         """Set up database."""
         super(BaseTestCase, self).setUp()
-        self.conn = SqliteDatabase(':memory:')
+        self.conn = SqliteDatabase(":memory:")
         self.conn.bind(MODELS, bind_refs=False, bind_backrefs=False)
         self.conn.connect()
         self.conn.create_tables(MODELS)
@@ -22,6 +22,7 @@ class BaseTestCase(unittest.TestCase):
         """Cleanup database."""
         self.conn.drop_tables(MODELS)
         self.conn.close()
+
 
 #
 #     # <!-------- Water Table --------!>
