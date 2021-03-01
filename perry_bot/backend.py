@@ -516,11 +516,7 @@ def edit_existing_entry(self, table, **kwargs):
         edit_input = ""
         if len(choices) == 2 and edit_target in choices[1]:
             edit_input = Prompt.ask()
-        elif (
-            len(choices) == 2
-            and edit_target in choices[0]
-            or len(choices) == 1
-        ):
+        elif len(choices) == 2 and edit_target in choices[0] or len(choices) == 1:
             edit_input = IntPrompt.ask()
         console.print(
             f"[bold]{escape('[perry-bot]:')}[/bold] You would like to "
