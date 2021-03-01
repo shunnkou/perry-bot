@@ -12,6 +12,9 @@
 - [](#track-mood)
 
   - [](#add-a-comment)
+  - [](#edit-a-mood-rating)
+  - [](#average-rating)
+  - [](#mood-ratings-table)
 
 - [](#track-and-manage-habits)
 
@@ -25,7 +28,7 @@
 
   - [](#compare-data-from-two-dates)
 
-- [](#date-formats)
+- [](#date-tokens)
 
 - [](#full-list-of-commands-and-options)
 
@@ -51,25 +54,37 @@ To log cups of water drank, use the `-a` or `--add` option.
 For example, to log 1 bottle/cup of water:
 
 ```console
-perry-bot water -a 1
+$ perry-bot water -a 1
+[perry-bot]: Water log added to database.
+[perry-bot]: You've drunk 1 cups of water today, keep up the good work!
 ```
 
 ### Delete a cup
 
 If you made a mistake and want to remove a log, use `-d` or `--delete`.
-For example, to delete 1 bottle/cup of water:
+For example, to delete 2 bottle/cup of water:
 
 ```console
-perry-bot water --delete 1
+$ perry-bot water --delete 2
+[perry-bot]: 2 cups deleted from today's log.
 ```
+
+If the number of cups you delete causes the total number of cups to become negative,
+`perry-bot` will warn you and ask you if you're sure you want to delete all your cups drank.
 
 ### View your cups drank
 
 To view the number of cups you've drunk, use `-v` or `--view` and a date:
 
 ```console
-perry-bot water --view 2021-02-05
+$ perry-bot water --view 2021-02-05
+[perry-bot]: You've drunk 8 cups of water on 2021-02-05.
 ```
+
+:::{tip}
+Anywhere you can input a date, you can also use `today`. For example,
+`perry-bot water -v today`
+:::
 
 ## Track mood
 
@@ -82,7 +97,8 @@ perry-bot mood [OPTIONS]
 Use the `-r` or `--rating` option and rate your mood on a scale from 1 to 10:
 
 ```console
-perry-bot mood -r 6
+$ perry-bot mood -r 6
+[perry-bot]: Mood entry added to database.
 ```
 
 ### Add a comment
@@ -91,6 +107,37 @@ To add a comment/explanation for your mood, use the `-c` or `--comment` option:
 
 ```console
 perry-bot -c 'Failed an exam today...' -r 3
+```
+
+### Edit a mood rating
+
+To edit a mood rating or comment on a specific date, use the `-e` or `--edit` option with a date:
+
+```console
+$ perry-bot --edit today
+```
+
+### Average rating
+
+To view your average rating on a specific date, use the `-av` or `--average` option with a date (or `today`):
+
+```console
+$ perry-bot -av today
+[perry-bot]: Your average mood on 2021-02-28 is 4.
+```
+
+### Mood ratings table
+
+To see a table of your mood ratings, use the `-vt` or `--view-table` option wih a date:
+
+```console
+$ perry-bot -vt 2021-02-28
+                 Mood Records
+┏━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┓
+┃ # ┃   Datetime stamp    ┃ Rating ┃ Comment ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━┩
+│ 1 │ 2021-02-28 14-28-24 │   4    │  None   │
+└───┴─────────────────────┴────────┴─────────┘
 ```
 
 ## Track and manage habits
@@ -233,7 +280,7 @@ Basically, everything is in the format of 'Year-Month-Date'
 ```
 ````
 
-## Date Formats
+## Date Tokens
 
 | Command | Option                | Accepted Format                                 | Example                                                     |
 | ------- | --------------------- | ----------------------------------------------- | ----------------------------------------------------------- |
@@ -306,10 +353,14 @@ Usage: perry-bot mood [OPTIONS]
   Rate your mood.
 
 Options:
-  -r, --rating INTEGER RANGE      Your mood's rating. A number from 1-10
-  -c, --comment TEXT              Add a comment.
-  -v, --view [%Y-%m-%d|%Y-%m|%Y]  View average mood.
-  --help                          Show this message and exit.
+  -r, --rating INTEGER RANGE  Your mood's rating. A number from 1-10
+  -c, --comment TEXT          Add a comment.
+  -av, --average TEXT         View your average mood on a given date.
+  -vt, --view-table TEXT      View a table of your mood and comments on a
+                              given date.
+
+  -e, --edit TEXT             Edit a mood rating or comment on a given date.
+  --help                      Show this message and exit.
 ```
 
 ### Data visualization options
@@ -346,12 +397,9 @@ Usage: perry-bot water [OPTIONS]
   See the documentation for more information on scheduling reminders.
 
 Options:
-  -a, --add INTEGER RANGE         Add NUM cup(s) of water
-  -d, --delete INTEGER RANGE      Delete NUM cup(s) of water.
-  -v, --view [%Y-%m-%d|%Y-%m, %Y]
-                                  View cups of water drank.
-  --start                         Start water reminder.
-  --stop                          Stop water reminder.
-  -e, --edit                      Edit water reminder schedule.
-  --help                          Show this message and exit.
+  -a, --add INTEGER RANGE     Add NUM cup(s) of water to today's log
+  -d, --delete INTEGER RANGE  Delete NUM cup(s) of water from today's log.
+  -v, --view TEXT             View cups of water drank on the given date.
+  -e, --edit TEXT             Edit cups of water drank on the given date.
+  --help                      Show this message and exit.
 ```
