@@ -29,13 +29,13 @@ def validate_edit_habit(ctx, param, value):
             "'name', 'frequency', or 'start date'."
         )
     raise click.BadParameter(
-        message="Separate your option and your " "new habit name with a comma.",
+        message="Separate your option and your new habit name with a comma.",
         param=param,
         ctx=ctx,
     )
 
 
-def validate_date(value: str):
+def validate_date(value: str) -> str:
     """Check date is in the correct format.
 
     :param value:
@@ -53,7 +53,7 @@ def validate_date(value: str):
     if view_day:
         return value
     if value.lower() == valid_strings[0]:
-        return arrow.now("local").format("YYYY-MM-DD")
+        return str(arrow.now("local").format("YYYY-MM-DD"))
     raise click.BadParameter(
         message="Date is incorrectly formatted. "
         "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY, today."
@@ -62,7 +62,7 @@ def validate_date(value: str):
 
 @click.group()
 @click.version_option(version="v0.1.0", prog_name="perry-bot")
-def main():
+def cli():
     """
     \b
     Perry Bot - a commandline self-care tracker bot.
@@ -89,8 +89,12 @@ def main():
     help="Delete NUM cup(s) of water from today's log.",
     type=click.IntRange(1, None),
 )
-@click.option("-v", "--view", help="View cups of water drank on the given date.")
-@click.option("-e", "--edit", help="Edit cups of water drank on the given date.")
+@click.option(
+    "-v", "--view", help="View cups of water drank on the given " "date."
+)
+@click.option(
+    "-e", "--edit", help="Edit cups of water drank on the given " "date."
+)
 def log_water(add, delete, view, edit):
     """
     \b
@@ -132,13 +136,17 @@ def log_water(add, delete, view, edit):
     type=click.IntRange(1, 10),
 )
 @click.option("-c", "--comment", help="Add a comment.", type=str)
-@click.option("-av", "--average", help="View your average mood on a given date.")
+@click.option(
+    "-av", "--average", help="View your average" " mood on a given date."
+)
 @click.option(
     "-vt",
     "--view-table",
     help="View a table of your mood and comments on a given date.",
 )
-@click.option("-e", "--edit", help="Edit a mood rating or comment on a given date.")
+@click.option(
+    "-e", "--edit", help="Edit a mood rating or " "comment on a given date."
+)
 def log_mood(rating, comment, average, edit, view_table):
     """
     Rate your mood.
@@ -185,14 +193,16 @@ def log_mood(rating, comment, average, edit, view_table):
     "--frequency",
     help="Frequency of the habit.",
     type=click.Choice(
-        ["Daily", "Bi-Weekly", "Weekly", "Monthly", "Yearly"], case_sensitive=False
+        ["Daily", "Bi-Weekly", "Weekly", "Monthly", "Yearly"],
+        case_sensitive=False,
     ),
     default="Daily",
 )
 @click.option(
     "-sd",
     "--start-date",
-    help="Set the start date for weekly, bi-weekly, monthly, or yearly habits.",
+    help="Set the start date for weekly, bi-weekly, "
+    "monthly, or yearly habits.",
     type=click.DateTime(formats=["%Y-%m-%d"]),
 )
 @click.option(
@@ -203,7 +213,9 @@ def log_mood(rating, comment, average, edit, view_table):
     nargs=2,
     callback=validate_edit_habit,
 )
-def log_habit(view, complete, incomplete, add, delete, start_date, edit, frequency):
+def log_habit(
+    view, complete, incomplete, add, delete, start_date, edit, frequency
+):
     """
     \b
     Log and manage habits.
@@ -290,11 +302,14 @@ def dataviz(from_, to, on, month, year, log_type, habit):
     click.echo(f"Month = {month}")
     click.echo(f"Year = {year}")
     if habit and log_type != "habit":
-        raise BadOptionUsage(message="LOG_TYPE must be habit.", option_name="--habit")
+        raise BadOptionUsage(
+            message="LOG_TYPE must be habit if the habit flag is used.",
+            option_name="--habit",
+        )
     return 0
 
 
-main.add_command(log_water)
-main.add_command(log_mood)
-main.add_command(log_habit)
-main.add_command(dataviz)
+cli.add_command(log_water)
+cli.add_command(log_mood)
+cli.add_command(log_habit)
+cli.add_command(dataviz)

@@ -47,7 +47,7 @@ setup(
     description="A commandline tracker program.",
     entry_points={
         "console_scripts": [
-            "perry-bot=perry_bot.cli_entry:main",
+            "perry-bot=perry_bot.cli_entry:cli",
         ],
     },
     install_requires=requirements,

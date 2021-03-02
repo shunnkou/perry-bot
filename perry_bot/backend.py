@@ -5,17 +5,16 @@ from pathlib import Path
 
 import attr
 from peewee import BooleanField, IntegerField, Model, SqliteDatabase, TextField
-from rich import pretty
 from rich.markup import escape
 from rich.prompt import IntPrompt, Prompt
 from rich.table import Table
-from rich.logging import RichHandler
 
 from perry_bot.console import console
 
 # <----- Debugging ----->
 
 # import logging
+# from rich.logging import RichHandler
 #
 # logger = logging.getLogger('peewee')
 # logger.setLevel(logging.DEBUG)
@@ -43,6 +42,7 @@ db = SqliteDatabase(
         "synchronous": 0,
     },
 )
+
 
 # <!-------- Models --------!>
 
@@ -152,7 +152,8 @@ class Water:
 
         self.query(date=date)
         console.print(
-            f"[bold]{escape('[perry-bot]:')}[/bold] Water log added to database.\n"
+            f"[bold]{escape('[perry-bot]:')}[/bold] Water log added to "
+            f"database.\n "
             f"[bold]{escape('[perry-bot]:')}[/bold] You've drunk "
             f"{self.cups_drank[-1]} cups of water today, "
             f"keep up the good work!",
@@ -168,45 +169,62 @@ class Water:
         """
         self.query(date=date)
         if self.id:
-            if sum(self.cups_drank) - cups < 0:
-                console.print(
-                    f"[bold]{escape('[perry-bot]:')}[/bold] Deleting {cups} cups will cause "
-                    f"the total cups to be less than zero ({sum(self.cups_drank) - cups})."
-                    f"\n[bold]{escape('[perry-bot]:')}[/bold] Reset today's cups drank to 0?",
-                    style="default",
-                )
-                c = Prompt.ask(choices=["y", "n"])
-                if c in ["y"]:
-                    with db:
-                        WaterDB.update(cups_drank=0).where(
-                            WaterDB.date_stamp.contains(date)
-                        ).execute()
-                    console.print(
-                        f"[bold]{escape('[perry-bot]:')}[/bold] Cups drank today reset to 0.",
-                        style="default",
-                    )
-                elif c in ["n"]:
-                    console.print(
-                        f"[bold]{escape('[perry-bot]:')}[/bold] Deleting cups cancelled.",
-                        style="default",
-                    )
-                    return
-            else:
-                with db:
-                    WaterDB.update(cups_drank=WaterDB.cups_drank - cups).where(
-                        WaterDB.date_stamp.contains(date)
-                    ).execute()
-                console.print(
-                    f"[bold]{escape('[perry-bot]:')}[/bold] {cups} cups deleted "
-                    f"from today's log.",
-                    style="default",
-                )
+            check_cups = self.check_cups_less_than_zero(date=date, cups=cups)
+            if not check_cups:
+                return
+            with db:
+                WaterDB.update(cups_drank=WaterDB.cups_drank - cups).where(
+                    WaterDB.date_stamp.contains(date)
+                ).execute()
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] {cups} cups deleted "
+                f"from today's log.",
+                style="default",
+            )
         else:
             console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] You haven't recorded any cups drank today yet, "
+                f"[bold]{escape('[perry-bot]:')}[/bold] You haven't recorded "
+                f"any cups drank today yet, "
                 f"there's nothing to delete!",
                 style="default",
             )
+
+    def check_cups_less_than_zero(self, date: str, cups: int) -> bool:
+        """Check total number of cups.
+
+        :param date:
+        :param cups:
+        :return:
+        """
+        total_cups = sum(self.cups_drank) - cups
+        if total_cups < 0:
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] Deleting {cups} cups "
+                f"will cause the total cups to be "
+                f"less than zero ({sum(self.cups_drank) - cups})."
+                f"\n[bold]{escape('[perry-bot]:')}[/bold] Reset today's cups "
+                f"drank to 0?",
+                style="default",
+            )
+            c = Prompt.ask(choices=["y", "n"])
+            if c in ["y"]:
+                with db:
+                    WaterDB.update(cups_drank=0).where(
+                        WaterDB.date_stamp.contains(date)
+                    ).execute()
+                console.print(
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Cups drank today "
+                    f"reset to 0.",
+                    style="default",
+                )
+                return False
+            elif c in ["n"]:
+                console.print(
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Deleting cups "
+                    f"cancelled.",
+                    style="default",
+                )
+                return False
 
     def view_total(self, date: str):
         """Return total cups in database.
@@ -217,13 +235,15 @@ class Water:
         self.query(date=date)
         if self.id:
             console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] You've drunk {sum(self.cups_drank)} "
+                f"[bold]{escape('[perry-bot]:')}[/bold] "
+                f"You've drunk {sum(self.cups_drank)} "
                 f"cups of water on {date}.",
                 style="default",
             )
         else:
             console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no records "
+                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no "
+                f"records "
                 f"matching {date}. Try another date.",
                 style="default",
             )
@@ -240,18 +260,21 @@ class Water:
         table.add_column("Date")
         table.add_column("Cups drank", justify="center")
 
-        for (number, date, cups) in zip(self.id, self.date_stamp, self.cups_drank):
+        for (number, date, cups) in zip(
+            self.id, self.date_stamp, self.cups_drank
+        ):
             table.add_row(str(number), str(date), str(cups))
-
-        table.add_row(
-            str(len(self.id) + 1),
-            "[b]Cancel Edit[/b]",
-            "[b]----------[/b]",
-            style="cancel",
-        )
         if self.id:
-            targets = {"choices": ["cups drank"]}
-            edit_target = edit_existing_entry(self, table, **targets)
+            table.add_row(
+                str(self.id[-1] + 1),
+                "[b]Cancel Edit[/b]",
+                "[b]----------[/b]",
+                style="cancel",
+            )
+            setup_edit = EditExistingEntry(
+                table=table, id=self.id, column_choices=["cups drank"]
+            )
+            edit_target = EditExistingEntry.edit_table(setup_edit)
             if edit_target is False:
                 return
             with db:
@@ -265,7 +288,8 @@ class Water:
             )
         else:
             console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no records "
+                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no "
+                f"records "
                 f"matching {edit_date}. Try another date.",
                 style="default",
             )
@@ -325,7 +349,8 @@ class Mood:
                 comment=self.comment,
             )
         console.print(
-            f"[bold]{escape('[perry-bot]:')}[/bold] Mood entry added to database.",
+            f"[bold]{escape('[perry-bot]:')}[/bold] Mood entry added to "
+            f"database.",
             style="default",
         )
 
@@ -359,26 +384,41 @@ class Mood:
         self.query(date=view_date)
         table = self.make_table(title="Mood Records")
         if self.id:
-            if len(table.rows) >= 20:
-                console.print(
-                    f"[bold]{escape('[perry-bot]:')}[/bold] The table has more "
-                    f"than 20 rows. Would you like to continue displaying the table?",
-                    style="default",
-                )
-                q = Prompt.ask(choices=["y", "n"])
-                if q in ["n"]:
-                    console.print(
-                        f"[bold]{escape('[perry-bot]:')}[/bold] --view-table cancelled.",
-                        style="default",
-                    )
-                    return
+            check_long_table = self.long_table_confirmation
+            if not check_long_table:
+                return
             console.print(table, style="default")
         else:
             console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no records "
+                f"[bold]{escape('[perry-bot]:')}[/bold] "
+                f"Sorry, there are no records "
                 f"matching {view_date}. Try another date.",
                 style="default",
             )
+
+    @staticmethod
+    def long_table_confirmation(table):
+        """Check max table length.
+
+        :param table:
+        :return:
+        """
+        max_table_length = len(table.rows)
+        if max_table_length < 20:
+            return True
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] The table has more "
+            f"than 20 rows. Would you like to continue displaying the table?",
+            style="default",
+        )
+        q = Prompt.ask(choices=["y", "n"])
+        if q in ["n"]:
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] "
+                f"--view-table cancelled.",
+                style="default",
+            )
+            return False
 
     def edit_mood(self, edit_date: str):
         """Edit a specific mood rating.
@@ -390,18 +430,19 @@ class Mood:
         """
         self.query(date=edit_date)
         table = self.make_table(title="Edit a Mood Rating")
-
-        table.add_row(
-            str(len(self.id) + 1),
-            "[b]----------[/b]",
-            "[b]Cancel Edit[/b]",
-            "[b]----------[/b]",
-            style="cancel",
-        )
         if self.id:
-            targets = {"choices": ["rating", "comment"]}
-            edit_target = edit_existing_entry(self, table, **targets)
-            if edit_target is False:
+            table.add_row(
+                str(self.id[-1] + 1),
+                "[b]----------[/b]",
+                "[b]Cancel Edit[/b]",
+                "[b]----------[/b]",
+                style="cancel",
+            )
+            setup_edit = EditExistingEntry(
+                table=table, id=self.id, column_choices=["rating", "comment"]
+            )
+            edit_target = EditExistingEntry.edit_table(setup_edit)
+            if not edit_target:
                 return
             if edit_target[0] in ["rating"]:
                 with db:
@@ -409,7 +450,8 @@ class Mood:
                         MoodDB.id == edit_target[2]
                     ).execute()
                 console.print(
-                    f"[bold]{escape('[perry-bot]:')}[/bold] Your rating has been updated.",
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Your rating has "
+                    f"been updated.",
                     style="default",
                 )
             elif edit_target[0] in ["comment"]:
@@ -418,115 +460,18 @@ class Mood:
                         MoodDB.id == edit_target[2]
                     ).execute()
                 console.print(
-                    f"[bold]{escape('[perry-bot]:')}[/bold] Your comment has been updated.",
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Your comment has "
+                    f"been updated.",
                     style="default",
                 )
 
         else:
             console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no records "
-                f"matching {edit_date}. Try another date.",
+                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, there are no "
+                f"records matching {edit_date}. "
+                f"Try another date.",
                 style="default",
             )
-
-
-def edit_existing_entry(self, table, **kwargs):
-    """Edit an existing entry.
-
-    :param self:
-    :param table:
-    :param kwargs:
-    :return:
-    """
-    choices = kwargs["choices"]
-    if len(table.rows) >= 20:
-        console.print(
-            f"[bold]{escape('[perry-bot]:')}[/bold] The table has more "
-            f"than 20 rows. Would you like to continue editing your "
-            f"records on this date?",
-            style="default",
-        )
-        q = Prompt.ask(choices=["y", "n"])
-        if q in ["n"]:
-            console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] --edit cancelled.",
-                style="default",
-            )
-            return
-    console.print(table, style="default")
-    console.print(
-        f"[bold]{escape('[perry-bot]:')}[/bold] Enter the number of "
-        f"the entry you want to edit",
-        style="default",
-    )
-    num = IntPrompt.ask()
-    while num not in self.id:
-        if num == len(self.id) + 1:
-            console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Editing cancelled!",
-                style="default",
-            )
-            return False
-        console.print(
-            f"[bold]{escape('[perry-bot]:')}[/bold] Please enter "
-            f"a valid number from the table",
-            style="default",
-        )
-        num_again = IntPrompt.ask()
-        if num_again == len(self.id) + 1:
-            console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] Editing cancelled!",
-                style="default",
-            )
-            return False
-        if num_again in self.id:
-            num = num_again
-            break
-    console.print(
-        f"[bold]{escape('[perry-bot]:')}[/bold] Which category would "
-        f"you like to edit?",
-        style="default",
-    )
-    edit_target = Prompt.ask(choices=choices, default=choices[0])
-    console.print(
-        f"[bold]{escape('[perry-bot]:')}[/bold] Enter the new value", style="default"
-    )
-    edit_input = ""
-    if len(choices) == 2 and edit_target in choices[1]:
-        edit_input = Prompt.ask()
-    elif len(choices) == 2 and edit_target in choices[0] or len(choices) == 1:
-        edit_input = IntPrompt.ask()
-    console.print(
-        f"[bold]{escape('[perry-bot]:')}[/bold] You would like to "
-        f"change the {edit_target} for entry #{num} to '{edit_input}'. Correct?",
-        style="default",
-    )
-    check = Prompt.ask(choices=["y", "n"])
-    while check.lower() in ["n"]:
-        console.print(
-            f"[bold]{escape('[perry-bot]:')}[/bold] Which category would "
-            f"you like to edit?",
-            style="default",
-        )
-        edit_target = Prompt.ask(choices=choices, default=choices[0])
-        console.print(
-            f"[bold]{escape('[perry-bot]:')}[/bold] Enter the new value",
-            style="default",
-        )
-        edit_input = ""
-        if len(choices) == 2 and edit_target in choices[1]:
-            edit_input = Prompt.ask()
-        elif len(choices) == 2 and edit_target in choices[0] or len(choices) == 1:
-            edit_input = IntPrompt.ask()
-        console.print(
-            f"[bold]{escape('[perry-bot]:')}[/bold] You would like to "
-            f"change the {edit_target} for entry #{num} to '{edit_input}'. Correct?",
-            style="default",
-        )
-        check = Prompt.ask(choices=["y", "n"])
-        if check.lower() in ["y"]:
-            break
-    return edit_target, edit_input, num
 
 
 @attr.s(kw_only=True)
@@ -550,3 +495,190 @@ class Habit:
         table.add_column("Next due on")
         table.add_column("Start Date")
         table.add_column("Frequency")
+
+
+# <!---------- Class Helpers ---------->
+
+
+@attr.s()
+class EditExistingEntry:
+    table = attr.ib(kw_only=True)
+    id = attr.ib(factory=list)
+    new_value = attr.ib(factory=str)
+    number_to_edit = attr.ib(factory=int)
+    column_to_edit = attr.ib(factory=str)
+    column_choices = attr.ib(factory=list)
+    max_row = attr.ib(default=20)
+
+    def edit_table(self):
+        """Main function."""
+        length = self.check_length
+        if not length:
+            return False
+        console.print(self.table, style="default")
+        cancel_edit = self.get_num_to_edit()
+        if not cancel_edit:
+            return False
+        self.get_column_to_edit()
+        return self.column_to_edit, self.new_value, self.number_to_edit
+
+    def check_length(self) -> bool:
+        """Check number of rows in table.
+
+        :return:
+        """
+        if len(self.table.rows) < self.max_row:
+            return True
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] The table has more "
+            f"than 20 rows. Would you like to continue editing your "
+            f"records on this date?",
+            style="default",
+        )
+        q = Prompt.ask(choices=["y", "n"])
+        if q in ["n"]:
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] --edit cancelled.",
+                style="default",
+            )
+            return False
+        return True
+
+    def check_cancel_edit(self, num) -> bool:
+        """Check if user cancels edit.
+
+        :param num:
+        :return:
+        """
+        cancel_number = self.id[-1] + 1
+        if num == cancel_number:
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] Editing cancelled!",
+                style="default",
+            )
+            return False
+        return True
+
+    def wrong_num_loop(self, num: int) -> bool:
+        """Loop while user enters a number that doesn't exist.
+
+        :param num:
+        :return:
+        """
+        check_cancel = self.check_cancel_edit(num=num)
+        if not check_cancel:
+            return False
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] Please enter "
+            f"a valid number from the table",
+            style="default",
+        )
+        num_again = IntPrompt.ask()
+        check_cancel_again = self.check_cancel_edit(num=num_again)
+        if not check_cancel_again:
+            return False
+        if num_again in self.id:
+            self.number_to_edit = num_again
+            return True
+
+    def get_num_to_edit(self):
+        """Get the number user wants to edit.
+
+        :return:
+        """
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] Enter the number of "
+            f"the entry you want to edit.",
+            style="default",
+        )
+        num = IntPrompt.ask()
+        while num not in self.id:
+            wrong_id = self.wrong_num_loop(num=num)
+            if self.number_to_edit in self.id:
+                break
+            if not wrong_id:
+                return False
+        self.number_to_edit = num
+        return True
+
+    def get_new_value(self):
+        """Get the new value.
+
+        :return:
+        """
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] Enter the new value",
+            style="default",
+        )
+        if (
+            len(self.column_choices) == 2
+            and self.column_to_edit in self.column_choices[1]
+        ):
+            self.new_value = Prompt.ask()
+        elif (
+            len(self.column_choices) == 2
+            and self.column_to_edit in self.column_choices[0]
+            or len(self.column_choices) == 1
+        ):
+            self.new_value = IntPrompt.ask()
+
+    def check_new_value(self):
+        """Check new value is valid for their column.
+
+        :return:
+        """
+        if (
+            self.column_to_edit.lower() == "rating"
+            and self.new_value not in range(1, 11)
+        ):
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] The mood rating has "
+                f"to be between 1 and 10.",
+                style="default",
+            )
+            return False
+        if self.column_to_edit.lower() == "cups drank" and self.new_value < 0:
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] Cups drank cannot be "
+                f"below 0.",
+                style="default",
+            )
+            return False
+        return True
+
+    def get_column_to_edit(self):
+        """Get the column to edit.
+
+        :return:
+        """
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] Which category would "
+            f"you like to edit?",
+            style="default",
+        )
+        self.column_to_edit = Prompt.ask(
+            choices=self.column_choices, default=self.column_choices[0]
+        )
+        self.get_new_value()
+        check_value = self.check_new_value()
+        while check_value is False:
+            self.get_new_value()
+            check_value_again = self.check_new_value()
+            if check_value_again:
+                break
+        self.check_edit_target_and_value()
+
+    def check_edit_target_and_value(self):
+        """Check user has inputted everything correctly.
+
+        :return:
+        """
+        console.print(
+            f"[bold]{escape('[perry-bot]:')}[/bold] You would like to "
+            f"change the {self.column_to_edit} for entry "
+            f"#{self.number_to_edit} to '{self.new_value}'. Correct?",
+            style="default",
+        )
+        check = Prompt.ask(choices=["y", "n"])
+        if check.lower() in ["n"]:
+            self.get_column_to_edit()
