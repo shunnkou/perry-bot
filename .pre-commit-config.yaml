@@ -27,3 +27,11 @@ repos:
       hooks:
           - id: flake8
 
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v0.812
+      hooks:
+          - id: mypy
+            additional_dependencies:
+                [click==7.1.2, arrow==1.0.1, peewee==3.14.1,
+                 rich==9.12.3, attrs==20.3.0]
+
