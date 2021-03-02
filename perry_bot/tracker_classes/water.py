@@ -119,7 +119,7 @@ class Water:
                     style="default",
                 )
                 return False
-            elif c in ["n"]:
+            if c in ["n"]:
                 console.print(
                     f"[bold]{escape('[perry-bot]:')}[/bold] Deleting cups "
                     f"cancelled.",
