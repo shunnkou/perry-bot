@@ -4,35 +4,35 @@ import click
 from click.exceptions import BadOptionUsage
 import arrow
 import re
-from perry_bot import backend as be
+from perry_bot.tracker_classes import water, mood, habit
 
 
-def validate_edit_habit(ctx, param, value):
-    """Check input is in the correct format.
-
-     Format = 'option, str'
-
-    :param ctx:
-    :param param:
-    :param value:
-    :return:
-    """
-    # TODO: Switch this to something like validate_date()
-    check_comma = re.search(",", value)
-    if check_comma:
-        option, habit_name = value.split(",")
-        check_option = re.search("name|frequency|start date", value)
-        if check_option:
-            return option, habit_name
-        raise click.BadParameter(
-            message="The value to change needs to be "
-            "'name', 'frequency', or 'start date'."
-        )
-    raise click.BadParameter(
-        message="Separate your option and your new habit name with a comma.",
-        param=param,
-        ctx=ctx,
-    )
+# def validate_edit_habit(ctx, param, value):
+#     """Check input is in the correct format.
+#
+#      Format = 'option, str'
+#
+#     :param ctx:
+#     :param param:
+#     :param value:
+#     :return:
+#     """
+#     # TODO: Switch this to something like validate_date()
+#     check_comma = re.search(",", value)
+#     if check_comma:
+#         option, habit_name = value.split(",")
+#         check_option = re.search("name|frequency|start date", value)
+#         if check_option:
+#             return option, habit_name
+#         raise click.BadParameter(
+#             message="The value to change needs to be "
+#             "'name', 'frequency', or 'start date'."
+#         )
+#     raise click.BadParameter(
+#         message="Separate your option and your new habit name with a comma.",
+#         param=param,
+#         ctx=ctx,
+#     )
 
 
 def validate_date(value: str) -> str:
@@ -90,12 +90,12 @@ def cli():
     type=click.IntRange(1, None),
 )
 @click.option(
-    "-v", "--view", help="View cups of water drank on the given " "date."
+    "-v", "--view", help="View cups of water drank on the given date."
 )
 @click.option(
-    "-e", "--edit", help="Edit cups of water drank on the given " "date."
+    "-e", "--edit", help="Edit cups of water drank on the given date."
 )
-def log_water(add, delete, view, edit):
+def log_water(add: int, delete: int, view: str, edit: str) -> None:
     """
     \b
     Log cups of water drank.
@@ -113,19 +113,19 @@ def log_water(add, delete, view, edit):
     dt = arrow.now("local").format("YYYY-MM-DD")
 
     if add:
-        new_record = be.Water(id=[], cups_drank=[], date_stamp=[])
-        be.Water.get_or_create_cups(new_record, date=dt, cups=add)
+        new_record = water.Water(id=[], cups_drank=[], date_stamp=[])
+        water.Water.get_or_create_cups(new_record, date=dt, cups=add)
     if delete:
-        delete_cups = be.Water(id=[], cups_drank=[], date_stamp=[])
-        be.Water.delete_cups(delete_cups, date=dt, cups=delete)
+        delete_cups = water.Water(id=[], cups_drank=[], date_stamp=[])
+        water.Water.delete_cups(delete_cups, date=dt, cups=delete)
     if view:
         date = validate_date(view)
-        view_date = be.Water(id=[], cups_drank=[], date_stamp=[])
-        be.Water.view_total(view_date, date=date)
+        view_date = water.Water(id=[], cups_drank=[], date_stamp=[])
+        water.Water.view_total(view_date, date=date)
     if edit:
         edit_date = validate_date(edit)
-        edit_model = be.Water(id=[], cups_drank=[], date_stamp=[])
-        be.Water.edit_cups(edit_model, edit_date=edit_date)
+        edit_model = water.Water(id=[], cups_drank=[], date_stamp=[])
+        water.Water.edit_cups(edit_model, edit_date=edit_date)
 
 
 @click.command(name="mood")
@@ -137,7 +137,7 @@ def log_water(add, delete, view, edit):
 )
 @click.option("-c", "--comment", help="Add a comment.", type=str)
 @click.option(
-    "-av", "--average", help="View your average" " mood on a given date."
+    "-av", "--average", help="View your average mood on a given date."
 )
 @click.option(
     "-vt",
@@ -145,9 +145,11 @@ def log_water(add, delete, view, edit):
     help="View a table of your mood and comments on a given date.",
 )
 @click.option(
-    "-e", "--edit", help="Edit a mood rating or " "comment on a given date."
+    "-e", "--edit", help="Edit a mood rating or comment on a given date."
 )
-def log_mood(rating, comment, average, edit, view_table):
+def log_mood(
+    rating: int, comment: str, average: str, edit: str, view_table: str
+) -> None:
     """
     Rate your mood.
 
@@ -162,22 +164,22 @@ def log_mood(rating, comment, average, edit, view_table):
     """
     datetime = arrow.now("local").format("YYYY-MM-DD HH-mm-ss")
     if rating:
-        new_entry = be.Mood(
+        new_entry = mood.Mood(
             id=[], rating=rating, comment=comment, datetime_stamp=datetime
         )
-        be.Mood.new_entry(new_entry)
+        mood.Mood.new_entry(new_entry)
     if average:
         view_option = validate_date(value=average)
-        mood = be.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
-        be.Mood.view_average_mood(mood, view_date=view_option)
+        mood_ = mood.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
+        mood.Mood.view_average_mood(mood_, view_date=view_option)
     if view_table:
         date_option = validate_date(value=view_table)
-        table = be.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
-        be.Mood.view_mood_table(table, view_date=date_option)
+        table = mood.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
+        mood.Mood.view_mood_table(table, view_date=date_option)
     if edit:
         edit_date = validate_date(value=edit)
-        edit_mood = be.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
-        be.Mood.edit_mood(edit_mood, edit_date=edit_date)
+        edit_mood = mood.Mood(id=[], rating=[], datetime_stamp=[], comment=[])
+        mood.Mood.edit_mood(edit_mood, edit_date=edit_date)
 
 
 @click.command(name="habit")
@@ -209,9 +211,9 @@ def log_mood(rating, comment, average, edit, view_table):
     "-e",
     "--edit",
     help="Edit a habit's name, frequency, start date. "
-    "Separate your choice and the name (or number) of the habit with a comma.",
+    "Separate your choice and the name (or number) "
+    "of the habit with a comma.",
     nargs=2,
-    callback=validate_edit_habit,
 )
 def log_habit(
     view, complete, incomplete, add, delete, start_date, edit, frequency
@@ -222,26 +224,26 @@ def log_habit(
     Default frequency is set to daily.
 
     Tip: The number of the habit can be used instead of its name.
-
     \f
-
-    :param incomplete:
-    :param frequency:
-    :param edit:
     :param view:
     :param complete:
+    :param incomplete:
     :param add:
     :param delete:
     :param start_date:
-    :return:
+    :param edit:
+    :param frequency:
     """
-    # If editing name, the `-a` option has to be supplied as well
-    click.echo(f"Complete = {complete}")
-    click.echo(f"View = {view}")
-    click.echo(f"Add = {add}")
-    click.echo(f"Delete = {delete}")
-    click.echo(f"Edit = {edit[0]}, {edit[1]}")
-    return 0
+    ...
+
+
+# If editing name, the `-a` option has to be supplied as well
+# click.echo(f"Complete = {complete}")
+# click.echo(f"View = {view}")
+# click.echo(f"Add = {add}")
+# click.echo(f"Delete = {delete}")
+# click.echo(f"Edit = {edit[0]}, {edit[1]}")
+# return 0
 
 
 @click.command(name="viz")
@@ -273,9 +275,11 @@ def log_habit(
         click.DateTime(formats=["%Y-%m-%d", "%Y-%m", "%Y"]),
     ),
 )
-@click.option("-h", "--habit", help="Show records of a specific habit.")
+@click.option(
+    "-h", "--habit", "habit_", help="Show records of a specific habit."
+)
 @click.argument("log_type")
-def dataviz(from_, to, on, month, year, log_type, habit):
+def dataviz(from_, to, on, month, year, log_type, habit_):
     """
     Visualize your records.
 
@@ -292,7 +296,7 @@ def dataviz(from_, to, on, month, year, log_type, habit):
     :param month:
     :param year:
     :param log_type:
-    :param habit:
+    :param habit_:
     :return:
     """
     click.echo(f"From = {from_}")

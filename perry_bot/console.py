@@ -1,3 +1,5 @@
+"""Set up console."""
+
 from rich.console import Console
 from rich.theme import Theme
 
@@ -6,6 +8,6 @@ theme = Theme(
 )
 
 
-def console():
+def main_console() -> Console:
     """Console."""
     return Console(theme=theme)
