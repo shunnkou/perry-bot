@@ -193,8 +193,6 @@ class EditExistingEntry:
             f"#{self.number_to_edit} to '{self.new_value}'. Correct?",
             style="default",
         )
-        check = Prompt.ask(
-            choices=["y", "n"], default=["y"], show_default=True
-        )
+        check = Prompt.ask(choices=["y", "n"], default="y", show_default=True)
         if check in ["n"]:
             self.get_column_to_edit()
