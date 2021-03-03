@@ -17,7 +17,7 @@ console: Console = main_console()
 class Mood:
     """Mood dataclass."""
 
-    id: list
+    id: typing.List[int]
     rating: typing.Any
     datetime_stamp: typing.Any
     comment: typing.Any
@@ -28,7 +28,7 @@ class Mood:
         :param date:
         :return:
         """
-        with db:
+        with db.atomic():
             query = MoodDB.select().where(MoodDB.datetime_stamp.contains(date))
             for record in query:
                 self.id.append(record.id)
@@ -60,12 +60,12 @@ class Mood:
 
         :return:
         """
-        with db:
-            MoodDB.create(
+        with db.atomic():
+            MoodDB.insert(
                 rating=self.rating,
                 datetime_stamp=self.datetime_stamp,
                 comment=self.comment,
-            )
+            ).execute()
         console.print(
             f"[bold]{escape('[perry-bot]:')}[/bold] Mood entry added to "
             f"database.",
@@ -167,7 +167,7 @@ class Mood:
             if not edit_target:
                 return
             if edit_target[0] in ["rating"]:
-                with db:
+                with db.atomic():
                     MoodDB.update(rating=edit_target[1]).where(
                         MoodDB.id == edit_target[2]
                     ).execute()
@@ -177,7 +177,7 @@ class Mood:
                     style="default",
                 )
             elif edit_target[0] in ["comment"]:
-                with db:
+                with db.atomic():
                     MoodDB.update(comment=edit_target[1]).where(
                         MoodDB.id == edit_target[2]
                     ).execute()

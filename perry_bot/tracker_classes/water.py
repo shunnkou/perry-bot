@@ -27,7 +27,7 @@ class Water:
         :param date:
         :return:
         """
-        with db:
+        with db.atomic():
             query = WaterDB.select().where(WaterDB.date_stamp.contains(date))
         for record in query:
             self.id.append(record.id)
@@ -43,12 +43,12 @@ class Water:
         """
         self.query(date=date)
         if self.id:
-            with db:
+            with db.atomic():
                 WaterDB.update(cups_drank=WaterDB.cups_drank + cups).where(
                     WaterDB.date_stamp.contains(date)
                 ).execute()
         else:
-            with db:
+            with db.atomic():
                 WaterDB.insert(cups_drank=cups, date_stamp=date).execute()
 
         self.query(date=date)
@@ -73,7 +73,7 @@ class Water:
             check_cups = self.check_cups_less_than_zero(date=date, cups=cups)
             if not check_cups:
                 return
-            with db:
+            with db.atomic():
                 WaterDB.update(cups_drank=WaterDB.cups_drank - cups).where(
                     WaterDB.date_stamp.contains(date)
                 ).execute()
@@ -109,7 +109,7 @@ class Water:
             )
             c = Prompt.ask(choices=["y", "n"], default="y")
             if c in ["y"]:
-                with db:
+                with db.atomic():
                     WaterDB.update(cups_drank=0).where(
                         WaterDB.date_stamp.contains(date)
                     ).execute()
@@ -182,7 +182,7 @@ class Water:
             edit_target = EditExistingEntry.edit_table(setup_edit)
             if edit_target is False:
                 return
-            with db:
+            with db.atomic():
                 WaterDB.update(cups_drank=edit_target[1]).where(
                     WaterDB.id == edit_target[2]
                 ).execute()
