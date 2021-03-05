@@ -245,10 +245,9 @@ class Habit:
             return date_today
         if date_string:
             return arrow.get(start_date_input, "YYYY-MM-DD")
-        else:
-            return self.wrong_date_format_loop(
-                date_today=date_today, start_date_input=start_date_input
-            )
+        return self.wrong_date_format_loop(
+            date_today=date_today, start_date_input=start_date_input
+        )
 
     @staticmethod
     def wrong_date_format_loop(
@@ -294,18 +293,17 @@ class Habit:
         ]
         if frequency == 1:
             return frequencies[0]
-        elif frequency == 2:
+        if frequency == 2:
             return frequencies[1]
-        elif frequency == 3:
+        if frequency == 3:
             return frequencies[2]
-        elif frequency == 4:
+        if frequency == 4:
             return frequencies[3]
-        elif frequency == 5:
+        if frequency == 5:
             return frequencies[4]
-        elif frequency == 6:
+        if frequency == 6:
             return frequencies[5]
-        else:
-            return "False"
+        return "False"
 
     def new_habit_next_due(self) -> None:
         """
