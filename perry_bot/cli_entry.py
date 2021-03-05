@@ -60,19 +60,18 @@ def check_complete_or_incomplete(
             ),
             "id",
         )
-    else:
-        return (
-            habit.Habit(
-                id=[],
-                habit_name=input_,
-                completion=[completion],
-                start_date=[],
-                completed_on=[],
-                frequency=[],
-                next_due=[],
-            ),
-            "name",
-        )
+    return (
+        habit.Habit(
+            id=[],
+            habit_name=input_,
+            completion=[completion],
+            start_date=[],
+            completed_on=[],
+            frequency=[],
+            next_due=[],
+        ),
+        "name",
+    )
 
 
 @click.group()

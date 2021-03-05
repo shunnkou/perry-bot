@@ -453,7 +453,7 @@ class Habit:
         if str_name_or_id == "id":
             exists = HabitDB.get_or_none(HabitDB.id == self.id)
             return exists
-        elif str_name_or_id == "name":
+        if str_name_or_id == "name":
             exists = HabitDB.get_or_none(
                 HabitDB.habit_name.contains(self.habit_name)
             )
