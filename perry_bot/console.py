@@ -1,4 +1,4 @@
-"""Set up console."""
+"""Top level console."""
 
 from rich.console import Console
 from rich.theme import Theme

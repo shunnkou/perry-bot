@@ -53,6 +53,8 @@ class Habit:
     def make_table(self, title: str) -> Table:
         """Create 'Habit' table.
 
+        A simple habit table.
+
         :param title:
         :return:
         """
@@ -77,6 +79,8 @@ class Habit:
 
     def make_table_details(self, title: str) -> Table:
         """Create 'Habit Details' table.
+
+        A habit table with all database columns.
 
         :param title:
         :return:
@@ -114,7 +118,7 @@ class Habit:
 
     @staticmethod
     def table_add_row(table: Table, number, name, complete, next_) -> None:
-        """
+        """Add a row.
 
         :param table:
         :param number:
@@ -137,7 +141,7 @@ class Habit:
     def table_add_row_details(
         table: Table, number, name, complete, next_, start, freq, completed_on
     ) -> None:
-        """
+        """Add a detailed row.
 
         :param completed_on:
         :param table:
@@ -173,8 +177,9 @@ class Habit:
             )
 
     def create_new_habit(self, date_today: arrow.Arrow) -> None:
-        """Create new habit flow.
+        """Main function for creating new a new habit.
 
+        :param date_today:
         :return:
         """
         self.new_habit_freq_start_date(date_today=date_today)
@@ -195,7 +200,7 @@ class Habit:
             )
 
     def new_habit_freq_start_date(self, date_today: arrow.Arrow) -> None:
-        """
+        """Get new frequency and start date.
 
         :param date_today:
         :return:
@@ -234,7 +239,7 @@ class Habit:
     def check_date_format(
         self, start_date_input: typing.Any, date_today: arrow.Arrow
     ) -> arrow.Arrow:
-        """
+        """Check input date format.
 
         :param start_date_input:
         :param date_today:
@@ -253,7 +258,7 @@ class Habit:
     def wrong_date_format_loop(
         date_today: arrow.Arrow, start_date_input: str
     ) -> arrow.Arrow:
-        """
+        """Wrong input date format loop.
 
         :param start_date_input:
         :param date_today:
@@ -278,7 +283,7 @@ class Habit:
 
     @staticmethod
     def new_habit_freq_to_string(frequency: int) -> str:
-        """
+        """Convert frequency choice to string.
 
         :param frequency:
         :return:
@@ -306,7 +311,7 @@ class Habit:
         return "False"
 
     def new_habit_next_due(self) -> None:
-        """
+        """Shift given date for next due date.
 
         :return:
         """
@@ -331,7 +336,7 @@ class Habit:
             self.shift_date(**args)
 
     def shift_date(self, **kwargs) -> None:
-        """
+        """Shift date.
 
         :param kwargs:
         :return:
@@ -341,7 +346,7 @@ class Habit:
         self.next_due.append(next_due.format("YYYY-MM-DD"))
 
     def insert_new_habit(self) -> bool:
-        """
+        """Insert a new habit into the database.
 
         :return:
         """
