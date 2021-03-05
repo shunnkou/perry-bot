@@ -274,8 +274,8 @@ class Habit:
             )
             if date_string_again:
                 return arrow.get(start_date_input_again)
-        else:
-            return arrow.get(start_date_input)
+
+        return arrow.get(start_date_input)
 
     @staticmethod
     def new_habit_freq_to_string(frequency: int) -> str:
