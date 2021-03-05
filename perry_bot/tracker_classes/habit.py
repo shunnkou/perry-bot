@@ -22,7 +22,7 @@ console: Console = main_console()
 class Habit:
     """Habit dataclass."""
 
-    id: typing.List[int]
+    id: typing.Any
     habit_name: typing.Any
     completion: typing.List[bool]
     start_date: typing.Any
@@ -49,6 +49,8 @@ class Habit:
                 self.completed_on.append(record.completed_on)
                 self.frequency.append(record.frequency)
                 self.next_due.append(record.next_due)
+
+    # ---------- View ----------
 
     def make_table(self, title: str) -> Table:
         """Create 'Habit' table.
@@ -116,6 +118,26 @@ class Habit:
 
         return table
 
+    def view_habit_table(self, detailed: bool) -> None:
+        """View existing habits as a table.
+
+        :return:
+        """
+        self.query(selection=HabitDB.select())
+        if detailed:
+            table = self.make_table_details(title="Habits Details")
+        else:
+            table = self.make_table(title="Habits")
+        if self.id:
+            console.print(table, style="default")
+        else:
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] "
+                f"No habits found! Create a habit with "
+                f"[i][b]perry-bot habit -a 'habit name'[/b][/i].",
+                style="default",
+            )
+
     @staticmethod
     def table_add_row(table: Table, number, name, complete, next_) -> None:
         """Add a row.
@@ -175,6 +197,8 @@ class Habit:
                 str(completed_on),
                 str(complete_status),
             )
+
+    # ---------- Add ----------
 
     def create_new_habit(self, date_today: arrow.Arrow) -> None:
         """Main function for creating new a new habit.
@@ -362,22 +386,98 @@ class Habit:
         except peewee.IntegrityError:
             return False  # habit name already exists
 
-    def view_habit_table(self, detailed: bool) -> None:
-        """View existing habits as a table.
+    # ---------- Complete / Incomplete ----------
+
+    def mark_complete_or_incomplete(self, str_name_or_id: str) -> None:
+        """
+
+        :param str_name_or_id:
+        :return:
+        """
+        exists = self.check_if_exists(str_name_or_id=str_name_or_id)
+        if not exists:
+            self.doesnt_exist_response(str_name_or_id=str_name_or_id)
+            return
+        with db.atomic():
+            if str_name_or_id == "id":
+                HabitDB.update(completion=self.completion[0]).where(
+                    HabitDB.id == self.id
+                ).execute()
+            elif str_name_or_id == "name":
+                HabitDB.update(completion=self.completion[0]).where(
+                    HabitDB.habit_name.contains(self.habit_name)
+                ).execute()
+        self.complete_incomplete_response()
+
+    def complete_incomplete_response(self) -> None:
+        """
 
         :return:
         """
-        self.query(selection=HabitDB.select())
-        if detailed:
-            table = self.make_table_details(title="Habits Details")
-        else:
-            table = self.make_table(title="Habits")
-        if self.id:
-            console.print(table, style="default")
-        else:
+        if True in self.completion:
+            if self.habit_name:
+                console.print(
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Habit "
+                    f"'{self.habit_name}' has been marked "
+                    f"as complete.",
+                    style="default",
+                )
+            if self.id:
+                console.print(
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Habit "
+                    f"'{self.id}' has been marked as complete.",
+                    style="default",
+                )
+        elif False in self.completion:
+            if self.habit_name:
+                console.print(
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Habit "
+                    f"'{self.habit_name}' has been marked "
+                    f"as incomplete.",
+                    style="default",
+                )
+            if self.id:
+                console.print(
+                    f"[bold]{escape('[perry-bot]:')}[/bold] Habit "
+                    f"'{self.id}' has been marked "
+                    f"as incomplete.",
+                    style="default",
+                )
+
+    def check_if_exists(self, str_name_or_id: str) -> typing.Union[bool, None]:
+        """Check if habit name or id exists in database.
+
+        :param str_name_or_id:
+        :return:
+        """
+        if str_name_or_id == "id":
+            exists = HabitDB.get_or_none(HabitDB.id == self.id)
+            return exists
+        elif str_name_or_id == "name":
+            exists = HabitDB.get_or_none(
+                HabitDB.habit_name.contains(self.habit_name)
+            )
+            return exists
+        return None
+
+    def doesnt_exist_response(self, str_name_or_id: str) -> None:
+        """
+
+        :param str_name_or_id:
+        :return:
+        """
+        if str_name_or_id == "id":
             console.print(
-                f"[bold]{escape('[perry-bot]:')}[/bold] "
-                f"No habits found! Create a habit with "
-                f"[i][b]perry-bot habit -a 'habit name'[/b][/i].",
+                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, "
+                f"there is no habit "
+                f"with the ID of '{self.id}'.",
                 style="default",
             )
+        elif str_name_or_id == "name":
+            console.print(
+                f"[bold]{escape('[perry-bot]:')}[/bold] Sorry, "
+                f"there is no "
+                f"habit named '{self.habit_name}.",
+                style="default",
+            )
+        return None

@@ -4,7 +4,11 @@ import click
 from click.exceptions import BadOptionUsage
 import arrow
 import re
+import typing
+from perry_bot.console import main_console
 from perry_bot.tracker_classes import water, mood, habit
+
+console = main_console()
 
 
 def validate_date(value: str) -> str:
@@ -30,6 +34,45 @@ def validate_date(value: str) -> str:
         message="Date is incorrectly formatted. "
         "Accepted formats = YYYY-MM-DD, YYYY-MM, YYYY, today."
     )
+
+
+def check_complete_or_incomplete(
+    input_: str, completion: bool
+) -> typing.Union[tuple]:
+    """
+
+    :param input_:
+    :param completion:
+    :return:
+    """
+    id_ = re.match(r"\d", input_)
+
+    if id_:
+        return (
+            habit.Habit(
+                id=int(input_),
+                habit_name=[],
+                completion=[completion],
+                start_date=[],
+                completed_on=[],
+                frequency=[],
+                next_due=[],
+            ),
+            "id",
+        )
+    else:
+        return (
+            habit.Habit(
+                id=[],
+                habit_name=input_,
+                completion=[completion],
+                start_date=[],
+                completed_on=[],
+                frequency=[],
+                next_due=[],
+            ),
+            "name",
+        )
 
 
 @click.group()
@@ -103,8 +146,8 @@ def log_water(add: int, delete: int, view: str, edit: str) -> None:
 
 @click.command(name="mood")
 @click.option(
-    "-r",
-    "--rating",
+    "-a",
+    "--add",
     help="Your mood's rating. A number from 1-10",
     type=click.IntRange(1, 10),
 )
@@ -121,7 +164,7 @@ def log_water(add: int, delete: int, view: str, edit: str) -> None:
     "-e", "--edit", help="Edit a mood rating or comment on a given date."
 )
 def log_mood(
-    rating: int, comment: str, average: str, edit: str, view_table: str
+    add: int, comment: str, average: str, edit: str, view_table: str
 ) -> None:
     """
     Rate your mood.
@@ -130,15 +173,15 @@ def log_mood(
 
     :param view_table:
     :param edit:
-    :param rating:
+    :param add:
     :param comment:
     :param average:
     :return:
     """
     datetime = arrow.now("local").format("YYYY-MM-DD HH-mm-ss")
-    if rating:
+    if add:
         new_entry = mood.Mood(
-            id=[], rating=rating, comment=comment, datetime_stamp=datetime
+            id=[], rating=add, comment=comment, datetime_stamp=datetime
         )
         mood.Mood.new_entry(new_entry)
     if average:
@@ -205,9 +248,7 @@ def log_habit(
             next_due=[],
         )
         habit.Habit.view_habit_table(habit_table, detailed=False)
-
     if view_details:
-        # TODO
         detailed_table = habit.Habit(
             id=[],
             habit_name=[],
@@ -219,9 +260,19 @@ def log_habit(
         )
         habit.Habit.view_habit_table(detailed_table, detailed=True)
     if complete:
-        raise NotImplementedError
+        complete_, name_or_id = check_complete_or_incomplete(
+            input_=complete, completion=True
+        )
+        habit.Habit.mark_complete_or_incomplete(
+            complete_, str_name_or_id=name_or_id
+        )
     if incomplete:
-        raise NotImplementedError
+        incomplete_, name_or_id = check_complete_or_incomplete(
+            input_=incomplete, completion=False
+        )
+        habit.Habit.mark_complete_or_incomplete(
+            incomplete_, str_name_or_id=name_or_id
+        )
     if add:
         date = arrow.now("local")
         new_habit = habit.Habit(
