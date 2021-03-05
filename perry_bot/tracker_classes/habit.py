@@ -274,7 +274,7 @@ class Habit:
             )
             if date_string_again:
                 return arrow.get(start_date_input_again)
-            
+
         return arrow.get(start_date_input)
 
     @staticmethod
