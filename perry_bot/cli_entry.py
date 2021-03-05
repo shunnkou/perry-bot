@@ -7,34 +7,6 @@ import re
 from perry_bot.tracker_classes import water, mood, habit
 
 
-# def validate_edit_habit(ctx, param, value):
-#     """Check input is in the correct format.
-#
-#      Format = 'option, str'
-#
-#     :param ctx:
-#     :param param:
-#     :param value:
-#     :return:
-#     """
-#     # TODO: Switch this to something like validate_date()
-#     check_comma = re.search(",", value)
-#     if check_comma:
-#         option, habit_name = value.split(",")
-#         check_option = re.search("name|frequency|start date", value)
-#         if check_option:
-#             return option, habit_name
-#         raise click.BadParameter(
-#             message="The value to change needs to be "
-#             "'name', 'frequency', or 'start date'."
-#         )
-#     raise click.BadParameter(
-#         message="Separate your option and your new habit name with a comma.",
-#         param=param,
-#         ctx=ctx,
-#     )
-
-
 def validate_date(value: str) -> str:
     """Check date is in the correct format.
 
@@ -73,6 +45,7 @@ def cli():
     https://perry-bot.readthedocs.io/en/latest/usage.html
     for further help.
     """
+    # TODO: Run update habit DB for 'next due' and completion
     return 0
 
 
@@ -186,55 +159,85 @@ def log_mood(
 @click.option(
     "-v", "--view", help="View existing habit(s) and its status.", is_flag=True
 )
+@click.option(
+    "-vd",
+    "--view-details",
+    help="See details of existing habit(s).",
+    is_flag=True,
+)
 @click.option("-c", "--complete", help="Mark habit as complete.")
 @click.option("-ic", "--incomplete", help="Mark habit as incomplete")
 @click.option("-a", "--add", help="Add a habit.")
 @click.option("-d", "--delete", help="Delete a habit.")
 @click.option(
-    "-f",
-    "--frequency",
-    help="Frequency of the habit.",
-    type=click.Choice(
-        ["Daily", "Bi-Weekly", "Weekly", "Monthly", "Yearly"],
-        case_sensitive=False,
-    ),
-    default="Daily",
-)
-@click.option(
-    "-sd",
-    "--start-date",
-    help="Set the start date for weekly, bi-weekly, "
-    "monthly, or yearly habits.",
-    type=click.DateTime(formats=["%Y-%m-%d"]),
-)
-@click.option(
     "-e",
     "--edit",
-    help="Edit a habit's name, frequency, start date. "
-    "Separate your choice and the name (or number) "
-    "of the habit with a comma.",
-    nargs=2,
+    help="Edit a habit's name, frequency, or start date.",
+    is_flag=True,
 )
 def log_habit(
-    view, complete, incomplete, add, delete, start_date, edit, frequency
-):
+    view, complete, incomplete, add, delete, edit, view_details
+) -> None:
     """
     \b
     Log and manage habits.
-    Default frequency is set to daily.
 
     Tip: The number of the habit can be used instead of its name.
     \f
+    :param view_details:
     :param view:
     :param complete:
     :param incomplete:
     :param add:
     :param delete:
-    :param start_date:
     :param edit:
-    :param frequency:
     """
-    ...
+    # date can't be formatted or it won't be an
+    # arrow type anymore (can't shift)
+    if view:
+        habit_table = habit.Habit(
+            id=[],
+            habit_name=[],
+            completion=[],
+            start_date=[],
+            completed_on=[],
+            frequency=[],
+            next_due=[],
+        )
+        habit.Habit.view_habit_table(habit_table, detailed=False)
+
+    if view_details:
+        # TODO
+        detailed_table = habit.Habit(
+            id=[],
+            habit_name=[],
+            completion=[],
+            start_date=[],
+            completed_on=[],
+            frequency=[],
+            next_due=[],
+        )
+        habit.Habit.view_habit_table(detailed_table, detailed=True)
+    if complete:
+        raise NotImplementedError
+    if incomplete:
+        raise NotImplementedError
+    if add:
+        date = arrow.now("local")
+        new_habit = habit.Habit(
+            id=[],
+            habit_name=add,
+            completion=[],
+            start_date=[],
+            completed_on=[],
+            frequency=[],
+            next_due=[],
+        )
+        habit.Habit.create_new_habit(new_habit, date_today=date)
+    if delete:
+        raise NotImplementedError
+    if edit:
+        raise NotImplementedError
 
 
 # If editing name, the `-a` option has to be supplied as well
