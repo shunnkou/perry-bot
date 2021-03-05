@@ -389,10 +389,10 @@ class Habit:
     # ---------- Complete / Incomplete ----------
 
     def mark_complete_or_incomplete(self, str_name_or_id: str) -> None:
-        """
+        """Main function for marking a habit as complete or incomplete.
 
-        :param str_name_or_id:
-        :return:
+        :param str_name_or_id: Either 'id' or 'name'
+        :return: None
         """
         exists = self.check_if_exists(str_name_or_id=str_name_or_id)
         if not exists:
@@ -410,7 +410,7 @@ class Habit:
         self.complete_incomplete_response()
 
     def complete_incomplete_response(self) -> None:
-        """
+        """Perry-bot response after marking a habit.
 
         :return:
         """
@@ -461,7 +461,7 @@ class Habit:
         return None
 
     def doesnt_exist_response(self, str_name_or_id: str) -> None:
-        """
+        """Perry-bot response if habit doesn't exist.
 
         :param str_name_or_id:
         :return:
